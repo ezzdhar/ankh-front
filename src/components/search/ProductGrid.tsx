@@ -15,6 +15,7 @@ export function ProductGrid() {
 
   // Convert URLSearchParams to object
   const categoryId = searchParams.get("category_id");
+  const parsedCategoryId = categoryId ? parseInt(categoryId) : null;
 
   const params: ProductSearchParams = {
     search: searchParams.get("search") || undefined,
@@ -22,7 +23,10 @@ export function ProductGrid() {
     per_page: searchParams.get("per_page") || 12,
     page: searchParams.get("page") || 1,
     // Send as array so Laravel's whereIn() works correctly
-    category_id: categoryId ? [Number(categoryId)] : undefined,
+    // Only send if it's a valid positive number to avoid Laravel validation errors (e.g. category_id.0 is invalid)
+    category_id: (parsedCategoryId && !isNaN(parsedCategoryId) && parsedCategoryId > 0) 
+      ? [parsedCategoryId] 
+      : undefined,
     min_price: searchParams.get("min_price")
       ? Number(searchParams.get("min_price"))
       : undefined,

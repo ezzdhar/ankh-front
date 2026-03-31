@@ -39,16 +39,16 @@ export function SidebarFilters() {
   const searchParams = useSearchParams();
 
   // Helper to get current values
-  const selectedCategories = searchParams.getAll("category");
+  const selectedCategories = searchParams.getAll("category_id");
   const selectedSizes = searchParams.getAll("size");
   const selectedRate = searchParams.get("rate")
     ? Number(searchParams.get("rate"))
     : null;
-  const minPrice = searchParams.get("minPrice")
-    ? Number(searchParams.get("minPrice"))
+  const minPrice = searchParams.get("min_price")
+    ? Number(searchParams.get("min_price"))
     : 0;
-  const maxPrice = searchParams.get("maxPrice")
-    ? Number(searchParams.get("maxPrice"))
+  const maxPrice = searchParams.get("max_price")
+    ? Number(searchParams.get("max_price"))
     : 10000;
 
   // Local state for price inputs to allow typing before applying
@@ -64,14 +64,14 @@ export function SidebarFilters() {
 
   const handleCategoryChange = (id: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    const current = params.getAll("category");
+    const current = params.getAll("category_id");
     if (current.includes(id)) {
-      params.delete("category");
+      params.delete("category_id");
       current
         .filter((c) => c !== id)
-        .forEach((c) => params.append("category", c));
+        .forEach((c) => params.append("category_id", c));
     } else {
-      params.append("category", id);
+      params.append("category_id", id);
     }
     updateURL(params);
   };
@@ -106,8 +106,8 @@ export function SidebarFilters() {
 
   const applyPriceFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("minPrice", localPriceRange[0].toString());
-    params.set("maxPrice", localPriceRange[1].toString());
+    params.set("min_price", localPriceRange[0].toString());
+    params.set("max_price", localPriceRange[1].toString());
     updateURL(params);
   };
 

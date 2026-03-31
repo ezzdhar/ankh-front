@@ -106,7 +106,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                   key={category.id}
                   className="flex items-center space-x-3 group cursor-pointer"
                   onClick={() =>
-                    updateFilter("category_id", category.id.toString())
+                    updateFilter("category_id", selectedCategory === category.id.toString() ? null : category.id.toString())
                   }
                 >
                   <div
@@ -141,7 +141,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                 <div
                   key={rate}
                   className="flex items-center space-x-3 group cursor-pointer"
-                  onClick={() => updateFilter("rate", rate.toString())}
+                  onClick={() => updateFilter("rate", selectedRate?.toString() === rate.toString() ? null : rate.toString())}
                 >
                   <div
                     className={cn(

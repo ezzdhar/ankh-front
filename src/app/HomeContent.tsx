@@ -73,7 +73,7 @@ export function HomeContent() {
       id: cat.id,
       image: cat.image || "",
       title: cat.name,
-      link: `/search?category=${cat.id}`,
+      link: `/search?category_id=${cat.id}`,
     }));
   }, [categoriesData]);
 

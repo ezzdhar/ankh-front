@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "title": "Welcome to Ankh",
+    "subtitle": "Your journey starts here",
+    "cta": "Get Started"
+  },
+  "features": [
+    {
+      "id": 1,
+      "title": "Fast Performance",
+      "description": "Lightning-fast loading times",
+      "icon": "zap"
+    },
+    {
+      "id": 2,
+      "title": "Secure",
+      "description": "Enterprise-grade security",
+      "icon": "shield"
+    },
+    {
+      "id": 3,
+      "title": "Scalable",
+      "description": "Grows with your needs",
+      "icon": "trending-up"
+    }
+  ]
+}

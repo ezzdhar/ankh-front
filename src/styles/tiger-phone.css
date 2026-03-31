@@ -1,0 +1,220 @@
+.phone-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.phone-input-label-container {
+  display: none; /* We use our own label in RegisterForm */
+}
+
+.phone-input-wrapper {
+  position: relative;
+}
+
+.phone-input-field {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(140, 140, 140, 0.5); /* Matches border-[#8C8C8C]/50 */
+  border-radius: 8px;
+  overflow: hidden;
+  height: 44px; /* Matches h-11 (2.75rem = 44px) */
+  background-color: transparent;
+  transition: all 0.2s;
+}
+
+.phone-input-field:focus-within {
+  border-color: #3a0f0e; /* Matches focus-visible:ring-[#3A0F0E] */
+}
+
+.phone-input-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.phone-input-country-button {
+  flex-shrink: 0;
+  border-right: 1px solid rgba(140, 140, 140, 0.5);
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  outline: none;
+}
+
+[dir="rtl"] .phone-input-country-button {
+  border-right: none;
+  border-left: 1px solid rgba(140, 140, 140, 0.5);
+}
+
+.phone-input-country-button:hover {
+  background-color: rgba(58, 15, 14, 0.05);
+}
+
+.phone-input-country-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  min-width: 85px;
+  height: 100%;
+}
+
+.phone-input-flag {
+  width: 24px;
+  height: auto;
+  border-radius: 2px;
+}
+
+.phone-input-dial-code {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3a0f0e;
+}
+
+.phone-input-chevron {
+  width: 14px;
+  height: 14px;
+  color: #8c8c8c;
+  transition: transform 0.3s;
+}
+
+.phone-input-chevron-open {
+  transform: rotate(180deg);
+}
+
+.phone-input-text-container {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.phone-input-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.phone-input-loader {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  color: #8c8c8c;
+}
+
+.phone-input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #8c8c8c;
+}
+
+.phone-input-icon-ltr {
+  right: 12px;
+}
+
+.phone-input-icon-rtl {
+  left: 12px;
+}
+
+.phone-input-text {
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #3a0f0e;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.phone-input-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fffbf7;
+  border: 1px solid rgba(140, 140, 140, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.phone-input-search-container {
+  padding: 8px;
+  border-bottom: 1px solid rgba(140, 140, 140, 0.1);
+}
+
+.phone-input-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(140, 140, 140, 0.2);
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  background: white;
+}
+
+.phone-input-search:focus {
+  border-color: #3a0f0e;
+}
+
+.phone-input-dropdown-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.phone-input-country-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: left;
+}
+
+[dir="rtl"] .phone-input-country-item {
+  text-align: right;
+}
+
+.phone-input-country-item:hover {
+  background-color: rgba(58, 15, 14, 0.05);
+}
+
+.phone-input-country-flag {
+  width: 24px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.phone-input-country-name {
+  flex: 1;
+  font-size: 14px;
+  color: #3a0f0e;
+}
+
+.phone-input-country-dial {
+  font-size: 13px;
+  color: #8c8c8c;
+  font-weight: 500;
+}
+
+.phone-input-error {
+  display: none; /* We use our own MessageError */
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

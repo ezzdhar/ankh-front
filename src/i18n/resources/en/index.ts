@@ -1,0 +1,13 @@
+export { default as common } from "./common";
+export { default as home } from "./home";
+export { default as about } from "./about";
+export { default as auth } from "./auth";
+export { default as address } from "./address";
+export { default as orders } from "./orders";
+export { default as profile } from "./profile";
+export { default as wishlist } from "./wishlist";
+export { default as search } from "./search";
+export { default as product } from "./product";
+export { default as cart } from "./cart";
+export { default as checkout } from "./checkout";
+export { default as errors } from "./errors";

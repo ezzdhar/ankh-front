@@ -27,9 +27,9 @@ export interface ProductSearchParams {
   sort_by?: string;
   per_page?: string | number;
   page?: string | number;
-  category_id?: number | number[];
+  category_id?: number;
   sub_category_id?: number;
-  brand_id?: number | number[];
+  brand_id?: number;
   min_price?: number;
   max_price?: number;
   in_stock_only?: boolean;

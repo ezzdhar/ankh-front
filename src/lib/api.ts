@@ -10,19 +10,7 @@ export const api = axios.create({
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": "true",
   },
-  // Serialize arrays as category_id[]=1&category_id[]=2 so Laravel's whereIn() works
-  paramsSerializer: (params) => {
-    const parts: string[] = [];
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined || value === null) return;
-      if (Array.isArray(value)) {
-        value.forEach((v) => parts.push(`${encodeURIComponent(key)}[]=${encodeURIComponent(v)}`));
-      } else {
-        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`);
-      }
-    });
-    return parts.join("&");
-  },
+  // Use default axios serialization
 });
 
 api.interceptors.request.use(
@@ -66,8 +54,8 @@ api.interceptors.response.use(
       if (Pagination !== undefined) response.data.paginate = Pagination;
     }
 
-    if (response.config.url?.includes("/products/")) {
-      console.log(`[API Response] ${response.config.url}:`, response.data);
+    if (response.config.url?.includes("/products")) {
+      console.log(`[API Call Success] ${response.config.url}${response.config.params ? '?' + new URLSearchParams(response.config.params).toString() : ''}:`, response.data);
     }
 
     return response;

@@ -79,7 +79,7 @@ export function useAddToCart() {
     },
     onSuccess: (data) => {
       if (data.success) {
-        toast.success(i18n.t("common:cart.addedSuccess"));
+        toast.success(i18n.t("cart:addedSuccess"));
         queryClient.invalidateQueries({ queryKey: ["cart"] });
       }
     },
@@ -113,7 +113,7 @@ export function useRemoveCartItem() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success(i18n.t("common:cart.removedSuccess"));
+      toast.success(i18n.t("cart:removedSuccess"));
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
@@ -151,15 +151,15 @@ export function useApplyCoupon() {
     },
     onSuccess: (data) => {
       if (data.success) {
-        toast.success(i18n.t("common:cart.couponApplied"));
+        toast.success(i18n.t("cart:couponApplied"));
         queryClient.invalidateQueries({ queryKey: ["cart"] });
       } else {
-        toast.error(data.message || i18n.t("common:cart.couponError"));
+        toast.error(data.message || i18n.t("cart:couponError"));
       }
     },
     onError: (error: AxiosError<ApiResponse>) => {
       toast.error(
-        error.response?.data?.message || i18n.t("common:cart.couponError"),
+        error.response?.data?.message || i18n.t("cart:couponError"),
       );
     },
   });
@@ -174,7 +174,7 @@ export function useRemoveCoupon() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success(i18n.t("common:cart.couponRemoved"));
+      toast.success(i18n.t("cart:couponRemoved"));
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });

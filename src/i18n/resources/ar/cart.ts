@@ -29,6 +29,11 @@ const cartTranslations = {
     noImage: "لا توجد صورة",
   },
   justForYou: "اخترنا لك",
+  addedSuccess: "تم إضافة المنتج بنجاح!",
+  removedSuccess: "تم حذف المنتج من العربة",
+  couponApplied: "تم تطبيق الكوبون بنجاح",
+  couponRemoved: "تم حذف الكوبون بنجاح",
+  couponError: "كود الكوبون غير صالح أو منتهي الصلاحية",
 };
 
 export default cartTranslations;

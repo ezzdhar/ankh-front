@@ -29,6 +29,11 @@ const cartTranslations = {
     noImage: "No Image",
   },
   justForYou: "Just For You",
+  addedSuccess: "Product Added Successfully!",
+  removedSuccess: "Product Removed Successfully",
+  couponApplied: "Coupon Applied Successfully",
+  couponRemoved: "Coupon Removed Successfully",
+  couponError: "Coupon is either invalid or expired",
 };
 
 export default cartTranslations;

@@ -14,15 +14,23 @@ export function useCheckout() {
 
   return useMutation({
     mutationFn: async (data: CheckoutData) => {
-      const formData = new FormData();
-      formData.append("address_id", data.address_id.toString());
-      formData.append("payment_gateway", data.payment_gateway);
-      if (data.notes) formData.append("notes", data.notes);
-      formData.append("idempotency_key", data.idempotency_key);
+      // Use regular object for JSON payload, many backends prefer it for non-file requests
+      const payload = {
+        address_id: data.address_id,
+        payment_method: data.payment_gateway, // Use payment_method as suggested by useOrders.ts
+        payment_gateway: data.payment_gateway, 
+        notes: data.notes,
+        idempotency_key: data.idempotency_key,
+      };
 
       const response = await api.post<ApiResponse>(
         "/api/v1/checkout",
-        formData,
+        payload,
+        {
+          headers: {
+            "Idempotency-Key": data.idempotency_key,
+          },
+        },
       );
       return response.data;
     },

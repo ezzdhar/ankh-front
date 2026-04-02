@@ -36,7 +36,12 @@ function CheckoutContent() {
   );
   const [orderNotes, setOrderNotes] = useState("");
   const [selectedPaymentId, setSelectedPaymentId] = useState("cod");
-  const [idempotencyKey] = useState(() => crypto.randomUUID());
+  const [idempotencyKey] = useState(() => {
+    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  });
   const isCheckoutComplete = useRef(false);
 
   const items = useMemo(
@@ -158,10 +163,17 @@ function CheckoutContent() {
             } else {
               router.push("/order-success");
             }
+          } else {
+            toast.error(data.message || t("failed.message"));
           }
         },
-        onError: (error) => {
+        onError: (error: any) => {
           console.error("Checkout error:", error);
+          const message =
+            error.response?.data?.message ||
+            error.message ||
+            t("failed.message");
+          toast.error(message);
         },
       },
     );

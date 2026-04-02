@@ -53,8 +53,8 @@ function CheckoutContent() {
   const isCheckoutComplete = useRef(false);
 
   const items = useMemo(
-    () => cartData?.data.items || [],
-    [cartData?.data.items],
+    () => cartData?.data?.items || [],
+    [cartData?.data?.items],
   );
   const cart = cartData?.data;
   const addresses = useMemo(() => addressesData?.data || [], [addressesData]);

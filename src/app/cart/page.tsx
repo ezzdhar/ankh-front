@@ -28,8 +28,8 @@ export default function CartPage() {
   const [updatingItemId, setUpdatingItemId] = useState<number | null>(null);
 
   const items = useMemo(
-    () => cartData?.data.items || [],
-    [cartData?.data.items],
+    () => cartData?.data?.items || [],
+    [cartData?.data?.items],
   );
   const cart = cartData?.data;
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import i18n from "@/i18n";
 
-const API_BASE_URL = "https://admin.ankh-eg.com";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://admin.ankh-eg.com";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -28,6 +28,46 @@ api.interceptors.request.use(
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Workaround for CORS issues:
+    // Only send credentials (cookies) for endpoints that actually need the Session
+    // (like cart, favorites, checkout) to avoid CORS failing on public endpoints 
+    // that return Access-Control-Allow-Origin: *
+    const sessionEndpoints = [
+      "/cart-items",
+      "/favorites",
+      "/checkout",
+      "/coupon",
+      "/login",
+      "/register",
+      "/logout",
+      "/profile",
+      "/addresses",
+      "/orders",
+      "/change-password",
+      "/forgot-password",
+      "/reset-password"
+    ];
+
+    const needsCredentials = sessionEndpoints.some((ep) =>
+      config.url?.includes(ep)
+    );
+
+    if (needsCredentials || token) {
+      // If we have a token, we might need credentials for session merging etc.
+      // But actually if token is present, we should send credentials IF the backend supports it.
+      // Wait, if token is present and we request /banners, it will fail if we set withCredentials = true!
+      // So we ONLY set it if the endpoint needs it, OR if the developer explicitly fixes backend CORS.
+    }
+    
+    // Safer approach: Only set withCredentials for user-specific actions that might use Guest Session
+    // when we DON'T have an auth token yet. Logged-in users use Bearer tokens and don't need
+    // to send session credentials, which avoids CORS issues if the backend uses wildcard (*) origins.
+    if (needsCredentials && !token) {
+      config.withCredentials = true;
+    } else {
+      config.withCredentials = false;
     }
 
     // If data is FormData, remove Content-Type to let the browser set it with boundary
@@ -67,9 +107,16 @@ api.interceptors.response.use(
       }
     }
 
+    // Identify CORS/Network errors more clearly
+    const isNetworkError = !error.response;
+    
     // Log as warning only in dev to avoid intrusive overlays for handled errors
     if (process.env.NODE_ENV === "development") {
-      console.warn("API Error:", error.response?.status, error.message);
+      if (isNetworkError) {
+        console.error("🌐 Network/CORS Error:", error.message, "\nThis usually means the server doesn't allow 'withCredentials' with a wildcard '*' origin, or the domain is blocked.");
+      } else {
+        console.warn("API Error:", error.response?.status, error.message);
+      }
     }
 
     return Promise.reject(error);

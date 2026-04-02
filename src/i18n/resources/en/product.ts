@@ -34,6 +34,9 @@ const product = {
     placeholder: "Tell us what you think...",
     uploadImage: "Upload Image",
     success: "Thank you for your review!",
+    writeYourReview: "Write your review",
+    minChars: "min characters",
+    noReviews: "No reviews yet.",
   },
   justForYou: "Just For You",
 };

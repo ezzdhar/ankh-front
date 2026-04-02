@@ -106,7 +106,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://admin.ankh-eg.com" />
         <link rel="dns-prefetch" href="https://admin.ankh-eg.com" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Providers>
           <Navbar />
           <main className="main">{children}</main>

@@ -37,7 +37,7 @@ export function WinterCollection({
         <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10">
+      <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
         <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight tracking-wide uppercase drop-shadow-md">
           {displayTitle}
         </h1>

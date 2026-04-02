@@ -18,13 +18,8 @@ export interface Review {
   created_at: string;
 }
 
-export interface ReviewsPaginatedData {
-  current_page: number;
-  data: Review[];
-  last_page: number;
-  per_page: number;
-  total: number;
-}
+export interface ReviewsPaginatedData extends Array<Review> {}
+// Actually, ApiResponse<Review[]> is what we want.
 
 export interface StoreReviewData {
   product_id: number | string;
@@ -33,14 +28,17 @@ export interface StoreReviewData {
   image?: File;
 }
 
-export function useReviews(productId: number | string) {
-  return useQuery<ApiResponse<ReviewsPaginatedData>>({
-    queryKey: ["reviews", productId],
+export function useReviews(productId: number | string, perPage = 6) {
+  return useQuery<ApiResponse<Review[]>>({
+    queryKey: ["reviews", productId, perPage],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<ReviewsPaginatedData>>(
+      const response = await api.get<ApiResponse<Review[]>>(
         "/api/v1/products/reviews",
         {
-          params: { product_id: productId },
+          params: { 
+            product_id: productId,
+            per_page: perPage
+          },
         },
       );
       return response.data;

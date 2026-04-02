@@ -11,19 +11,19 @@ import { useAddresses } from "@/hooks/useAddresses";
 import { useCheckout } from "@/hooks/useCheckout";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/providers/AuthProvider";
+import { GuestAddressForm } from "@/components/checkout/GuestAddressForm";
 
 export default function CheckoutPage() {
   return (
-    <ProtectedRoute>
-      <CheckoutContent />
-    </ProtectedRoute>
+    <CheckoutContent />
   );
 }
 
 function CheckoutContent() {
   const { t } = useTranslation("checkout");
   const router = useRouter();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const { data: cartData, isLoading: isCartLoading } = useCart();
   const applyCouponMutation = useApplyCoupon();
@@ -34,6 +34,14 @@ function CheckoutContent() {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null,
   );
+  
+  // Guest state
+  const [guestData, setGuestData] = useState({
+    guest_name: "",
+    guest_phone: "",
+    guest_address: "",
+  });
+
   const [orderNotes, setOrderNotes] = useState("");
   const [selectedPaymentId, setSelectedPaymentId] = useState("cod");
   const [idempotencyKey] = useState(() => {
@@ -108,14 +116,22 @@ function CheckoutContent() {
   }, [addresses, selectedAddressId]);
 
   const handlePayNow = () => {
-    if (!selectedAddressId) {
-      toast.error(t("delivery.selectAddressError"));
-      return;
+    if (isAuthenticated) {
+      if (!selectedAddressId) {
+        toast.error(t("delivery.selectAddressError"));
+        return;
+      }
+    } else {
+      // Validate guest fields
+      if (!guestData.guest_name.trim() || !guestData.guest_phone.trim() || !guestData.guest_address.trim()) {
+        toast.error(t("guest.validationError") || "Please fill all required delivery details.");
+        return;
+      }
     }
 
     checkoutMutation.mutate(
       {
-        address_id: selectedAddressId,
+        ...(isAuthenticated ? { address_id: selectedAddressId! } : { ...guestData }),
         payment_gateway: selectedPaymentId,
         notes: orderNotes,
         idempotency_key: idempotencyKey,
@@ -186,7 +202,7 @@ function CheckoutContent() {
     }
   }, [isCartLoading, items.length, router]);
 
-  if (isCartLoading || isAddressesLoading) {
+  if (isCartLoading || (isAuthenticated && isAddressesLoading) || isAuthLoading) {
     return (
       <div className="bg-[#FFF8EF] min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
@@ -208,11 +224,18 @@ function CheckoutContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Details */}
           <div className="lg:col-span-8 space-y-8">
-            <AddressSelector
-              addresses={addresses}
-              selectedId={selectedAddressId}
-              onSelect={setSelectedAddressId}
-            />
+            {isAuthenticated ? (
+              <AddressSelector
+                addresses={addresses}
+                selectedId={selectedAddressId}
+                onSelect={setSelectedAddressId}
+              />
+            ) : (
+              <GuestAddressForm
+                value={guestData}
+                onChange={setGuestData}
+              />
+            )}
 
             <OrderNotes value={orderNotes} onChange={setOrderNotes} />
 

@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { useAuth } from "@/providers/AuthProvider";
 import { useProfile } from "@/hooks/useProfile";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 import {
   Sheet,
@@ -26,7 +27,8 @@ export function Navbar() {
   const { t } = useTranslation("common");
   const { isAuthenticated, logout: authLogout } = useAuth();
   const { logout: profileLogout } = useProfile();
-  const isArabic = i18n.language === "ar";
+  const isMounted = useIsMounted();
+  const isArabic = isMounted && i18n.language === "ar";
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
@@ -41,6 +43,7 @@ export function Navbar() {
     localStorage.setItem("i18nextLng", newLang);
     document.cookie = `NEXT_LOCALE=${newLang}; path=/; max-age=31536000`; // Standard Next.js server cookie
     document.cookie = `i18nextLng=${newLang}; path=/; max-age=31536000`; // i18next cookie
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -53,9 +56,9 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { href: "/", label: t("nav.home") },
-    { href: "/about", label: t("nav.about") },
-    { href: "/search", label: t("nav.products") },
+    { href: "/", label: t("nav.home", { lng: isMounted ? undefined : "en" }) },
+    { href: "/about", label: t("nav.about", { lng: isMounted ? undefined : "en" }) },
+    { href: "/search", label: t("nav.products", { lng: isMounted ? undefined : "en" }) },
   ];
 
   return (
@@ -119,7 +122,7 @@ export function Navbar() {
             <Input
               type="text"
               placeholder={
-                isArabic ? "ما الذي تبحث عنه؟" : "What are you looking for?"
+                t("search.placeholder", { lng: isMounted ? undefined : "en" })
               }
               className="w-[260px] focus:w-[270px] py-2.5 px-4 ps-3! border border-black/15 rounded-full bg-transparent font-primary text-sm text-[#3A0F0E] placeholder:text-[#999] outline-none focus:border-none transition-all"
               value={searchQuery}
@@ -178,7 +181,7 @@ export function Navbar() {
                     onClick={toggleLanguage}
                   >
                     <Globe size={22} strokeWidth={1.5} />
-                    {isArabic ? "English" : "العربية"}
+                    {isMounted ? (isArabic ? "English" : "العربية") : "العربية"}
                   </button>
 
                   {isAuthenticated ? (
@@ -187,7 +190,7 @@ export function Navbar() {
                       onClick={handleLogout}
                     >
                       <LogOut size={22} strokeWidth={1.5} />
-                      {isArabic ? "تسجيل الخروج" : "Logout"}
+                      {t("logout", { ns: "auth", lng: isMounted ? undefined : "en" })}
                     </button>
                   ) : (
                     <Link
@@ -195,7 +198,7 @@ export function Navbar() {
                       className="flex items-center gap-4 text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                     >
                       <User size={22} strokeWidth={1.5} />
-                      {isArabic ? "تسجيل الدخول" : "Login"}
+                      {t("login", { ns: "auth", lng: isMounted ? undefined : "en" })}
                     </Link>
                   )}
                 </div>
@@ -211,7 +214,7 @@ export function Navbar() {
           <Input
             type="text"
             placeholder={
-              isArabic ? "ما الذي تبحث عنه؟" : "What are you looking for?"
+              t("search.placeholder", { lng: isMounted ? undefined : "en" })
             }
             autoFocus
             className="flex-1 py-3 px-4 border border-black/15 rounded-full bg-transparent font-primary text-sm text-[#3A0F0E] placeholder:text-[#999] outline-none"

@@ -1,4 +1,5 @@
 import { useTranslation } from "@/i18n/hooks";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { Star, User } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -16,19 +17,20 @@ export function ProductReviews({
   onWriteReview,
 }: ProductReviewsProps) {
   const { t } = useTranslation("product");
-  const [perPage, setPerPage] = useState(4);
-  const { data: reviewsData, isLoading } = useReviews(productId);
+  const isMounted = useIsMounted();
+  const [perPage, setPerPage] = useState(6);
+  const { data: reviewsData, isLoading } = useReviews(productId, perPage);
 
-  const reviews = reviewsData?.data?.data || [];
-  const hasMore = reviewsData?.data
-    ? reviews.length < reviewsData.data.total
+  const reviews = reviewsData?.data || [];
+  const hasMore = reviewsData?.paginate
+    ? reviews.length < reviewsData.paginate.total
     : false;
 
   const handleViewMore = () => {
-    setPerPage((prev) => prev + 4);
+    setPerPage((prev) => prev + 6);
   };
 
-  if (isLoading && perPage === 4) {
+  if (isLoading && perPage === 6) {
     return (
       <div className="flex justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3A0F0E]"></div>
@@ -37,17 +39,17 @@ export function ProductReviews({
   }
 
   return (
-    <div className="space-y-8 bg-[#FFF8EF] py-4">
+    <div className="space-y-8 bg-[#FFF8EF] py-4 animate-in fade-in slide-in-from-bottom-8 duration-700">
       {/* Header */}
       <div className="flex justify-between items-baseline px-2">
         <h2 className="text-xl md:text-2xl font-medium text-[#3A0F0E] font-cormorant leading-tight">
-          {t("reviews.title")}
+          {t("reviews.title", { lng: isMounted ? undefined : "en" })}
         </h2>
         <button
           onClick={onWriteReview}
           className="text-sm text-[#3A0F0E] underline hover:opacity-70 transition-opacity font-medium"
         >
-          {t("reviews.writeReview")}
+          {t("reviews.writeReview", { lng: isMounted ? undefined : "en" })}
         </button>
       </div>
 
@@ -105,7 +107,7 @@ export function ProductReviews({
 
       {!isLoading && reviews.length === 0 && (
         <div className="text-center py-10 opacity-50">
-          <p>{t("reviews.noReviews") || "No reviews yet."}</p>
+          <p>{t("reviews.noReviews", { lng: isMounted ? undefined : "en" }) || "No reviews yet."}</p>
         </div>
       )}
 
@@ -117,7 +119,7 @@ export function ProductReviews({
             disabled={isLoading}
             className="text-sm font-medium text-[#3A0F0E] underline hover:opacity-70 transition-opacity disabled:opacity-50"
           >
-            {isLoading ? "..." : t("reviews.viewAll")}
+            {isLoading ? "..." : t("reviews.viewAll", { lng: isMounted ? undefined : "en" })}
           </button>
         </div>
       )}

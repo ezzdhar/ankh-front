@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+import { useIsMounted } from "@/hooks/useIsMounted";
+
 interface NewCollectionProps {
   image?: string;
   title?: string;
@@ -13,9 +15,10 @@ interface NewCollectionProps {
 
 export function NewCollection({ image, title, link }: NewCollectionProps) {
   const { t } = useTranslation("home");
+  const isMounted = useIsMounted();
 
   const displayImage = image || "/new-collection.webp";
-  const displayTitle = title || t("hero.title");
+  const displayTitle = title || t("hero.title", { lng: isMounted ? undefined : "en" });
   const displayLink = link || "/search";
 
   return (
@@ -33,7 +36,7 @@ export function NewCollection({ image, title, link }: NewCollectionProps) {
         <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      <div className="absolute left-[10%] top-[85%] -translate-x-1/4 -translate-y-1/2 flex flex-col items-start justify-center gap-6 text-center p-6 pb-20 text-white z-10">
+      <div className="absolute left-[10%] top-[85%] -translate-x-1/4 -translate-y-1/2 flex flex-col items-start justify-center gap-6 text-center p-6 pb-20 text-white z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
         <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight tracking-wide uppercase drop-shadow-md">
           {displayTitle}
         </h1>
@@ -45,7 +48,7 @@ export function NewCollection({ image, title, link }: NewCollectionProps) {
         >
           <Link href={displayLink} className="relative z-10">
             <span className="relative z-10 text-white group-hover:text-[#3A0F0E] transition-colors duration-300">
-              {t("hero.cta")}
+              {t("hero.cta", { lng: isMounted ? undefined : "en" })}
             </span>
             <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-0 ease-out" />
           </Link>

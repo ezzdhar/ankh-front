@@ -34,6 +34,15 @@ const checkoutTranslations = {
     tryAgain: "Try Again",
     backToHome: "Back to Home",
   },
+  guest: {
+    name: "Full Name",
+    namePlaceholder: "Enter your full name",
+    phone: "Phone Number",
+    phonePlaceholder: "Enter a valid phone number (e.g. 01012345678)",
+    address: "Detailed Address",
+    addressPlaceholder: "City, area, street, building number",
+    validationError: "Please fill in all required delivery details.",
+  },
 };
 
 export default checkoutTranslations;

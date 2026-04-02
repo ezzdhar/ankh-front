@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/hooks";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,14 +11,13 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 export default function WishlistPage() {
   return (
-    <ProtectedRoute>
-      <WishlistContent />
-    </ProtectedRoute>
+    <WishlistContent />
   );
 }
 
 function WishlistContent() {
   const { t, i18n } = useTranslation("wishlist");
+  const isMounted = useIsMounted();
   const isRTL = i18n.language === "ar";
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 8;
@@ -46,7 +46,7 @@ function WishlistContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <h1 className="text-[40px] font-medium text-[#3A0F0E] text-center mb-10 font-cormorant">
-          {t("title")}
+          {t("title", { lng: isMounted ? undefined : "en" })}
         </h1>
 
         {/* Grid */}
@@ -73,7 +73,7 @@ function WishlistContent() {
 
         {favoriteItems.length === 0 && (
           <div className="text-center py-20 opacity-50">
-            <p className="text-xl">{t("empty") || "Your wishlist is empty."}</p>
+            <p className="text-xl">{t("empty", { lng: isMounted ? undefined : "en" }) || "Your wishlist is empty."}</p>
           </div>
         )}
 

@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -27,10 +28,10 @@ import { useAddToCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
 import { useToggleFavorite } from "@/hooks/useFavorite";
 import { toast } from "sonner";
-import Cookies from "js-cookie";
 
 export function ProductInfo({ product }: { product: Product }) {
   const { t } = useTranslation("product");
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
   const addToCart = useAddToCart();
@@ -38,7 +39,7 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success(t("share.copied") || "Link copied to clipboard!");
+    toast.success(t("share.copied", { lng: isMounted ? undefined : "en" }) || "Link copied to clipboard!");
   };
 
   const handleToggleFavorite = () => {
@@ -73,7 +74,6 @@ export function ProductInfo({ product }: { product: Product }) {
   const LOW_STOCK_THRESHOLD = 10;
 
   const [quantity, setQuantity] = useState(1);
-  const [guestAttempts, setGuestAttempts] = useState(0);
 
   // Filter out any invalid image URLs
   const images = useMemo(() => {
@@ -123,21 +123,8 @@ export function ProductInfo({ product }: { product: Product }) {
   }, [emblaMainApi, onSelect]);
 
   const handleAddToCart = () => {
-    const token = Cookies.get("token");
-
-    if (!token) {
-      if (guestAttempts >= 1) {
-        toast.error(t("auth:login.loginRequired") || "Login required");
-        router.push("/login?redirect=" + window.location.pathname);
-        return;
-      }
-      toast.error(t("auth:login.loginRequired") || "Login required");
-      setGuestAttempts((prev) => prev + 1);
-      return;
-    }
-
     if (showVariants && !selectedVariant) {
-      toast.error(t("details.selectVariant") || "Please select options");
+      toast.error(t("details.selectVariant", { lng: isMounted ? undefined : "en" }) || "Please select options");
       return;
     }
 
@@ -151,7 +138,7 @@ export function ProductInfo({ product }: { product: Product }) {
   return (
     <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 bg-[#FFF8EF]">
       {/* Gallery Section */}
-      <div className="flex flex-col gap-4 w-full lg:w-[600px] select-none">
+      <div className="flex flex-col gap-4 w-full lg:w-[600px] select-none animate-in fade-in slide-in-from-left-8 duration-700">
         {/* Main Slider */}
         <div className="relative group">
           <div className="overflow-hidden" ref={mainViewportRef}>
@@ -167,6 +154,7 @@ export function ProductInfo({ product }: { product: Product }) {
                     fill
                     className="object-cover"
                     priority={idx === 0}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                   />
                 </div>
               ))}
@@ -219,7 +207,7 @@ export function ProductInfo({ product }: { product: Product }) {
       </div>
 
       {/* Details Section */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-6 animate-in fade-in slide-in-from-right-8 duration-700">
         <div className="flex justify-start gap-3">
           <button
             onClick={handleToggleFavorite}
@@ -271,13 +259,13 @@ export function ProductInfo({ product }: { product: Product }) {
         <div className="space-y-2 text-[#3A0F0E]">
           {product.sku && (
             <div className="flex gap-2 text-base">
-              <span className="font-medium">{t("details.sku")} :</span>
+              <span className="font-medium">{t("details.sku", { lng: isMounted ? undefined : "en" })} :</span>
               <span className="opacity-70">{product.sku}</span>
             </div>
           )}
           {product.category_name && (
             <div className="flex gap-2 text-base">
-              <span className="font-medium">{t("details.category")} :</span>
+              <span className="font-medium">{t("details.category", { lng: isMounted ? undefined : "en" })} :</span>
               <span className="opacity-70 uppercase tracking-widest">
                 {product.category_name}
               </span>
@@ -289,9 +277,9 @@ export function ProductInfo({ product }: { product: Product }) {
         {showVariants && (
           <div className="space-y-3">
             <div className="text-sm font-medium text-[#3A0F0E]">
-              {t("details.chooseOption")}
+              {t("details.chooseOption", { lng: isMounted ? undefined : "en" })}
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-3">
               {variants.map((variant) => {
                 const isSelected = selectedVariantId === variant.id;
                 const isOutOfStock = variant.stock <= 0;
@@ -358,12 +346,12 @@ export function ProductInfo({ product }: { product: Product }) {
                     {/* Stock Badge */}
                     {isOutOfStock && (
                       <div className="mt-2 text-xs font-medium text-red-600">
-                        {t("details.outOfStock")}
+                        {t("details.outOfStock", { lng: isMounted ? undefined : "en" })}
                       </div>
                     )}
                     {isLowStock && (
                       <div className="mt-2 text-xs font-medium text-[#C6943E]">
-                        {t("details.lowStock", { count: variant.stock })}
+                        {t("details.lowStock", { count: variant.stock, lng: isMounted ? undefined : "en" })}
                       </div>
                     )}
 
@@ -420,8 +408,8 @@ export function ProductInfo({ product }: { product: Product }) {
               className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
               {addToCart.isPending
-                ? t("details.adding")
-                : t("details.addToCart")}
+                ? t("details.adding", { lng: isMounted ? undefined : "en" })
+                : t("details.addToCart", { lng: isMounted ? undefined : "en" })}
             </Button>
             <Button
               onClick={() => {
@@ -430,7 +418,7 @@ export function ProductInfo({ product }: { product: Product }) {
               }}
               className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#3A0F0E]/90! text-white text-sm font-medium rounded-full uppercase tracking-wider transition-all"
             >
-              {t("details.checkOut")}
+              {t("details.checkOut", { lng: isMounted ? undefined : "en" })}
             </Button>
           </div>
         </div>
@@ -440,7 +428,7 @@ export function ProductInfo({ product }: { product: Product }) {
           <Accordion type="single" collapsible defaultValue="about">
             <AccordionItem value="about">
               <AccordionTrigger className="text-base font-medium text-[#3A0F0E]">
-                {t("details.about")}
+                {t("details.about", { lng: isMounted ? undefined : "en" })}
               </AccordionTrigger>
               <AccordionContent>
                 <div
@@ -453,7 +441,7 @@ export function ProductInfo({ product }: { product: Product }) {
             </AccordionItem>
             <AccordionItem value="size">
               <AccordionTrigger className="text-base font-medium text-[#3A0F0E]">
-                {t("details.sizeChart")}
+                {t("details.sizeChart", { lng: isMounted ? undefined : "en" })}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="relative w-full aspect-video">

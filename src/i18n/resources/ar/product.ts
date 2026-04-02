@@ -34,6 +34,9 @@ const product = {
     placeholder: "أخبرنا برأيك...",
     uploadImage: "رفع صورة",
     success: "شكراً لتقييمك!",
+    writeYourReview: "اكتب رأيك",
+    minChars: "أقل عدد من الحروف",
+    noReviews: "لا توجد مراجعات بعد.",
   },
   justForYou: "اخترنا لك",
 };

@@ -45,7 +45,7 @@ export function InstagramSection({
   if (!items.length) return null;
 
   return (
-    <section className="container bg-[#FFF8EF]">
+    <section className="container bg-[#FFF8EF] animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center gap-6 mb-10">
         <h2 className="text-center text-lg md:text-2xl font-normal tracking-[0.2em] uppercase text-maroon">
           Follow Us On Instagram

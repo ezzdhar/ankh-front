@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 interface HeroProps {
   image?: string;
@@ -26,7 +27,8 @@ export function Hero({
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [imgSrc, setImgSrc] = useState(image || "/landing.webp");
 
-  const displayTitle = title || t("hero.title");
+  const isMounted = useIsMounted();
+  const displayTitle = title || t("hero.title", { lng: isMounted ? undefined : "en" });
   const displayLink = link || "/search";
 
   const showLoader = isParentLoading || isImageLoading;
@@ -56,7 +58,7 @@ export function Hero({
         <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10">
+      <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both delay-300">
         <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight tracking-wide uppercase drop-shadow-md">
           {displayTitle}
         </h1>
@@ -73,7 +75,7 @@ export function Hero({
         >
           <Link href={displayLink} className="relative z-10">
             <span className="relative z-10 text-white group-hover:text-[#3A0F0E] transition-colors duration-300">
-              {t("hero.cta")}
+              {t("hero.cta", { lng: isMounted ? undefined : "en" })}
             </span>
             <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-0 ease-out" />
           </Link>

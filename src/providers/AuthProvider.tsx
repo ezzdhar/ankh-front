@@ -91,6 +91,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       // Trigger profile refetch so Navbar and other components get fresh data
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
     },
     [queryClient],
   );

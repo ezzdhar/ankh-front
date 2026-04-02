@@ -131,7 +131,7 @@ export default function CartPage() {
         </h1>
 
         {items.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
             {/* Items List */}
             <div className="lg:col-span-8 space-y-6">
               {items.map((item) => (
@@ -166,7 +166,7 @@ export default function CartPage() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 bg-[#FCF7F1]/50 border border-[#3A0F0E]/10 rounded-sm space-y-6">
+          <div className="flex flex-col items-center justify-center py-20 bg-[#FCF7F1]/50 border border-[#3A0F0E]/10 rounded-sm space-y-6 animate-in zoom-in-95 fade-in duration-700">
             <div className="w-20 h-20 rounded-full bg-[#310E0E]/5 flex items-center justify-center text-[#310E0E]">
               <ShoppingBag size={40} />
             </div>

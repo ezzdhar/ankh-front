@@ -3,10 +3,15 @@ import { api } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
 
 export interface CheckoutData {
-  address_id: number;
-  payment_gateway: "paymob" | "fawry" | string;
+  payment_gateway: "paymob" | "fawry" | "cod" | string;
   notes?: string;
   idempotency_key: string;
+  // Authenticated user fields
+  address_id?: number;
+  // Guest fields
+  guest_name?: string;
+  guest_phone?: string;
+  guest_address?: string;
 }
 
 export function useCheckout() {
@@ -14,14 +19,21 @@ export function useCheckout() {
 
   return useMutation({
     mutationFn: async (data: CheckoutData) => {
-      // Use regular object for JSON payload, many backends prefer it for non-file requests
-      const payload = {
-        address_id: data.address_id,
-        payment_method: data.payment_gateway, // Use payment_method as suggested by useOrders.ts
-        payment_gateway: data.payment_gateway, 
+      const payload: Record<string, unknown> = {
+        payment_method: data.payment_gateway,
+        payment_gateway: data.payment_gateway,
         notes: data.notes,
         idempotency_key: data.idempotency_key,
       };
+
+      // Conditionally include either address_id OR guest fields
+      if (data.address_id) {
+        payload.address_id = data.address_id;
+      } else {
+        payload.guest_name = data.guest_name;
+        payload.guest_phone = data.guest_phone;
+        payload.guest_address = data.guest_address;
+      }
 
       const response = await api.post<ApiResponse>(
         "/api/v1/checkout",

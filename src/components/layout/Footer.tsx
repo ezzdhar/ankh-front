@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Phone, MapPin, Mail } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 const API_BASE_URL = "https://admin.ankh-eg.com";
 
@@ -19,6 +20,7 @@ const paymentIcons = [
 
 export function Footer() {
   const { t } = useTranslation("common");
+  const isMounted = useIsMounted();
   const { data: settingsData } = useSiteSettings();
   const settings = settingsData?.data;
 
@@ -29,22 +31,22 @@ export function Footer() {
     : "/logo_white.svg";
 
   const quickLinks = [
-    { label: t("footer.home"), href: "/" },
-    { label: t("footer.products"), href: "/search" },
-    { label: t("footer.aboutUs"), href: "/about" },
+    { label: t("footer.home", { lng: isMounted ? undefined : "en" }), href: "/" },
+    { label: t("footer.products", { lng: isMounted ? undefined : "en" }), href: "/search" },
+    { label: t("footer.aboutUs", { lng: isMounted ? undefined : "en" }), href: "/about" },
   ];
 
   const supportLinks = [
-    { label: t("footer.myAccount"), href: "/profile" },
-    { label: t("footer.myOrders"), href: "/orders" },
-    { label: t("footer.wishlist") || "Wishlist", href: "/wishlist" },
+    { label: t("footer.myAccount", { lng: isMounted ? undefined : "en" }), href: "/profile" },
+    { label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }), href: "/orders" },
+    { label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }) || "Wishlist", href: "/wishlist" },
   ];
 
   const policyLinks = [
-    { label: t("footer.terms"), href: "/terms" },
-    { label: t("footer.privacyPolicy"), href: "/privacy-policy" },
-    { label: t("footer.shippingPolicy"), href: "/shipping-policy" },
-    { label: t("footer.refundPolicy"), href: "/refund-policy" },
+    { label: t("footer.terms", { lng: isMounted ? undefined : "en" }), href: "/terms" },
+    { label: t("footer.privacyPolicy", { lng: isMounted ? undefined : "en" }), href: "/privacy-policy" },
+    { label: t("footer.shippingPolicy", { lng: isMounted ? undefined : "en" }), href: "/shipping-policy" },
+    { label: t("footer.refundPolicy", { lng: isMounted ? undefined : "en" }), href: "/refund-policy" },
   ];
 
   return (
@@ -72,14 +74,14 @@ export function Footer() {
           {/* Quick Links */}
           <div className="flex flex-col gap-4">
             <h3 className="text-base font-medium tracking-wide">
-              {t("footer.quickLinks")}
+              {t("footer.quickLinks", { lng: isMounted ? undefined : "en" })}
             </h3>
             <ul className="flex flex-col gap-2">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm text-white/70 hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -91,14 +93,14 @@ export function Footer() {
           {/* Customer Support */}
           <div className="flex flex-col gap-4">
             <h3 className="text-base font-medium tracking-wide">
-              {t("footer.customerSupport")}
+              {t("footer.customerSupport", { lng: isMounted ? undefined : "en" })}
             </h3>
             <ul className="flex flex-col gap-2">
               {supportLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm text-white/70 hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -110,7 +112,7 @@ export function Footer() {
           {/* Contact Information */}
           <div className="flex flex-col gap-4">
             <h3 className="text-base font-medium tracking-wide">
-              {t("footer.contactInfo")}
+              {t("footer.contactInfo", { lng: isMounted ? undefined : "en" })}
             </h3>
             <ul className="flex flex-col gap-3">
               {settings?.phone && (
@@ -171,7 +173,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Copyright */}
             <p className="text-xs text-white/60">
-              {t("footer.copyright", { year: new Date().getFullYear() })}
+              {t("footer.copyright", { year: new Date().getFullYear(), lng: isMounted ? undefined : "en" })}
             </p>
 
             {/* Payment Icons */}
@@ -179,7 +181,7 @@ export function Footer() {
               {paymentIcons.map((icon) => (
                 <div
                   key={icon.alt}
-                  className="w-10 h-6 bg-white rounded flex items-center justify-center p-1"
+                  className="w-10 h-6 bg-white rounded flex items-center justify-center p-1 hover:scale-110 transition-transform duration-300 cursor-pointer"
                 >
                   <Image
                     src={icon.src}
@@ -192,13 +194,12 @@ export function Footer() {
               ))}
             </div>
 
-            {/* Policy Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               {policyLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-white/60 hover:text-white transition-colors"
+                  className="text-xs text-white/60 hover:text-white transition-colors hover:underline"
                 >
                   {link.label}
                 </Link>

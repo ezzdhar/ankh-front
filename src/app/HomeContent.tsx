@@ -9,6 +9,7 @@ import { useInspired } from "@/hooks/useInspired";
 import { useBanners } from "@/hooks/useBanners";
 import { useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 // Lazy load below-fold components to reduce initial JS bundle
 const WinterCollection = dynamic(
@@ -56,6 +57,7 @@ const InstagramSection = dynamic(
 
 export function HomeContent() {
   const { t } = useTranslation("home");
+  const isMounted = useIsMounted();
   const { data: categoriesData, isLoading: isCategoriesLoading } =
     useCategories();
   const { data: randomProductsData, isLoading: isProductsLoading } =
@@ -100,7 +102,7 @@ export function HomeContent() {
         isLoading={isLoading || !bannersData}
       />
       <CollectionCarousel
-        title={t("collections.title")}
+        title={t("collections.title", { lng: isMounted ? undefined : "en" })}
         items={categoryItems}
         isLoading={isCategoriesLoading}
       />
@@ -110,7 +112,7 @@ export function HomeContent() {
         link={"/search"}
       />
       <CollectionCarousel
-        title={t("newest")}
+        title={t("newest", { lng: isMounted ? undefined : "en" })}
         items={randomProductItems}
         isProduct={true}
         isLoading={isProductsLoading}

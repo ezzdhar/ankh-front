@@ -32,6 +32,15 @@ const checkoutTranslations = {
     tryAgain: "المحاولة مرة أخرى",
     backToHome: "العودة للرئيسية",
   },
+  guest: {
+    name: "الاسم الكامل",
+    namePlaceholder: "أدخل اسمك بالكامل",
+    phone: "رقم الهاتف",
+    phonePlaceholder: "أدخل رقم هاتف صالح (مثال: 01012345678)",
+    address: "العنوان التفصيلي",
+    addressPlaceholder: "المدينة، المنطقة، الشارع، رقم المبنى",
+    validationError: "يرجى ملء جميع بيانات التوصيل الأساسية.",
+  },
 };
 
 export default checkoutTranslations;

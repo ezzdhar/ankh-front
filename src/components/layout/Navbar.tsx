@@ -198,7 +198,7 @@ export function Navbar() {
                       className="flex items-center gap-4 text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                     >
                       <User size={22} strokeWidth={1.5} />
-                      {t("login", { ns: "auth", lng: isMounted ? undefined : "en" })}
+                      {t("login.submit", { ns: "auth", lng: isMounted ? undefined : "en" })}
                     </Link>
                   )}
                 </div>

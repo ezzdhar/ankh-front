@@ -162,15 +162,15 @@ export function ProductInfo({ product }: { product: Product }) {
   return (
     <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 bg-[#FFF8EF]">
       {/* Gallery Section */}
-      <div className="flex flex-col gap-4 w-full lg:w-[600px] select-none animate-in fade-in slide-in-from-left-8 duration-700">
+      <div className="flex flex-col gap-4 w-full max-w-[420px] sm:max-w-[520px] lg:w-[560px] lg:max-w-[560px] mx-auto lg:mx-0 select-none animate-in fade-in slide-in-from-left-8 duration-700">
         {/* Main Slider */}
         <div className="relative group">
-          <div className="overflow-hidden" ref={mainViewportRef}>
+          <div className="overflow-hidden rounded-md" ref={mainViewportRef}>
             <div className="flex">
               {images.map((img, idx) => (
                 <div
                   key={idx}
-                  className="relative flex-[0_0_100%] min-w-0 aspect-3/4"
+                  className="relative flex-[0_0_100%] min-w-0 aspect-[4/5] sm:aspect-3/4"
                 >
                   <Image
                     src={img}
@@ -178,7 +178,7 @@ export function ProductInfo({ product }: { product: Product }) {
                     fill
                     className="object-cover"
                     priority={idx === 0}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                    sizes="(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 560px"
                   />
                 </div>
               ))}
@@ -202,13 +202,13 @@ export function ProductInfo({ product }: { product: Product }) {
         {/* Thumbnail Slider */}
         <div className="relative">
           <div className="overflow-hidden" ref={thumbViewportRef}>
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               {images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => onThumbClick(idx)}
                   className={cn(
-                    "relative shrink-0 w-20 h-28 overflow-hidden transition-all duration-300",
+                    "relative shrink-0 w-16 h-24 sm:w-20 sm:h-28 overflow-hidden transition-all duration-300",
                     selectedImage === idx
                       ? "opacity-100 ring-1 ring-[#3A0F0E]"
                       : "opacity-100",

@@ -144,7 +144,7 @@ export function OrderDetailsModal({
           {order.notes && (
             <div className="p-3 bg-slate-50 rounded-lg text-sm italic">
               <p className="text-slate-500 mb-1 font-bold not-italic">
-                {t("checkout:notes")}:
+                {t("checkout:notes.label")}:
               </p>
               {order.notes}
             </div>

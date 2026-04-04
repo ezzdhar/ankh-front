@@ -3,14 +3,9 @@
 import { useTranslation } from "@/i18n/hooks";
 import { OrdersFilters, OrdersTable } from "@/components/orders";
 import { Suspense } from "react";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 export default function MyOrdersPage() {
-  return (
-    <ProtectedRoute>
-      <OrdersContent />
-    </ProtectedRoute>
-  );
+  return <OrdersContent />;
 }
 
 function OrdersContent() {

@@ -35,8 +35,6 @@ function rateLimit(ip: string) {
 const protectedRoutes = [
   // "/checkout",
   "/profile",
-  "/orders",
-  "/wishlist",
   "/address",
   "/change-password",
 ];

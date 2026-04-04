@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductCard } from "@/components/common/ProductCard";
 import { useFavorites } from "@/hooks/useFavorite";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 export default function WishlistPage() {
   return (

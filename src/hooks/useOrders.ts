@@ -2,6 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
 
+const GUEST_ID_STORAGE_KEY = "ankh_guest_id";
+
+function getOrderSessionScope() {
+  if (typeof window === "undefined") {
+    return "server";
+  }
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    return `auth:${token.slice(0, 12)}`;
+  }
+
+  const guestId = localStorage.getItem(GUEST_ID_STORAGE_KEY);
+  return guestId ? `guest:${guestId}` : "guest:anonymous";
+}
+
 export interface OrderItem {
   id: number;
   product_id: number;
@@ -56,8 +72,10 @@ export function useOrders(
   per_page = 10,
   filters?: { search?: string; status?: string; payment_status?: string },
 ) {
+  const sessionScope = getOrderSessionScope();
+
   return useQuery<ApiResponse<OrdersPaginatedData>>({
-    queryKey: ["orders", page, per_page, filters],
+    queryKey: ["orders", sessionScope, page, per_page, filters],
     queryFn: async () => {
       const response = await api.get<ApiResponse<OrdersPaginatedData>>(
         "/api/v1/orders",

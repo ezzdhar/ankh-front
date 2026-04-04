@@ -66,7 +66,12 @@ api.interceptors.request.use(
       "/reset-password",
     ];
 
-    const guestHeaderEndpoints = ["/cart-items", "/checkout"];
+    const guestHeaderEndpoints = [
+      "/cart-items",
+      "/checkout",
+      "/orders",
+      "/favorites",
+    ];
 
     const needsCredentials = sessionEndpoints.some((ep) =>
       config.url?.includes(ep)
@@ -112,10 +117,6 @@ api.interceptors.response.use(
       if (Status !== undefined) response.data.status = Status;
       if (Message !== undefined) response.data.message = Message;
       if (Pagination !== undefined) response.data.paginate = Pagination;
-    }
-
-    if (response.config.url?.includes("/products")) {
-      console.log(`[API Call Success] ${response.config.url}${response.config.params ? '?' + new URLSearchParams(response.config.params).toString() : ''}:`, response.data);
     }
 
     return response;

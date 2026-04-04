@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Menu, User, ShoppingBag, Globe, LogOut } from "lucide-react";
+import {
+  Search,
+  Menu,
+  User,
+  ShoppingBag,
+  Globe,
+  LogOut,
+  Heart,
+} from "lucide-react";
 import i18n from "@/i18n";
 import { useTranslation } from "@/i18n/hooks";
 import Image from "next/image";
@@ -59,6 +67,7 @@ export function Navbar() {
     { href: "/", label: t("nav.home", { lng: isMounted ? undefined : "en" }) },
     { href: "/about", label: t("nav.about", { lng: isMounted ? undefined : "en" }) },
     { href: "/search", label: t("nav.products", { lng: isMounted ? undefined : "en" }) },
+    { href: "/wishlist", label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }) },
   ];
 
   return (
@@ -72,6 +81,13 @@ export function Navbar() {
             aria-label="Account"
           >
             <User size={20} strokeWidth={1.5} />
+          </Link>
+          <Link
+            href="/wishlist"
+            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity"
+            aria-label="Wishlist"
+          >
+            <Heart size={20} strokeWidth={1.5} />
           </Link>
           <Link
             href="/cart"

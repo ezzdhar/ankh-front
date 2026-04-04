@@ -140,8 +140,13 @@ export function useApplyCoupon() {
 
   return useMutation({
     mutationFn: async (coupon_code: string) => {
+      const normalizedCouponCode = coupon_code.trim();
+      if (!normalizedCouponCode) {
+        throw new Error(i18n.t("cart:couponError"));
+      }
+
       const formData = new FormData();
-      formData.append("coupon_code", coupon_code);
+      formData.append("coupon_code", normalizedCouponCode);
 
       const response = await api.post<ApiResponse>(
         "/api/v1/coupon/apply",
@@ -154,10 +159,16 @@ export function useApplyCoupon() {
         toast.success(i18n.t("cart:couponApplied"));
         queryClient.invalidateQueries({ queryKey: ["cart"] });
       } else {
+        console.log("[Coupon Apply API Result - success:false]", data);
         toast.error(data.message || i18n.t("cart:couponError"));
       }
     },
     onError: (error: AxiosError<ApiResponse>) => {
+      console.log("[Coupon Apply API Error]", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
       toast.error(
         error.response?.data?.message || i18n.t("cart:couponError"),
       );

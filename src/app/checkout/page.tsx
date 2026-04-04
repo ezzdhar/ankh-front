@@ -10,6 +10,7 @@ import { useCart, useApplyCoupon, useRemoveCoupon } from "@/hooks/useCart";
 import { useAddresses } from "@/hooks/useAddresses";
 import { useCheckout } from "@/hooks/useCheckout";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/AuthProvider";
 import { GuestAddressForm } from "@/components/checkout/GuestAddressForm";
@@ -23,9 +24,14 @@ export default function CheckoutPage() {
 function CheckoutContent() {
   const { t } = useTranslation("checkout");
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-  const { data: cartData, isLoading: isCartLoading } = useCart();
+  const {
+    data: cartData,
+    isLoading: isCartLoading,
+    refetch: refetchCart,
+  } = useCart();
   const applyCouponMutation = useApplyCoupon();
   const removeCouponMutation = useRemoveCoupon();
   const { data: addressesData, isLoading: isAddressesLoading } = useAddresses();
@@ -44,6 +50,7 @@ function CheckoutContent() {
 
   const [orderNotes, setOrderNotes] = useState("");
   const [selectedPaymentId, setSelectedPaymentId] = useState("cod");
+  const [appliedCouponCode, setAppliedCouponCode] = useState("");
   const [idempotencyKey] = useState(() => {
     if (typeof crypto !== "undefined" && crypto.randomUUID) {
       return crypto.randomUUID();
@@ -183,11 +190,15 @@ function CheckoutContent() {
             toast.error(data.message || t("failed.message"));
           }
         },
-        onError: (error: any) => {
+        onError: (error: unknown) => {
           console.error("Checkout error:", error);
+          const maybeError = error as {
+            response?: { data?: { message?: string } };
+            message?: string;
+          };
           const message =
-            error.response?.data?.message ||
-            error.message ||
+            maybeError.response?.data?.message ||
+            maybeError.message ||
             t("failed.message");
           toast.error(message);
         },
@@ -261,9 +272,39 @@ function CheckoutContent() {
                 finalTotal={finalTotal}
                 onPayNow={handlePayNow}
                 isSubmitting={checkoutMutation.isPending}
-                couponCode={cart?.coupon_code || ""}
-                onApplyCoupon={(code) => applyCouponMutation.mutate(code)}
-                onRemoveCoupon={() => removeCouponMutation.mutate()}
+                couponCode={cart?.coupon_code || appliedCouponCode}
+                onApplyCoupon={(code) =>
+                  applyCouponMutation.mutate(code, {
+                    onSuccess: (data) => {
+                      console.log("[Coupon Apply Result]", data);
+                      if (data?.success) {
+                        setAppliedCouponCode(code);
+                      }
+                    },
+                    onSettled: async () => {
+                      await queryClient.invalidateQueries({
+                        queryKey: ["cart"],
+                      });
+                      await refetchCart();
+                    },
+                  })
+                }
+                onRemoveCoupon={() =>
+                  removeCouponMutation.mutate(undefined, {
+                    onSuccess: (data) => {
+                      console.log("[Coupon Remove Result]", data);
+                      if (data?.success !== false) {
+                        setAppliedCouponCode("");
+                      }
+                    },
+                    onSettled: async () => {
+                      await queryClient.invalidateQueries({
+                        queryKey: ["cart"],
+                      });
+                      await refetchCart();
+                    },
+                  })
+                }
                 isApplyingCoupon={
                   applyCouponMutation.isPending ||
                   removeCouponMutation.isPending

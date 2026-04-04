@@ -71,6 +71,7 @@ api.interceptors.request.use(
       "/checkout",
       "/orders",
       "/favorites",
+      "/coupon",
     ];
 
     const needsCredentials = sessionEndpoints.some((ep) =>

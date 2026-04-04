@@ -10,10 +10,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "ankh-back.test",
-      },
-      {
-        protocol: "https",
         hostname: "admin.ankh-eg.com",
         pathname: "/storage/**",
       },

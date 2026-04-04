@@ -122,16 +122,40 @@ export function ProductInfo({ product }: { product: Product }) {
     emblaMainApi.on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  const handleAddToCart = () => {
+  const getCartPayload = () => {
     if (showVariants && !selectedVariant) {
       toast.error(t("details.selectVariant", { lng: isMounted ? undefined : "en" }) || "Please select options");
-      return;
+      return null;
     }
 
-    addToCart.mutate({
+    return {
       product_id: product.id,
       product_variant_id: selectedVariant?.id,
       quantity,
+    };
+  };
+
+  const handleAddToCart = () => {
+    const payload = getCartPayload();
+    if (!payload) {
+      return;
+    }
+
+    addToCart.mutate(payload);
+  };
+
+  const handleCheckout = () => {
+    const payload = getCartPayload();
+    if (!payload) {
+      return;
+    }
+
+    addToCart.mutate(payload, {
+      onSuccess: (data) => {
+        if ((data as { success?: boolean })?.success) {
+          router.push("/checkout");
+        }
+      },
     });
   };
 
@@ -412,10 +436,8 @@ export function ProductInfo({ product }: { product: Product }) {
                 : t("details.addToCart", { lng: isMounted ? undefined : "en" })}
             </Button>
             <Button
-              onClick={() => {
-                handleAddToCart();
-                setTimeout(() => router.push("/checkout"), 500);
-              }}
+              disabled={addToCart.isPending}
+              onClick={handleCheckout}
               className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#3A0F0E]/90! text-white text-sm font-medium rounded-full uppercase tracking-wider transition-all"
             >
               {t("details.checkOut", { lng: isMounted ? undefined : "en" })}

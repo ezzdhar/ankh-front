@@ -33,7 +33,7 @@ function rateLimit(ip: string) {
 
 // --- 2. Auth Route Config ---
 const protectedRoutes = [
-  "/checkout",
+  // "/checkout",
   "/profile",
   "/orders",
   "/wishlist",
@@ -86,7 +86,13 @@ export function proxy(request: NextRequest) {
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set("Access-Control-Allow-Origin", "*");
+  const origin = request.headers.get("origin");
+  if (origin) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+  } else {
+    response.headers.set("Access-Control-Allow-Origin", "*");
+  }
   response.headers.set(
     "Access-Control-Allow-Methods",
     "GET,POST,PUT,DELETE,OPTIONS",

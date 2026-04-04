@@ -2,6 +2,26 @@ import axios from "axios";
 import i18n from "@/i18n";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://admin.ankh-eg.com";
+const GUEST_ID_STORAGE_KEY = "ankh_guest_id";
+
+function getOrCreateGuestId() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const storedGuestId = localStorage.getItem(GUEST_ID_STORAGE_KEY);
+  if (storedGuestId) {
+    return storedGuestId;
+  }
+
+  const generatedGuestId =
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  localStorage.setItem(GUEST_ID_STORAGE_KEY, generatedGuestId);
+  return generatedGuestId;
+}
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -30,10 +50,6 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // Workaround for CORS issues:
-    // Only send credentials (cookies) for endpoints that actually need the Session
-    // (like cart, favorites, checkout) to avoid CORS failing on public endpoints 
-    // that return Access-Control-Allow-Origin: *
     const sessionEndpoints = [
       "/cart-items",
       "/favorites",
@@ -47,23 +63,27 @@ api.interceptors.request.use(
       "/orders",
       "/change-password",
       "/forgot-password",
-      "/reset-password"
+      "/reset-password",
     ];
+
+    const guestHeaderEndpoints = ["/cart-items", "/checkout"];
 
     const needsCredentials = sessionEndpoints.some((ep) =>
       config.url?.includes(ep)
     );
 
-    if (needsCredentials || token) {
-      // If we have a token, we might need credentials for session merging etc.
-      // But actually if token is present, we should send credentials IF the backend supports it.
-      // Wait, if token is present and we request /banners, it will fail if we set withCredentials = true!
-      // So we ONLY set it if the endpoint needs it, OR if the developer explicitly fixes backend CORS.
+    const needsGuestHeader =
+      !token &&
+      guestHeaderEndpoints.some((ep) => config.url?.includes(ep));
+
+    if (needsGuestHeader) {
+      const guestId = getOrCreateGuestId();
+      if (guestId) {
+        config.headers["X-Guest-Id"] = guestId;
+      }
     }
-    
-    // Safer approach: Only set withCredentials for user-specific actions that might use Guest Session
-    // when we DON'T have an auth token yet. Logged-in users use Bearer tokens and don't need
-    // to send session credentials, which avoids CORS issues if the backend uses wildcard (*) origins.
+
+    // Send credentials for session-driven guest flows on protected/session endpoints.
     if (needsCredentials && !token) {
       config.withCredentials = true;
     } else {

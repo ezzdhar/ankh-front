@@ -41,8 +41,8 @@ export function SidebarFilters() {
   // Helper to get current values
   const selectedCategories = searchParams.getAll("category_id");
   const selectedSizes = searchParams.getAll("size");
-  const selectedRate = searchParams.get("rate")
-    ? Number(searchParams.get("rate"))
+  const selectedRating = searchParams.get("rating")
+    ? Number(searchParams.get("rating"))
     : null;
   const minPrice = searchParams.get("min_price")
     ? Number(searchParams.get("min_price"))
@@ -88,12 +88,12 @@ export function SidebarFilters() {
     updateURL(params);
   };
 
-  const handleRateChange = (rate: number) => {
+  const handleRatingChange = (rating: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (selectedRate === rate) {
-      params.delete("rate");
+    if (selectedRating === rating) {
+      params.delete("rating");
     } else {
-      params.set("rate", rate.toString());
+      params.set("rating", rating.toString());
     }
     updateURL(params);
   };
@@ -174,7 +174,7 @@ export function SidebarFilters() {
       {/* Rates */}
       <AccordionItem value="rates">
         <AccordionTrigger className="text-base font-medium text-[#3A0F0E]">
-          {t("filters.rates")}
+          {t("filters.rating")}
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex flex-col gap-2">
@@ -182,10 +182,10 @@ export function SidebarFilters() {
               <div
                 key={rate}
                 className="flex items-center gap-2 cursor-pointer"
-                onClick={() => handleRateChange(rate)}
+                onClick={() => handleRatingChange(rate)}
               >
                 <div
-                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] shrink-0 ${selectedRate === rate ? "bg-[#3A0F0E]" : "bg-transparent"}`}
+                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] shrink-0 ${selectedRating === rate ? "bg-[#3A0F0E]" : "bg-transparent"}`}
                 />
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (

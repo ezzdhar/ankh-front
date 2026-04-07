@@ -29,6 +29,9 @@ export function ProductGrid() {
     max_price: searchParams.get("max_price")
       ? Number(searchParams.get("max_price"))
       : undefined,
+    rating: searchParams.get("rating")
+      ? Number(searchParams.get("rating"))
+      : undefined,
     // in_stock_only: searchParams.get("in_stock_only") === "true",
     // has_discount_only: searchParams.get("has_discount_only") === "true",
   };

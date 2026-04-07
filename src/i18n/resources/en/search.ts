@@ -11,7 +11,7 @@ const search = {
   filters: {
     categories: "Categories",
     sizes: "Sizes",
-    rates: "Rates",
+    rating: "Rating",
     priceRange: "Price Range",
     applyPrice: "Apply Price",
     clear: "Clear Filters",

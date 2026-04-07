@@ -15,7 +15,7 @@ export interface Product {
   }[]; // Array of additional images
   sku?: string;
   in_stock: boolean;
-  rating?: number;
+  average_rating?: number;
   price_after_discount?: number;
   original_price?: number | string;
   has_discount?: boolean;
@@ -32,6 +32,7 @@ export interface ProductSearchParams {
   brand_id?: number;
   min_price?: number;
   max_price?: number;
+  rating?: number;
   in_stock_only?: boolean;
   has_discount_only?: boolean;
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useTranslation } from "@/i18n/hooks";
 import { useCategories } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ interface FiltersProps {
 const RATES = [5, 4, 3, 2, 1];
 
 export function Filters({ className, closeMobileMenu }: FiltersProps) {
+  const { t } = useTranslation("search");
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -31,8 +33,8 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
 
   // Derived state from URL
   const selectedCategory = searchParams.get("category_id");
-  const selectedRate = searchParams.get("rate")
-    ? Number(searchParams.get("rate"))
+  const selectedRating = searchParams.get("rating")
+    ? Number(searchParams.get("rating"))
     : null;
 
   // Local state for Price inputs (to allow typing before applying)
@@ -133,7 +135,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
         {/* Rates */}
         <AccordionItem value="rates" className="border-b border-maroon/20">
           <AccordionTrigger className="text-maroon uppercase tracking-wide text-sm font-bold hover:no-underline py-6">
-            RATES
+            {t("filters.rating")}
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3 pt-2 pb-6">
@@ -141,17 +143,17 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                 <div
                   key={rate}
                   className="flex items-center space-x-3 group cursor-pointer"
-                  onClick={() => updateFilter("rate", selectedRate?.toString() === rate.toString() ? null : rate.toString())}
+                  onClick={() => updateFilter("rating", selectedRating?.toString() === rate.toString() ? null : rate.toString())}
                 >
                   <div
                     className={cn(
                       "w-4 h-4 rounded-full border border-maroon flex items-center justify-center transition-all",
-                      selectedRate === rate
+                      selectedRating === rate
                         ? "bg-maroon"
                         : "bg-transparent group-hover:border-maroon/70",
                     )}
                   >
-                    {selectedRate === rate && (
+                    {selectedRating === rate && (
                       <div className="w-2 h-2 rounded-full bg-white" />
                     )}
                   </div>

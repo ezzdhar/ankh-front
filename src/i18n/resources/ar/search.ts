@@ -11,7 +11,7 @@ const search = {
   filters: {
     categories: "الفئات",
     sizes: "المقاسات",
-    rates: "التقييم",
+    rating: "التقييم",
     priceRange: "نطاق السعر",
     applyPrice: "تطبيق السعر",
     clear: "مسح الفلاتر",

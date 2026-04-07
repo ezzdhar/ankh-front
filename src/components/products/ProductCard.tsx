@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { cn } from "@/lib/utils";
+import { Star } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -46,7 +47,27 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {name}
         </h3>
 
-        <div className="flex items-center gap-2 justify-center">
+        {product.average_rating !== undefined && product.average_rating > 0 && (
+          <div className="flex items-center gap-0.5 mt-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                size={12}
+                fill={i < Math.floor(product.average_rating || 0) ? "#facc15" : "none"}
+                className={
+                  i < Math.floor(product.average_rating || 0)
+                    ? "text-yellow-400"
+                    : "text-gray-300"
+                }
+              />
+            ))}
+            <span className="text-[10px] text-gray-400 ml-1">
+              ({product.reviews_count || 0})
+            </span>
+          </div>
+        )}
+
+        <div className="flex items-center gap-2 justify-center mt-1">
           <div className="text-sm md:text-base font-bold text-[#3A0F0E]">
             {product.price} {product.currency || "EGP"}
           </div>

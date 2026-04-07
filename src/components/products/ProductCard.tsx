@@ -14,6 +14,8 @@ export function ProductCard({ product, className }: ProductCardProps) {
   const img = product.main_image || product.image;
   const name = product.name || product.title;
   const oldPrice = product.original_price || product.old_price;
+  const averageRating = product.average_rating;
+  const reviewsCount = product.reviews_count;
   const hasDiscount =
     product.has_discount ||
     (oldPrice && Number(oldPrice) > Number(product.price));
@@ -47,25 +49,20 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {name}
         </h3>
 
-        {product.average_rating !== undefined && product.average_rating > 0 && (
-          <div className="flex items-center gap-0.5 mt-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={12}
-                fill={i < Math.floor(product.average_rating || 0) ? "#facc15" : "none"}
-                className={
-                  i < Math.floor(product.average_rating || 0)
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }
-              />
-            ))}
-            <span className="text-[10px] text-gray-400 ml-1">
-              ({product.reviews_count || 0})
-            </span>
-          </div>
-        )}
+              <div className="flex items-center gap-0.5 mt-0.5">
+                {[...Array(5)].map((_, i) => {
+                  const isFilled = i < Math.round(averageRating);
+                  return (
+                    <Star
+                      key={i}
+                      size={12}
+                      fill={isFilled ? "currentColor" : "none"}
+                      className={isFilled ? "text-yellow-400" : "text-gray-300"}
+                    />
+                  );
+                })}
+              </div>
+
 
         <div className="flex items-center gap-2 justify-center mt-1">
           <div className="text-sm md:text-base font-bold text-[#3A0F0E]">

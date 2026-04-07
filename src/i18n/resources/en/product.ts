@@ -20,6 +20,7 @@ const product = {
     lowStock: "Low stock ({{count}} items)",
     resetToDefault: "Reset to default",
     outOfStock: "Out of stock",
+    reviews: "Reviews",
   },
   productNotFound: "Product not found",
   reviews: {

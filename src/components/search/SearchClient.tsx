@@ -14,9 +14,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 export function SearchClient() {
   const { t } = useTranslation("search");
+  const isMounted = useIsMounted();
+
+  if (!isMounted) return <div className="bg-cream min-h-screen pt-24 pb-16" />;
 
   return (
     <div className="bg-cream min-h-screen pt-24 pb-16">

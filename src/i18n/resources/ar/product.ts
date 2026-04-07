@@ -20,6 +20,7 @@ const product = {
     lowStock: "كمية منخفضة ({{count}} عنصر)",
     resetToDefault: "إعادة التعيين إلى الافتراضي",
     outOfStock: "نفذت الكمية",
+    reviews: "مراجعة",
   },
   productNotFound: "المنتج غير موجود",
   reviews: {

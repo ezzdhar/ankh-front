@@ -10,6 +10,7 @@ import {
   Plus,
   ChevronLeft,
   ChevronRight,
+  Star,
 } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useIsMounted } from "@/hooks/useIsMounted";
@@ -257,6 +258,33 @@ export function ProductInfo({ product }: { product: Product }) {
           <h1 className="text-2xl font-medium text-[#3A0F0E] font-cormorant leading-tight">
             {product.name}
           </h1>
+
+          {/* Rating Display */}
+          {product.average_rating !== undefined && Number(product.average_rating) > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => {
+                  const rating = Number(product.average_rating);
+                  const isFilled = i < Math.round(rating);
+                  return (
+                    <Star
+                      key={i}
+                      size={16}
+                      fill={isFilled ? "currentColor" : "none"}
+                      className={isFilled ? "text-yellow-400" : "text-gray-300"}
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-sm text-gray-500 font-medium">
+                {Number(product.average_rating).toFixed(1)}
+              </span>
+              <span className="text-xs text-gray-400">
+                ({product.reviews_count || 0} {t("details.reviews")})
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <div className="text-xl font-bold text-[#3A0F0E]">
               {selectedVariant?.price ||

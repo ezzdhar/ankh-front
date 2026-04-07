@@ -51,13 +51,11 @@ export function ProfileForm() {
       name: user?.name || "",
       email: user?.email || "",
       phone: user?.phone || "",
-      image: user?.image || "",
     },
     defaultValues: {
       name: "",
       email: "",
       phone: "",
-      image: "",
     },
   });
 

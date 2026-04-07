@@ -49,19 +49,19 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {name}
         </h3>
 
-              <div className="flex items-center gap-0.5 mt-0.5">
-                {[...Array(5)].map((_, i) => {
-                  const isFilled = i < Math.round(averageRating);
-                  return (
-                    <Star
-                      key={i}
-                      size={12}
-                      fill={isFilled ? "currentColor" : "none"}
-                      className={isFilled ? "text-yellow-400" : "text-gray-300"}
-                    />
-                  );
-                })}
-              </div>
+        <div className="flex items-center gap-0.5 mt-0.5">
+          {[...Array(5)].map((_, i) => {
+            const isFilled = i < Math.round(Number(averageRating || 0));
+            return (
+              <Star
+                key={i}
+                size={12}
+                fill={isFilled ? "currentColor" : "none"}
+                className={isFilled ? "text-yellow-400" : "text-gray-300"}
+              />
+            );
+          })}
+        </div>
 
 
         <div className="flex items-center gap-2 justify-center mt-1">

@@ -28,16 +28,17 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 
-export function Navbar() {
+export function Navbar() {  
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
   const { t } = useTranslation("common");
-  const { isAuthenticated, user, logout: authLogout } = useAuth();
-  const { logout: profileLogout } = useProfile();
+  const { isAuthenticated, user: authUser, logout: authLogout } = useAuth();
+  const { getProfile, logout: profileLogout } = useProfile();
   const isMounted = useIsMounted();
   const isArabic = isMounted && i18n.language === "ar";
+  const user = getProfile.data?.data || authUser;
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return;

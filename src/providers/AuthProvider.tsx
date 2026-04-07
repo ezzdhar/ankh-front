@@ -25,6 +25,7 @@ interface AuthContextType {
   isLoading: boolean;
   user: User | null;
   login: (token: string, user?: User) => void;
+  updateUser: (user: User) => void;
   logout: () => void;
 }
 
@@ -33,6 +34,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   user: null,
   login: () => {},
+  updateUser: () => {},
   logout: () => {},
 });
 
@@ -97,6 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [queryClient],
   );
 
+  const updateUser = useCallback((userData: User) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setAuthState((prev) => ({
+      ...prev,
+      user: userData,
+    }));
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -119,6 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading: authState.isLoading,
         user: authState.user,
         login,
+        updateUser,
         logout,
       }}
     >

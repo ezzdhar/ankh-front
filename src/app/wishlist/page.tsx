@@ -50,24 +50,26 @@ function WishlistContent() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 mb-20">
-          {favoriteItems.map((item) => (
-            <ProductCard
-              key={item.id}
-              product={{
-                id: item.product.slug || item.product.id.toString(), // Use slug for link if available
-                title: item.product.name,
-                price: `${item.product.price_after_discount || item.product.price} EGP`,
-                image:
-                  item.product.main_image ||
-                  item.product.image ||
-                  (item.product.images?.[0]
-                    ? typeof item.product.images[0] === "string"
-                      ? item.product.images[0]
-                      : item.product.images[0]?.url
-                    : ""),
-              }}
-            />
-          ))}
+          {favoriteItems
+            .filter((item) => item.product)
+            .map((item) => (
+              <ProductCard
+                key={item.id}
+                product={{
+                  id: item.product?.slug || item.product?.id?.toString() || "",
+                  title: item.product?.name || "",
+                  price: `${item.product?.price_after_discount || item.product?.price || 0} EGP`,
+                  image:
+                    item.product?.main_image ||
+                    item.product?.image ||
+                    (item.product?.images?.[0]
+                      ? typeof item.product.images[0] === "string"
+                        ? item.product.images[0]
+                        : item.product.images[0]?.url
+                      : ""),
+                }}
+              />
+            ))}
         </div>
 
         {favoriteItems.length === 0 && (

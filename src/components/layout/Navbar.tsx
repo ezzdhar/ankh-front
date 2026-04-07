@@ -34,7 +34,7 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
   const { t } = useTranslation("common");
-  const { isAuthenticated, logout: authLogout } = useAuth();
+  const { isAuthenticated, user, logout: authLogout } = useAuth();
   const { logout: profileLogout } = useProfile();
   const isMounted = useIsMounted();
   const isArabic = isMounted && i18n.language === "ar";
@@ -78,11 +78,23 @@ export function Navbar() {
         {/* Left Side - Icons */}
         <div className="flex items-center gap-5">
           <Link
-            href={isAuthenticated ? "/profile" : "/login"}
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity"
+            href={isMounted ? (isAuthenticated ? "/profile" : "/login") : "/login"}
+            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity flex items-center justify-center"
             aria-label="Account"
           >
-            <User size={20} strokeWidth={1.5} />
+            {isMounted && isAuthenticated && user?.image ? (
+              <div className="relative w-7 h-7 rounded-full overflow-hidden border border-[#3A0F0E]/10 bg-[#EBE5E0]">
+                <Image
+                  src={user.image}
+                  alt={user.name || "Profile"}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <User size={20} strokeWidth={1.5} />
+            )}
           </Link>
           <Link
             href="/wishlist"

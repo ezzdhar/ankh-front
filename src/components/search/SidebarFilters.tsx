@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/hooks";
+import { useCategories } from "@/hooks/useProducts";
 import {
   Accordion,
   AccordionContent,
@@ -14,14 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 // Mock Data (Should be replaced by API data or props)
-const CATEGORIES = [
-  { id: "casual", label: "Casual Clothing" },
-  { id: "formal", label: "Formal Wear" },
-  { id: "soiree", label: "Soiree" },
-  { id: "formal-soiree", label: "Formal Soiree" },
-  { id: "balzers", label: "Balzers" },
-];
-
 const SIZES = [
   { id: "xxl", label: "XXL" },
   { id: "xl", label: "XL" },
@@ -35,6 +28,7 @@ const RATES = [5, 4, 3, 2, 1];
 
 export function SidebarFilters() {
   const { t } = useTranslation("search");
+  const { data: categoriesData } = useCategories(1, 50);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -128,17 +122,17 @@ export function SidebarFilters() {
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex flex-col gap-3">
-            {CATEGORIES.map((cat) => (
+            {categoriesData?.data?.map((cat) => (
               <div key={cat.id} className="flex items-center gap-3">
                 <div
-                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] cursor-pointer ${selectedCategories.includes(cat.id) ? "bg-[#3A0F0E]" : "bg-transparent"}`}
-                  onClick={() => handleCategoryChange(cat.id)}
+                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] cursor-pointer ${selectedCategories.includes(cat.id.toString()) ? "bg-[#3A0F0E]" : "bg-transparent"}`}
+                  onClick={() => handleCategoryChange(cat.id.toString())}
                 />
                 <label
                   className="text-sm text-[#3A0F0E]/80 cursor-pointer"
-                  onClick={() => handleCategoryChange(cat.id)}
+                  onClick={() => handleCategoryChange(cat.id.toString())}
                 >
-                  {cat.label}
+                  {cat.name}
                 </label>
               </div>
             ))}

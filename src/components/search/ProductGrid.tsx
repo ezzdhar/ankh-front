@@ -52,7 +52,7 @@ export function ProductGrid() {
   if (isError) {
     return (
       <div className="flex flex-col justify-center items-center h-64 w-full text-maroon">
-        <p className="text-lg font-medium mb-2">Error loading products.</p>
+        <p className="text-lg font-medium mb-2">{t("errorLoading")}</p>
         <p className="text-sm opacity-70">{(error as Error).message}</p>
       </div>
     );
@@ -75,7 +75,7 @@ export function ProductGrid() {
     <div className="w-full">
       {data.paginate && (
         <p className="mb-6 text-sm text-maroon/60">
-          Showing {data.data.length} results
+          {t("showing", { count: data.data.length })}
         </p>
       )}
 

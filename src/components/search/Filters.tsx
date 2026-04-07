@@ -99,7 +99,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
         {/* Categories */}
         <AccordionItem value="categories" className="border-b border-maroon/20">
           <AccordionTrigger className="text-maroon uppercase tracking-wide text-sm font-bold hover:no-underline py-6">
-            CATEGORIES
+            {t("filters.categories")}
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3 pt-2 pb-6">
@@ -177,12 +177,12 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
         {/* Price Range */}
         <AccordionItem value="price" className="border-b border-maroon/20">
           <AccordionTrigger className="text-maroon uppercase tracking-wide text-sm font-bold hover:no-underline py-6">
-            PRICE RANGE
+            {t("filters.priceRange")}
           </AccordionTrigger>
           <AccordionContent>
             <div className="flex items-center gap-4 pt-2 pb-6">
               <div className="flex-1">
-                <label className="text-xs text-maroon/60 mb-1 block">Min</label>
+                <label className="text-xs text-maroon/60 mb-1 block">{t("filters.min")}</label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -193,7 +193,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                 />
               </div>
               <div className="flex-1">
-                <label className="text-xs text-maroon/60 mb-1 block">Max</label>
+                <label className="text-xs text-maroon/60 mb-1 block">{t("filters.max")}</label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -213,7 +213,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
         variant="outline"
         className="w-full mt-6 h-12 rounded-full border-maroon text-maroon hover:bg-maroon hover:text-white uppercase tracking-widest transition-colors"
       >
-        Clear Filters
+        {t("filters.clear")}
       </Button>
     </div>
   );

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useTranslation } from "@/i18n/hooks";
 
 interface PaginationProps {
   lastPage: number;
@@ -10,6 +11,7 @@ interface PaginationProps {
 }
 
 export function Pagination({ lastPage, currentPage }: PaginationProps) {
+  const { t } = useTranslation("search");
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,7 +43,7 @@ export function Pagination({ lastPage, currentPage }: PaginationProps) {
       </Button>
 
       <span className="text-maroon font-medium uppercase tracking-widest text-sm">
-        Page {currentPage} of {lastPage}
+        {t("pagination.page")} {currentPage} {t("pagination.of")} {lastPage}
       </span>
 
       <Button

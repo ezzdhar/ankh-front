@@ -72,7 +72,7 @@ function WishlistContent() {
 
         {favoriteItems.length === 0 && (
           <div className="text-center py-20 opacity-50">
-            <p className="text-xl">{t("empty", { lng: isMounted ? undefined : "en" }) || "Your wishlist is empty."}</p>
+            <p className="text-xl">{t("empty", { lng: isMounted ? undefined : "en" })}</p>
           </div>
         )}
 

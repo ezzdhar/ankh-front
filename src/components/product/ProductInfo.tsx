@@ -452,23 +452,16 @@ export function ProductInfo({ product }: { product: Product }) {
             </button>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="pt-4">
             <Button
               variant="outline"
               disabled={addToCart.isPending}
               onClick={handleAddToCart}
-              className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
+              className="w-full h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
               {addToCart.isPending
                 ? t("details.adding", { lng: isMounted ? undefined : "en" })
                 : t("details.addToCart", { lng: isMounted ? undefined : "en" })}
-            </Button>
-            <Button
-              disabled={addToCart.isPending}
-              onClick={handleCheckout}
-              className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#3A0F0E]/90! text-white text-sm font-medium rounded-full uppercase tracking-wider transition-all"
-            >
-              {t("details.checkOut", { lng: isMounted ? undefined : "en" })}
             </Button>
           </div>
         </div>

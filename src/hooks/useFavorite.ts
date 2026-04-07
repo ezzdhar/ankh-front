@@ -64,7 +64,7 @@ export function useToggleFavorite() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Wishlist updated successfully");
+      toast.success(data.message || i18n.t("wishlist:toastSuccess"));
       queryClient.invalidateQueries({ queryKey: ["favorites"] });
       queryClient.invalidateQueries({ queryKey: ["product"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });

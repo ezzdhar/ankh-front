@@ -31,6 +31,7 @@ import {
 export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
   const { t } = useTranslation("common");
   const { isAuthenticated, logout: authLogout } = useAuth();
@@ -58,6 +59,7 @@ export function Navbar() {
     profileLogout.mutate(undefined, {
       onSettled: () => {
         authLogout();
+        setIsMenuOpen(false);
         router.push("/");
       },
     });
@@ -85,7 +87,7 @@ export function Navbar() {
           <Link
             href="/wishlist"
             className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity"
-            aria-label="Wishlist"
+            aria-label={t("footer.wishlist", { lng: isMounted ? undefined : "en" })}
           >
             <Heart size={20} strokeWidth={1.5} />
           </Link>
@@ -164,7 +166,7 @@ export function Navbar() {
           </button>
 
           {/* Menu Button - Updated to use Sheet */}
-          <Sheet>
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild>
               <button
                 className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity focus:outline-none"
@@ -185,6 +187,7 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
                     className="py-4 text-[#3A0F0E] font-primary text-xl font-medium border-b border-black/5 last:border-b-0 hover:ps-2 transition-all"
                   >
                     {link.label}
@@ -194,7 +197,10 @@ export function Navbar() {
                 <div className="mt-8 flex flex-col gap-6">
                   <button
                     className="flex items-center gap-6 sm:hidden text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
-                    onClick={toggleLanguage}
+                    onClick={() => {
+                      toggleLanguage();
+                      setIsMenuOpen(false);
+                    }}
                   >
                     <Globe size={22} strokeWidth={1.5} />
                     {isMounted ? (isArabic ? "English" : "العربية") : "العربية"}
@@ -211,6 +217,7 @@ export function Navbar() {
                   ) : (
                     <Link
                       href="/login"
+                      onClick={() => setIsMenuOpen(false)}
                       className="flex items-center gap-4 text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                     >
                       <User size={22} strokeWidth={1.5} />

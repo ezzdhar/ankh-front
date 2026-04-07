@@ -23,7 +23,7 @@ const common = {
     products: "المنتجات",
     categories: "التصنيفات",
     offers: "العروض",
-    wishlist: "قائمة الأمنيات",
+    wishlist: "المفضلة",
     myAccount: "حسابي",
     myOrders: "طلباتي",
     aboutUs: "من نحن",

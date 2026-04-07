@@ -180,7 +180,7 @@ export default function CartPage() {
             </div>
             <Button
               asChild
-              className="bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white rounded-full px-12"
+              className="bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white! rounded-full px-12"
             >
               <Link href="/search">{t("empty.button")}</Link>
             </Button>

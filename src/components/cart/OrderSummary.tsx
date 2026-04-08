@@ -123,22 +123,22 @@ export function OrderSummary({
         </p>
       </div>
 
-      <div className="flex bg-[#FCF7F1]/0 gap-4 pt-4">
+      <div className="flex flex-col gap-3 pt-4">
         <Button
           asChild
-          variant="outline"
-          className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#3A0F0E]/5 transition-all font-bold"
+          className="w-full h-12 bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white! rounded-full uppercase text-xs tracking-widest transition-all font-bold"
         >
-          <Link href="/" className="w-full text-center py-3">
-            {t("summary.continueShopping") || "Continue Shopping"}
+          <Link href="/checkout" className="w-full text-center">
+            {t("summary.checkout") || "Proceed To Checkout"}
           </Link>
         </Button>
         <Button
           asChild
-          className="flex-1 h-12 bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white! rounded-full uppercase text-xs tracking-widest transition-all font-bold"
+          variant="outline"
+          className="w-full h-12 border-[#3A0F0E] text-[#3A0F0E] bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#3A0F0E]/5 transition-all font-bold"
         >
-          <Link href="/checkout" className="w-full text-center py-3">
-            {t("summary.checkout") || "Proceed To Checkout"}
+          <Link href="/" className="w-full text-center">
+            {t("summary.continueShopping") || "Continue Shopping"}
           </Link>
         </Button>
       </div>

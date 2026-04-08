@@ -1,6 +1,8 @@
 "use client";
 
 import { Suspense } from "react";
+import Image from "next/image";
+import headerImg from "@/styles/ankh_header.png";
 import { Filters } from "@/components/search/Filters";
 import { ProductGrid } from "@/components/search/ProductGrid";
 import { SortSelect } from "@/components/search/SortSelect";
@@ -20,10 +22,19 @@ export function SearchClient() {
   const { t } = useTranslation("search");
   const isMounted = useIsMounted();
 
-  if (!isMounted) return <div className="bg-cream min-h-screen pt-24 pb-16" />;
+  if (!isMounted) return <div className="bg-cream min-h-screen pt-[60px] pb-16" />;
 
   return (
-    <div className="bg-cream min-h-screen pt-24 pb-16">
+    <div className="bg-cream min-h-screen">
+      <div className="relative w-full h-[200px] sm:h-[300px] lg:h-[400px] mb-8 md:mb-12">
+        <Image
+          src={headerImg}
+          alt="Search Header"
+          fill
+          className="object-cover object-[center_35%]"
+          priority
+        />
+      </div>
       <div className="container mx-auto px-6 md:px-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">

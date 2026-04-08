@@ -35,6 +35,7 @@ export function ProductInfo({ product }: { product: Product }) {
   const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [loadingAction, setLoadingAction] = useState<"cart" | "buy_now" | null>(null);
   const addToCart = useAddToCart();
   const toggleFavorite = useToggleFavorite();
 
@@ -452,16 +453,38 @@ export function ProductInfo({ product }: { product: Product }) {
             </button>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-4 flex flex-col sm:flex-row gap-3">
             <Button
               variant="outline"
               disabled={addToCart.isPending}
-              onClick={handleAddToCart}
-              className="w-full h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
+              onClick={() => {
+                setLoadingAction("cart");
+                handleAddToCart();
+              }}
+              className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
-              {addToCart.isPending
+              {addToCart.isPending && loadingAction === "cart"
                 ? t("details.adding", { lng: isMounted ? undefined : "en" })
                 : t("details.addToCart", { lng: isMounted ? undefined : "en" })}
+            </Button>
+
+            <Button
+              disabled={addToCart.isPending}
+              onClick={() => {
+                setLoadingAction("buy_now");
+                const payload = getCartPayload();
+                if (!payload) return;
+                addToCart.mutate(payload, {
+                  onSuccess: () => {
+                    router.push("/cart");
+                  }
+                });
+              }}
+              className="flex-1 h-12 bg-[#3A0F0E] text-white hover:bg-[#3A0F0E]/90 text-sm font-medium rounded-full transition-all uppercase tracking-wider"
+            >
+              {addToCart.isPending && loadingAction === "buy_now"
+                ? t("details.adding", { lng: isMounted ? undefined : "en" })
+                : "اشتري الان"}
             </Button>
           </div>
         </div>

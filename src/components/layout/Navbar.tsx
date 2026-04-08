@@ -74,7 +74,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 px-5! h-[60px] bg-[#FAF6F1] border-b border-black/10 z-50">
+    <header className="fixed top-0 left-0 right-0 px-5! h-[60px] bg-[#FFF8EF] shadow-sm z-50">
       <div className="max-w-[1440px] h-full mx-auto flex items-center justify-between">
         {/* Left Side - Icons */}
         <div className="flex items-center gap-5">
@@ -246,7 +246,7 @@ export function Navbar() {
 
       {/* Mobile Search Bar */}
       {isSearchOpen && (
-        <div className="absolute top-[60px] left-0 right-0 p-3 bg-[#FAF6F1] border-b border-black/10 flex items-center gap-3 md:hidden">
+        <div className="absolute top-[60px] left-0 right-0 p-3 bg-[#FFF8EF] shadow-sm flex items-center gap-3 md:hidden">
           <Input
             type="text"
             placeholder={

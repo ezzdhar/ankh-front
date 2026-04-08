@@ -71,6 +71,7 @@ export function Navbar() {
     { href: "/about", label: t("nav.about", { lng: isMounted ? undefined : "en" }) },
     { href: "/search", label: t("nav.products", { lng: isMounted ? undefined : "en" }) },
     { href: "/wishlist", label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }) },
+    { href: "/orders", label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }) },
   ];
 
   return (

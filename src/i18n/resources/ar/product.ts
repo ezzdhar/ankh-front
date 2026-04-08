@@ -21,6 +21,7 @@ const product = {
     resetToDefault: "إعادة التعيين إلى الافتراضي",
     outOfStock: "نفذت الكمية",
     reviews: "مراجعة",
+    buyNow: "اشتري الآن",
   },
   productNotFound: "المنتج غير موجود",
   reviews: {

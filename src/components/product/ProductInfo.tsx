@@ -288,16 +288,29 @@ export function ProductInfo({ product }: { product: Product }) {
 
           <div className="flex items-center gap-3">
             <div className="text-xl font-bold text-[#3A0F0E]">
-              {selectedVariant?.price ||
-                product.price_after_discount ||
-                product.price}{" "}
+              {(() => {
+                const isZeroDiscount =
+                  product.discount_percentage === "0.00" ||
+                  product.discount_percentage === "0" ||
+                  product.discount_percentage === 0;
+                
+                return selectedVariant?.price ||
+                  (!isZeroDiscount && product.price_after_discount) ||
+                  product.price;
+              })()}{" "}
               EGP
             </div>
             {(() => {
+              const isZeroDiscount =
+                product.discount_percentage === "0.00" ||
+                product.discount_percentage === "0" ||
+                product.discount_percentage === 0;
+
               const displayPrice =
-                selectedVariant?.price || product.price_after_discount;
+                selectedVariant?.price || (!isZeroDiscount && product.price_after_discount) || null;
               const originalPrice = product.price;
-              if (displayPrice && displayPrice !== originalPrice) {
+              
+              if (!isZeroDiscount && displayPrice && String(displayPrice) !== String(originalPrice)) {
                 return (
                   <div className="text-lg text-gray-400 line-through">
                     {originalPrice} EGP
@@ -461,7 +474,7 @@ export function ProductInfo({ product }: { product: Product }) {
                 setLoadingAction("cart");
                 handleAddToCart();
               }}
-              className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
+              className="flex-1 h-12 border-2 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
               {addToCart.isPending && loadingAction === "cart"
                 ? t("details.adding", { lng: isMounted ? undefined : "en" })
@@ -484,7 +497,7 @@ export function ProductInfo({ product }: { product: Product }) {
             >
               {addToCart.isPending && loadingAction === "buy_now"
                 ? t("details.adding", { lng: isMounted ? undefined : "en" })
-                : "اشتري الان"}
+                : t("details.buyNow", { lng: isMounted ? undefined : "en" })}
             </Button>
           </div>
         </div>

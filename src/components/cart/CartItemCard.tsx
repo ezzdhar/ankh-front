@@ -51,8 +51,22 @@ export function CartItemCard({
           <h3 className="text-base font-medium text-[#3A0F0E] uppercase tracking-wide font-cormorant leading-tight max-w-[200px]">
             {item.product.name}
           </h3>
-          <div className="text-xl font-medium text-[#A32020] font-cormorant">
-            {parseFloat(item.unit_price).toFixed(0)} EGP
+          <div className="flex flex-col gap-1">
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-medium text-[#A32020] font-cormorant">
+                {parseFloat(item.unit_price).toFixed(2)} EGP
+              </span>
+              {item.product.original_price && Number(item.product.original_price) > Number(item.unit_price) && (
+                <span className="text-sm text-gray-400 line-through">
+                  {Number(item.product.original_price).toFixed(2)} EGP
+                </span>
+              )}
+            </div>
+            {item.quantity > 1 && (
+              <span className="text-[10px] text-[#3A0F0E]/40 uppercase tracking-widest">
+                {parseFloat(item.unit_price).toFixed(2)} x {item.quantity}
+              </span>
+            )}
           </div>
         </div>
 
@@ -93,7 +107,7 @@ export function CartItemCard({
             <div className="whitespace-nowrap">
               <span className="text-sm font-medium text-[#3A0F0E]">
                 {t("items.total") || "Total"}:{" "}
-                {parseFloat(item.total_price).toFixed(0)} EGP
+                {parseFloat(item.total_price).toFixed(2)} EGP
               </span>
             </div>
 
@@ -106,35 +120,54 @@ export function CartItemCard({
             </button>
           </div>
 
-          {/* Bottom Row: Variants */}
-          <div className="flex items-center gap-8 md:gap-12">
-            {/* Color */}
-            {item.product_variant.name && (
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-[#3A0F0E] font-medium">
-                  {t("items.color") || "Color"}*
-                </span>
-                {/* Try to use color code if available, else fallback to name or standard color */}
-                <div
-                  className="w-8 h-8 rounded-full shadow-sm border border-black/10"
-                  style={{
-                    backgroundColor: item.product_variant.color_code,
-                  }}
-                  title={item.product_variant.name}
-                />
-              </div>
-            )}
-
-            {/* Size */}
-            {item.product_variant.size_name && (
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-[#3A0F0E] font-medium">
-                  {t("items.size") || "Size"}*
-                </span>
-                <div className="w-8 h-8 rounded-full border border-[#3A0F0E] flex items-center justify-center text-xs font-medium text-[#3A0F0E] uppercase">
-                  {item.product_variant.size_name}
+          {/* Bottom Row: Variants Selection */}
+          <div className="flex flex-wrap items-center gap-y-2 gap-x-6 mt-2">
+            {item.product_variant?.attribute_values && item.product_variant.attribute_values.length > 0 ? (
+              item.product_variant.attribute_values.map((attr) => (
+                <div key={attr.id} className="flex items-center gap-2">
+                  <span className="text-xs text-[#3A0F0E]/60 font-medium">
+                    {attr.attribute.name}:
+                  </span>
+                  <span className="text-xs text-[#3A0F0E] font-semibold uppercase tracking-tight">
+                    {attr.name}
+                  </span>
+                  {attr.color_code && (attr.color_code.startsWith("#") || attr.color_code.startsWith("rgb")) && (
+                    <div
+                      className="w-3 h-3 rounded-full border border-black/10"
+                      style={{ backgroundColor: attr.color_code }}
+                    />
+                  )}
                 </div>
-              </div>
+              ))
+            ) : (
+              /* Fallback for variants without attribute_values array structure */
+              <>
+                {item.product_variant?.color_code && (
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-[#3A0F0E]/60 font-medium">
+                      {t("items.color") || "Color"}
+                    </span>
+                    <span className="text-xs text-[#3A0F0E] font-semibold uppercase">
+                      {item.product_variant.color_code}
+                    </span>
+                  </div>
+                )}
+                {item.product_variant?.size_name && (
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-[#3A0F0E]/60 font-medium">
+                      {t("items.size") || "Size"}
+                    </span>
+                    <span className="text-xs text-[#3A0F0E] font-semibold uppercase">
+                      {item.product_variant.size_name}
+                    </span>
+                  </div>
+                )}
+                {!item.product_variant?.color_code && !item.product_variant?.size_name && item.product_variant?.name && (
+                   <span className="text-xs text-[#3A0F0E]/60 font-medium uppercase tracking-widest">
+                    {item.product_variant.name}
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>

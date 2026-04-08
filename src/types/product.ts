@@ -20,6 +20,7 @@ export interface Product {
   original_price?: number | string;
   has_discount?: boolean;
   reviews_count?: number;
+  discount_percentage?: string | number;
 }
 
 export interface ProductSearchParams {

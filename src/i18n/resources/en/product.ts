@@ -21,6 +21,7 @@ const product = {
     resetToDefault: "Reset to default",
     outOfStock: "Out of stock",
     reviews: "Reviews",
+    buyNow: "Buy Now",
   },
   productNotFound: "Product not found",
   reviews: {

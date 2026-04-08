@@ -50,7 +50,7 @@ export function OrderSummary({
             {t("summary.totalCost") || "Total Cost (Without Tax)"}
           </span>
           <span className="text-[#3A0F0E] font-medium">
-            {totalCost.toFixed(0)} LE
+            {totalCost.toFixed(2)} EGP
           </span>
         </div>
       </div>
@@ -97,7 +97,7 @@ export function OrderSummary({
             {t("summary.discount") || "Discount"}
           </span>
           <span className="text-[#3A0F0E] font-medium">
-            {discount.toFixed(0)} EGP-
+            {discount > 0 ? `-${discount.toFixed(2)}` : discount.toFixed(2)} EGP
           </span>
         </div>
         <div className="flex justify-between items-center text-sm md:text-base">
@@ -105,7 +105,7 @@ export function OrderSummary({
             {t("summary.vatAmount") || "VAT Tax Amount"}
           </span>
           <span className="text-[#3A0F0E] font-medium">
-            {vat.toFixed(0)} EGP
+            {vat.toFixed(2)} EGP
           </span>
         </div>
 
@@ -114,7 +114,7 @@ export function OrderSummary({
             {t("summary.finalTotal") || "Final Total Amount"}
           </span>
           <span className="text-xl md:text-2xl font-bold text-[#3A0F0E]">
-            {finalTotal.toFixed(0)} EGP
+            {finalTotal.toFixed(2)} EGP
           </span>
         </div>
 

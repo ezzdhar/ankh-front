@@ -16,9 +16,15 @@ export function ProductCard({ product, className }: ProductCardProps) {
   const oldPrice = product.original_price || product.old_price;
   const averageRating = product.average_rating;
   const reviewsCount = product.reviews_count;
+  const isZeroDiscount = 
+    product.discount_percentage === "0.00" || 
+    product.discount_percentage === "0" || 
+    product.discount_percentage === 0;
+
   const hasDiscount =
+    !isZeroDiscount && (
     product.has_discount ||
-    (oldPrice && Number(oldPrice) > Number(product.price));
+    (oldPrice && Number(oldPrice) > Number(product.price)));
 
   return (
     <Link href={href} className={cn("block group/item h-full", className)}>

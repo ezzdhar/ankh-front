@@ -40,7 +40,7 @@ export interface Product {
   images?: Array<{ id: number; url: string }>;
   price: string;
   price_after_discount?: string;
-  discount_percentage?: string;
+  discount_percentage?: string | number;
   has_discount?: boolean;
   category?: { id: number; name: string };
   category_name?: string;

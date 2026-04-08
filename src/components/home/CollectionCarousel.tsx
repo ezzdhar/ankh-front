@@ -123,7 +123,7 @@ export function CollectionCarousel({
                             <span className="text-sm font-semibold text-maroon">
                               {item.price_after_discount || item.price} EGP
                             </span>
-                            {item.price_after_discount && (
+                            {item.price_after_discount && String(item.price_after_discount) !== String(item.price) && (
                               <span className="text-xs text-gray-400 line-through">
                                 {item.price} EGP
                               </span>

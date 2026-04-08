@@ -28,6 +28,15 @@ export interface CartItem {
     color_code?: string;
     size_name: string | null;
     price?: string;
+    attribute_values?: Array<{
+      id: number;
+      name: string;
+      attribute: {
+        id: number;
+        name: string;
+      };
+      color_code?: string;
+    }>;
   };
 }
 

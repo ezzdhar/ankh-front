@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Search,
-  Menu,
-  User,
-  ShoppingBag,
+  AlignRight as MenuIcon,
+  UserRound,
+  ShoppingCart,
   Globe,
   LogOut,
   Heart,
@@ -78,9 +78,9 @@ export function Navbar() {
       <div className="max-w-[1440px] h-full mx-auto flex items-center justify-between">
         {/* Left Side - Icons */}
         <div className="flex items-center gap-5">
-          <Link
-            href={isMounted ? (isAuthenticated ? "/profile" : "/login") : "/login"}
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity flex items-center justify-center"
+          <button
+            onClick={() => router.push(isAuthenticated ? "/profile" : "/login")}
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity flex items-center justify-center focus:outline-none"
             aria-label="Account"
           >
             {isMounted && isAuthenticated && user?.image ? (
@@ -94,38 +94,38 @@ export function Navbar() {
                 />
               </div>
             ) : (
-              <User size={20} strokeWidth={1.5} />
+              <UserRound size={24} strokeWidth={1} />
             )}
-          </Link>
+          </button>
           <Link
             href="/wishlist"
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity"
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
             aria-label={t("footer.wishlist", { lng: isMounted ? undefined : "en" })}
           >
-            <Heart size={20} strokeWidth={1.5} />
+            <Heart size={24} strokeWidth={1} />
           </Link>
           <Link
             href="/cart"
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity"
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
             aria-label="Cart"
           >
-            <ShoppingBag size={20} strokeWidth={1.5} />
+            <ShoppingCart size={24} strokeWidth={1} />
           </Link>
           <button
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity hidden sm:flex"
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity hidden sm:flex"
             aria-label="Language"
             onClick={toggleLanguage}
           >
-            <Globe size={20} strokeWidth={1.5} />
+            <Globe size={24} strokeWidth={1} />
           </button>
 
           {isAuthenticated && (
             <button
-              className="p-2 text-red-600 hover:opacity-60 transition-opacity"
+              className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
               aria-label="Logout"
               onClick={handleLogout}
             >
-              <LogOut size={20} strokeWidth={1.5} />
+              <LogOut size={24} strokeWidth={1} />
             </button>
           )}
         </div>
@@ -155,7 +155,7 @@ export function Navbar() {
               placeholder={
                 t("search.placeholder", { lng: isMounted ? undefined : "en" })
               }
-              className="w-[260px] focus:w-[270px] py-2.5 px-4 ps-3! border border-black/15 rounded-full bg-transparent font-primary text-sm text-[#3A0F0E] placeholder:text-[#999] outline-none focus:border-none transition-all"
+              className="w-[260px] focus:w-[270px] py-2.5 px-4 ps-3! border border-[#310E0E]/90! rounded-full bg-transparent font-primary text-sm text-[#310E0E]/90! placeholder:text-[#310E0E]/60 outline-none focus:border-none transition-all"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -163,29 +163,29 @@ export function Navbar() {
             <button
               onClick={handleSearch}
               aria-label="Search"
-              className="absolute end-2 top-1/2 -translate-y-1/2 p-2 text-[#666] hover:text-[#3A0F0E] transition-colors"
+              className="absolute end-2 top-1/2 -translate-y-1/2 p-2 text-[#442524] hover:opacity-60 transition-colors"
             >
-              <Search size={18} strokeWidth={1.5} />
+              <Search size={20} strokeWidth={1} />
             </button>
           </div>
 
           {/* Mobile Search Toggle */}
           <button
-            className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity md:hidden"
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity md:hidden"
             aria-label="Search"
             onClick={() => setIsSearchOpen(!isSearchOpen)}
           >
-            <Search size={20} strokeWidth={1.5} />
+            <Search size={24} strokeWidth={1} />
           </button>
 
           {/* Menu Button - Updated to use Sheet */}
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild>
               <button
-                className="p-2 text-[#3A0F0E] hover:opacity-60 transition-opacity focus:outline-none"
+                className="p-2 text-[#442524] hover:opacity-60 transition-opacity focus:outline-none"
                 aria-label="Menu"
               >
-                <Menu size={22} strokeWidth={1.5} />
+                <MenuIcon size={24} strokeWidth={1} />
               </button>
             </SheetTrigger>
             <SheetContent
@@ -209,13 +209,13 @@ export function Navbar() {
                 {/* Additional Mobile-only items */}
                 <div className="mt-8 flex flex-col gap-6">
                   <button
-                    className="flex items-center gap-6 sm:hidden text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
+                    className="flex items-center gap-6 sm:hidden text-[#442524] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                     onClick={() => {
                       toggleLanguage();
                       setIsMenuOpen(false);
                     }}
                   >
-                    <Globe size={22} strokeWidth={1.5} />
+                    <Globe size={24} strokeWidth={1} />
                     {isMounted ? (isArabic ? "English" : "العربية") : "العربية"}
                   </button>
 
@@ -224,16 +224,16 @@ export function Navbar() {
                       className="flex items-center gap-4 text-red-600 font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                       onClick={handleLogout}
                     >
-                      <LogOut size={22} strokeWidth={1.5} />
+                      <LogOut size={24} strokeWidth={1} />
                       {t("logout", { ns: "auth", lng: isMounted ? undefined : "en" })}
                     </button>
                   ) : (
                     <Link
                       href="/login"
                       onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center gap-4 text-[#3A0F0E] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
+                      className="flex items-center gap-4 text-[#442524] font-primary text-lg font-medium hover:opacity-60 transition-opacity"
                     >
-                      <User size={22} strokeWidth={1.5} />
+                      <UserRound size={24} strokeWidth={1} />
                       {t("login.submit", { ns: "auth", lng: isMounted ? undefined : "en" })}
                     </Link>
                   )}
@@ -253,13 +253,13 @@ export function Navbar() {
               t("search.placeholder", { lng: isMounted ? undefined : "en" })
             }
             autoFocus
-            className="flex-1 py-3 px-4 border border-black/15 rounded-full bg-transparent font-primary text-sm text-[#3A0F0E] placeholder:text-[#999] outline-none"
+            className="flex-1 py-3 px-4 border border-[#310E0E]/90! rounded-full bg-transparent font-primary text-sm text-[#310E0E]/90! placeholder:text-[#310E0E]/60 outline-none"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button onClick={handleSearch} aria-label="Search" className="p-2">
-            <Search size={18} strokeWidth={1.5} className="text-[#666]" />
+            <Search size={20} strokeWidth={1} className="text-[#442524]" />
           </button>
         </div>
       )}

@@ -211,7 +211,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
       <Button
         onClick={clearFilters}
         variant="outline"
-        className="w-full mt-6 h-12 rounded-full border-maroon text-maroon hover:bg-maroon hover:text-white uppercase tracking-widest transition-colors"
+        className="mt-6 w-full h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
       >
         {t("filters.clear")}
       </Button>

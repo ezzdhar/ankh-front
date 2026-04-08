@@ -135,7 +135,7 @@ export function OrderSummary({
         <Button
           asChild
           variant="outline"
-          className="w-full h-12 border-[#3A0F0E] text-[#3A0F0E] bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#3A0F0E]/5 transition-all font-bold"
+          className="w-full h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
         >
           <Link href="/" className="w-full text-center">
             {t("summary.continueShopping") || "Continue Shopping"}

@@ -34,10 +34,9 @@ export function Pagination({ lastPage, currentPage }: PaginationProps) {
     <div className="flex justify-center items-center gap-4 mt-12">
       <Button
         variant="outline"
-        size="icon"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
-        className="border-maroon/20 text-maroon hover:bg-maroon hover:text-white disabled:opacity-30"
+        className="w-12 h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full hover:bg-[#310E0E]/5 transition-all font-bold flex items-center justify-center disabled:opacity-30 disabled:hover:bg-transparent"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -48,10 +47,9 @@ export function Pagination({ lastPage, currentPage }: PaginationProps) {
 
       <Button
         variant="outline"
-        size="icon"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= lastPage}
-        className="border-maroon/20 text-maroon hover:bg-maroon hover:text-white disabled:opacity-30"
+        className="w-12 h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full hover:bg-[#310E0E]/5 transition-all font-bold flex items-center justify-center disabled:opacity-30 disabled:hover:bg-transparent"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

@@ -49,7 +49,7 @@ export function SearchClient() {
                 <SheetTrigger asChild>
                   <Button
                     variant="outline"
-                    className="flex items-center gap-2 border-maroon/20 text-maroon"
+                    className="w-full h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold flex items-center justify-center gap-2"
                   >
                     <Filter size={16} /> {t("filters.title")}
                   </Button>

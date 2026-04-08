@@ -228,7 +228,7 @@ export function SidebarFilters() {
              */}
             <button
               onClick={applyPriceFilter}
-              className="text-xs underline text-[#3A0F0E] text-left hover:text-[#3A0F0E]/70"
+              className="w-full h-12 border border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
             >
               {t("filters.applyPrice")}
             </button>
@@ -238,7 +238,7 @@ export function SidebarFilters() {
       {/* Clear Filters */}
       <Button
         variant="outline"
-        className="w-full mt-4 border-[#3A0F0E] text-[#3A0F0E] hover:bg-[#3A0F0E] hover:text-white"
+        className="mt-4 w-full h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
         onClick={clearFilters}
       >
         {t("filters.clear")}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "@/i18n/hooks";
-import { Eye, FileText } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { Eye, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -23,19 +23,28 @@ export function OrdersTable() {
   const { t, i18n } = useTranslation("orders");
   const isRTL = i18n.language === "ar";
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const page = Number(searchParams.get("page")) || 1;
   const filters = {
     search: searchParams.get("search") || undefined,
-    status: searchParams.get("status") || undefined,
+    order_status: searchParams.get("order_status") || undefined,
     payment_status: searchParams.get("payment_status") || undefined,
   };
 
-  const { data: ordersData, isLoading } = useOrders(1, 10, filters);
+  const { data: ordersData, isLoading } = useOrders(page, 10, filters);
 
   const orders = ordersData?.data?.data || [];
+  const totalPages = ordersData?.data?.last_page || 1;
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   const handleDownloadPDF = (order: Order) => {
     const doc = new jsPDF();
@@ -216,12 +225,12 @@ export function OrdersTable() {
                     variant="secondary"
                     className={cn(
                       "rounded-full px-4 py-1 font-medium bg-[#5C5C5C] text-white hover:bg-[#5C5C5C]/90",
-                      order.payment_status === "completed" &&
+                      (order.payment_status === "completed" || order.payment_status === "paid") &&
                         "bg-green-600 hover:bg-green-700",
                       order.payment_status === "refunded" &&
                         "bg-orange-600 hover:bg-orange-700",
-                      order.payment_status === "paid" &&
-                        "bg-green-600 hover:bg-green-700",
+                      (order.payment_status === "failed" || order.payment_status === "expired") &&
+                        "bg-red-600 hover:bg-red-700",
                     )}
                   >
                     {t(`status.${order.payment_status}`) ||
@@ -233,10 +242,12 @@ export function OrdersTable() {
                 <TableCell className={cn(isRTL ? "text-right" : "text-left")}>
                   <Badge
                     className={cn(
-                      "rounded-full px-4 py-1 font-medium text-white shadow-none",
+                      "rounded-full px-4 py-1 font-medium text-white shadow-none bg-[#5C5C5C]",
                       order.order_status === "processing" &&
                         "bg-[#3B82F6] hover:bg-[#3B82F6]/90",
-                      order.order_status === "completed" &&
+                      order.order_status === "shipped" &&
+                        "bg-indigo-600 hover:bg-indigo-700",
+                      (order.order_status === "delivered" || order.order_status === "completed") &&
                         "bg-green-600 hover:bg-green-700",
                       order.order_status === "cancelled" &&
                         "bg-red-600 hover:bg-red-700",
@@ -271,6 +282,57 @@ export function OrdersTable() {
           </TableBody>
         </Table>
       </div>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-10">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page <= 1}
+            className="w-10 h-10 rounded-full border border-[#3A0F0E]/20 flex items-center justify-center text-[#3A0F0E] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#3A0F0E]/5 transition-colors"
+          >
+            {isRTL ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+          
+          <div className="flex items-center gap-2">
+            {[...Array(totalPages)].map((_, i) => {
+              const p = i + 1;
+              // Simple pagination logic: show current, first, last, and range
+              if (
+                p === 1 ||
+                p === totalPages ||
+                (p >= page - 1 && p <= page + 1)
+              ) {
+                return (
+                  <button
+                    key={p}
+                    onClick={() => handlePageChange(p)}
+                    className={cn(
+                      "w-10 h-10 rounded-full text-sm font-medium transition-colors",
+                      page === p
+                        ? "bg-[#3A0F0E] text-white"
+                        : "text-[#3A0F0E] hover:bg-[#3A0F0E]/5"
+                    )}
+                  >
+                    {p}
+                  </button>
+                );
+              }
+              if (p === page - 2 || p === page + 2) {
+                return <span key={p} className="text-[#3A0F0E]/30">...</span>;
+              }
+              return null;
+            })}
+          </div>
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page >= totalPages}
+            className="w-10 h-10 rounded-full border border-[#3A0F0E]/20 flex items-center justify-center text-[#3A0F0E] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#3A0F0E]/5 transition-colors"
+          >
+            {isRTL ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </button>
+        </div>
+      )}
 
       <OrderDetailsModal
         order={selectedOrder}

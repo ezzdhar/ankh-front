@@ -15,6 +15,11 @@ const common = {
     placeholder: "ما الذي تبحث عنه؟",
   },
   currency: "ج.م",
+  not_found: {
+    title: "الصفحة غير موجودة",
+    description: "عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    button: "العودة للرئيسية",
+  },
   footer: {
     quickLinks: "روابط سريعة",
     customerSupport: "خدمة العملاء",

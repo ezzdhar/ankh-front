@@ -15,6 +15,11 @@ const common = {
     placeholder: "What are you looking for?",
   },
   currency: "EGP",
+  not_found: {
+    title: "Page Not Found",
+    description: "Oops! The page you are looking for does not exist or has been moved.",
+    button: "Back to Home",
+  },
   footer: {
     quickLinks: "Quick Links",
     customerSupport: "Customer Support",

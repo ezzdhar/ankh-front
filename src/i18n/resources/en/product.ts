@@ -41,6 +41,9 @@ const product = {
     noReviews: "No reviews yet.",
   },
   justForYou: "Just For You",
+  share: {
+    copied: "Link copied to clipboard!",
+  },
 };
 
 export default product;

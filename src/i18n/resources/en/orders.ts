@@ -1,5 +1,6 @@
 const orders = {
   title: "My Orders",
+  noOrders: "No orders found",
   filters: {
     search: "Search By Order ID",
     searchPlaceholder: "12345",
@@ -29,6 +30,8 @@ const orders = {
     refunded: "Refunded",
     paid: "Paid",
     unpaid: "Unpaid",
+    failed: "Failed",
+    expired: "Expired",
   },
   details: {
     title: "Order Details",

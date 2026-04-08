@@ -1,5 +1,6 @@
 const orders = {
   title: "طلباتي",
+  noOrders: "لا توجد طلبات حالياً",
   filters: {
     search: "البحث برقم الطلب",
     searchPlaceholder: "12345",
@@ -29,6 +30,8 @@ const orders = {
     refunded: "مسترجع",
     paid: "تم الدفع",
     unpaid: "غير مدفوع",
+    failed: "فشل",
+    expired: "منتهي الصلاحية",
   },
   details: {
     title: "تفاصيل الطلب",

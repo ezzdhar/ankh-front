@@ -20,7 +20,7 @@ export function OrdersFilters() {
   const searchParams = useSearchParams();
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const [status, setStatus] = useState(searchParams.get("status") || "all");
+  const [orderStatus, setOrderStatus] = useState(searchParams.get("order_status") || "all");
   const [paymentStatus, setPaymentStatus] = useState(
     searchParams.get("payment_status") || "all",
   );
@@ -28,7 +28,7 @@ export function OrdersFilters() {
   // Sync local state if URL changes (e.g., browser back button)
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
-    setStatus(searchParams.get("status") || "all");
+    setOrderStatus(searchParams.get("order_status") || "all");
     setPaymentStatus(searchParams.get("payment_status") || "all");
   }, [searchParams]);
 
@@ -37,8 +37,8 @@ export function OrdersFilters() {
     if (search) params.set("search", search);
     else params.delete("search");
 
-    if (status !== "all") params.set("status", status);
-    else params.delete("status");
+    if (orderStatus !== "all") params.set("order_status", orderStatus);
+    else params.delete("order_status");
 
     if (paymentStatus !== "all") params.set("payment_status", paymentStatus);
     else params.delete("payment_status");
@@ -86,14 +86,16 @@ export function OrdersFilters() {
         <label className="text-xs text-[#3A0F0E]/50 font-medium">
           {t("filters.status")}
         </label>
-        <Select value={status} onValueChange={setStatus}>
+        <Select value={orderStatus} onValueChange={setOrderStatus}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder={t("filters.all")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t("filters.all")}</SelectItem>
+            <SelectItem value="pending">{t("status.pending")}</SelectItem>
             <SelectItem value="processing">{t("status.processing")}</SelectItem>
-            <SelectItem value="completed">{t("status.completed")}</SelectItem>
+            <SelectItem value="shipped">{t("status.shipped")}</SelectItem>
+            <SelectItem value="delivered">{t("status.delivered")}</SelectItem>
             <SelectItem value="cancelled">{t("status.cancelled")}</SelectItem>
           </SelectContent>
         </Select>
@@ -111,8 +113,10 @@ export function OrdersFilters() {
           <SelectContent>
             <SelectItem value="all">{t("filters.all")}</SelectItem>
             <SelectItem value="pending">{t("status.pending")}</SelectItem>
-            <SelectItem value="completed">{t("status.completed")}</SelectItem>
+            <SelectItem value="paid">{t("status.paid")}</SelectItem>
+            <SelectItem value="failed">{t("status.failed")}</SelectItem>
             <SelectItem value="refunded">{t("status.refunded")}</SelectItem>
+            <SelectItem value="expired">{t("status.expired")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

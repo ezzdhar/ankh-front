@@ -33,7 +33,7 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["common", "cart", "auth"]);
   const { isAuthenticated, user: authUser, logout: authLogout } = useAuth();
   const { getProfile, logout: profileLogout } = useProfile();
   const isMounted = useIsMounted();
@@ -70,6 +70,7 @@ export function Navbar() {
     { href: "/", label: t("nav.home", { lng: isMounted ? undefined : "en" }) },
     { href: "/about", label: t("nav.about", { lng: isMounted ? undefined : "en" }) },
     { href: "/search", label: t("nav.products", { lng: isMounted ? undefined : "en" }) },
+    { href: "/cart", label: t("title", { ns: "cart", lng: isMounted ? undefined : "en" }) },
     { href: "/wishlist", label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }) },
     { href: "/orders", label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }) },
   ];
@@ -79,8 +80,8 @@ export function Navbar() {
       <div className="max-w-[1440px] h-full mx-auto flex items-center justify-between">
         {/* Left Side - Icons */}
         <div className="flex items-center gap-5">
-          <button
-            onClick={() => router.push(isAuthenticated ? "/profile" : "/login")}
+          <Link
+            href={isAuthenticated ? "/profile" : "/login"}
             className="p-2 text-[#442524] hover:opacity-60 transition-opacity flex items-center justify-center focus:outline-none"
             aria-label="Account"
           >
@@ -97,10 +98,10 @@ export function Navbar() {
             ) : (
               <UserRound size={24} strokeWidth={1} />
             )}
-          </button>
+          </Link>
           <Link
             href="/wishlist"
-            className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
+            className="p-2 text-[#442524] hover:opacity-60 transition-opacity hidden sm:flex"
             aria-label={t("footer.wishlist", { lng: isMounted ? undefined : "en" })}
           >
             <Heart size={24} strokeWidth={1} />

@@ -100,14 +100,16 @@ export function OrderSummary({
             {discount > 0 ? `-${discount.toFixed(2)}` : discount.toFixed(2)} EGP
           </span>
         </div>
-        <div className="flex justify-between items-center text-sm md:text-base">
-          <span className="text-[#3A0F0E]">
-            {t("summary.vatAmount") || "VAT Tax Amount"}
-          </span>
-          <span className="text-[#3A0F0E] font-medium">
-            {vat.toFixed(2)} EGP
-          </span>
-        </div>
+        {vat > 0 && (
+          <div className="flex justify-between items-center text-sm md:text-base">
+            <span className="text-[#3A0F0E]">
+              {t("summary.vatAmount") || "VAT Tax Amount"}
+            </span>
+            <span className="text-[#3A0F0E] font-medium">
+              {vat.toFixed(2)} EGP
+            </span>
+          </div>
+        )}
 
         <div className="flex justify-between items-center pt-4">
           <span className="text-base md:text-lg font-medium text-[#3A0F0E]">
@@ -118,9 +120,11 @@ export function OrderSummary({
           </span>
         </div>
 
-        <p className="text-[10px] text-[#3A0F0E] opacity-50 uppercase tracking-wider">
-          {t("summary.vatInclusive") || "VAT Inclusive*"}
-        </p>
+        {vat > 0 && (
+          <p className="text-[10px] text-[#3A0F0E] opacity-50 uppercase tracking-wider">
+            {t("summary.vatInclusive") || "VAT Inclusive*"}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-3 pt-4">

@@ -79,14 +79,14 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 px-5! h-[60px] bg-[#FFF8EF] shadow-sm z-50">
       <div className="max-w-[1440px] h-full mx-auto flex items-center justify-between">
         {/* Left Side - Icons */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 sm:gap-5 flex-none relative z-10 text-[#442524]">
           <Link
             href={isAuthenticated ? "/profile" : "/login"}
-            className="p-2 text-[#442524] hover:opacity-60 transition-opacity flex items-center justify-center focus:outline-none"
+            className="p-2 hover:opacity-60 transition-opacity flex items-center justify-center focus:outline-none"
             aria-label="Account"
           >
             {isMounted && isAuthenticated && user?.image ? (
-              <div className="relative w-7 h-7 rounded-full overflow-hidden border border-[#3A0F0E]/10 bg-[#EBE5E0]">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#3A0F0E]/10 bg-[#EBE5E0]">
                 <Image
                   src={user.image}
                   alt={user.name || "Profile"}
@@ -101,20 +101,20 @@ export function Navbar() {
           </Link>
           <Link
             href="/wishlist"
-            className="p-2 text-[#442524] hover:opacity-60 transition-opacity hidden sm:flex"
+            className="p-2 hover:opacity-60 transition-opacity hidden sm:flex"
             aria-label={t("footer.wishlist", { lng: isMounted ? undefined : "en" })}
           >
             <Heart size={24} strokeWidth={1} />
           </Link>
           <Link
             href="/cart"
-            className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
+            className="p-2 hover:opacity-60 transition-opacity"
             aria-label="Cart"
           >
             <ShoppingCart size={24} strokeWidth={1} />
           </Link>
           <button
-            className="p-2 text-[#442524] hover:opacity-60 transition-opacity hidden sm:flex"
+            className="p-2 hover:opacity-60 transition-opacity hidden sm:flex"
             aria-label="Language"
             onClick={toggleLanguage}
           >
@@ -123,7 +123,7 @@ export function Navbar() {
 
           {isAuthenticated && (
             <button
-              className="p-2 text-[#442524] hover:opacity-60 transition-opacity"
+              className="p-2 hover:opacity-60 transition-opacity"
               aria-label="Logout"
               onClick={handleLogout}
             >
@@ -135,21 +135,21 @@ export function Navbar() {
         {/* Center - Logo */}
         <Link
           href="/"
-          className="absolute left-1/2 -translate-x-1/2 font-logo text-2xl md:text-[1.75rem] font-light tracking-[0.15em] text-[#3A0F0E] hover:opacity-70 transition-opacity"
+          className="absolute left-1/2 -translate-x-1/2 font-logo text-2xl md:text-[1.75rem] font-light tracking-[0.15em] text-[#3A0F0E] hover:opacity-70 transition-opacity z-0"
         >
           <Image
             src="/logo.svg"
             alt="Ankh"
             width={100}
             height={40}
-            className="h-10 w-auto"
+            className="h-9 sm:h-10 w-auto"
             loading="eager"
             priority
           />
         </Link>
 
         {/* Right Side - Search & Menu */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-none relative z-10">
           {/* Search Bar - Desktop */}
           <div className="relative hidden md:flex items-center">
             <Input

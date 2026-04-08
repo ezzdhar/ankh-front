@@ -19,14 +19,16 @@ export function useCheckout() {
 
   return useMutation({
     mutationFn: async (data: CheckoutData) => {
-      const payload: Record<string, unknown> = {
+      const payload: Record<string, any> = {
         payment_method: data.payment_gateway,
         payment_gateway: data.payment_gateway,
-        notes: data.notes,
         idempotency_key: data.idempotency_key,
       };
 
-      // Conditionally include either address_id OR guest fields
+      if (data.notes && data.notes.trim()) {
+        payload.notes = data.notes.trim();
+      }
+
       if (data.address_id) {
         payload.address_id = data.address_id;
       } else {
@@ -35,16 +37,25 @@ export function useCheckout() {
         payload.guest_address = data.guest_address;
       }
 
-      const response = await api.post<ApiResponse>(
-        "/api/v1/checkout",
-        payload,
-        {
-          headers: {
-            "Idempotency-Key": data.idempotency_key,
+      try {
+        const response = await api.post<ApiResponse>(
+          "/api/v1/checkout",
+          payload,
+          {
+            headers: {
+              "Idempotency-Key": data.idempotency_key,
+            },
           },
-        },
-      );
-      return response.data;
+        );
+        return response.data;
+      } catch (error: any) {
+        console.error("[useCheckout] API Error Details:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          payload
+        });
+        throw error;
+      }
     },
     onSuccess: (data) => {
       if (data.success) {

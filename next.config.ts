@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "admin.ankh-eg.com",
+        pathname: "/storage/**",
       },
       {
         protocol: "https",
@@ -22,3 +23,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+// ankh-back.test
+// admin.ankh-eg.com

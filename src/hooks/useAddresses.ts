@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
+import { useAuth } from "@/providers/AuthProvider";
 
 export interface Address {
   id: number;
@@ -13,6 +14,7 @@ export interface Address {
 }
 
 export function useAddresses() {
+  const { isAuthenticated } = useAuth();
   return useQuery<ApiResponse<Address[]>>({
     queryKey: ["addresses"],
     queryFn: async () => {
@@ -20,5 +22,6 @@ export function useAddresses() {
         await api.get<ApiResponse<Address[]>>("/api/v1/addresses");
       return response.data;
     },
+    enabled: isAuthenticated,
   });
 }

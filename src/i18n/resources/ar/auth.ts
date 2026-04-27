@@ -108,6 +108,7 @@ const auth = {
     },
     submit: "تغيير كلمة المرور",
   },
+  logout: "تسجيل الخروج",
   validation: {
     emailRequired: "البريد الإلكتروني مطلوب",
     emailInvalid: "بريد إلكتروني غير صالح",

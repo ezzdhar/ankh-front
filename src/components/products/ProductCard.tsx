@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { cn } from "@/lib/utils";
+import { Star } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -13,9 +14,17 @@ export function ProductCard({ product, className }: ProductCardProps) {
   const img = product.main_image || product.image;
   const name = product.name || product.title;
   const oldPrice = product.original_price || product.old_price;
+  const averageRating = product.average_rating;
+  const reviewsCount = product.reviews_count;
+  const isZeroDiscount = 
+    product.discount_percentage === "0.00" || 
+    product.discount_percentage === "0" || 
+    product.discount_percentage === 0;
+
   const hasDiscount =
+    !isZeroDiscount && (
     product.has_discount ||
-    (oldPrice && Number(oldPrice) > Number(product.price));
+    (oldPrice && Number(oldPrice) > Number(product.price)));
 
   return (
     <Link href={href} className={cn("block group/item h-full", className)}>
@@ -46,7 +55,22 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {name}
         </h3>
 
-        <div className="flex items-center gap-2 justify-center">
+        <div className="flex items-center gap-0.5 mt-0.5">
+          {[...Array(5)].map((_, i) => {
+            const isFilled = i < Math.round(Number(averageRating || 0));
+            return (
+              <Star
+                key={i}
+                size={12}
+                fill={isFilled ? "currentColor" : "none"}
+                className={isFilled ? "text-yellow-400" : "text-gray-300"}
+              />
+            );
+          })}
+        </div>
+
+
+        <div className="flex items-center gap-2 justify-center mt-1">
           <div className="text-sm md:text-base font-bold text-[#3A0F0E]">
             {product.price} {product.currency || "EGP"}
           </div>

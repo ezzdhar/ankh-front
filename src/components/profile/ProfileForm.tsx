@@ -129,16 +129,16 @@ export function ProfileForm() {
             className="relative w-24 h-24 mx-auto mb-4 group cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#5C2C28] p-0.5 relative">
+            <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#5C2C28] relative">
               <Image
                 src={
                   selectedImage ||
+                  user?.image ||
                   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop"
                 }
                 alt="Profile"
-                width={96}
-                height={96}
-                className="w-full h-full rounded-full object-cover"
+                fill
+                className="rounded-full object-cover"
                 unoptimized // If dealing with external or local blob URLs
               />
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">

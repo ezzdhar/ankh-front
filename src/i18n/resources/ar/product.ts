@@ -20,6 +20,8 @@ const product = {
     lowStock: "كمية منخفضة ({{count}} عنصر)",
     resetToDefault: "إعادة التعيين إلى الافتراضي",
     outOfStock: "نفذت الكمية",
+    reviews: "مراجعة",
+    buyNow: "اشتري الآن",
   },
   productNotFound: "المنتج غير موجود",
   reviews: {
@@ -39,6 +41,9 @@ const product = {
     noReviews: "لا توجد مراجعات بعد.",
   },
   justForYou: "اخترنا لك",
+  share: {
+    copied: "تم نسخ الرابط بنجاح!",
+  },
 };
 
 export default product;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/hooks";
+import { useCategories } from "@/hooks/useProducts";
 import {
   Accordion,
   AccordionContent,
@@ -14,14 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 // Mock Data (Should be replaced by API data or props)
-const CATEGORIES = [
-  { id: "casual", label: "Casual Clothing" },
-  { id: "formal", label: "Formal Wear" },
-  { id: "soiree", label: "Soiree" },
-  { id: "formal-soiree", label: "Formal Soiree" },
-  { id: "balzers", label: "Balzers" },
-];
-
 const SIZES = [
   { id: "xxl", label: "XXL" },
   { id: "xl", label: "XL" },
@@ -35,14 +28,15 @@ const RATES = [5, 4, 3, 2, 1];
 
 export function SidebarFilters() {
   const { t } = useTranslation("search");
+  const { data: categoriesData } = useCategories(1, 50);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Helper to get current values
   const selectedCategories = searchParams.getAll("category_id");
   const selectedSizes = searchParams.getAll("size");
-  const selectedRate = searchParams.get("rate")
-    ? Number(searchParams.get("rate"))
+  const selectedRating = searchParams.get("rating")
+    ? Number(searchParams.get("rating"))
     : null;
   const minPrice = searchParams.get("min_price")
     ? Number(searchParams.get("min_price"))
@@ -88,12 +82,12 @@ export function SidebarFilters() {
     updateURL(params);
   };
 
-  const handleRateChange = (rate: number) => {
+  const handleRatingChange = (rating: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (selectedRate === rate) {
-      params.delete("rate");
+    if (selectedRating === rating) {
+      params.delete("rating");
     } else {
-      params.set("rate", rate.toString());
+      params.set("rating", rating.toString());
     }
     updateURL(params);
   };
@@ -128,17 +122,17 @@ export function SidebarFilters() {
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex flex-col gap-3">
-            {CATEGORIES.map((cat) => (
+            {categoriesData?.data?.map((cat) => (
               <div key={cat.id} className="flex items-center gap-3">
                 <div
-                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] cursor-pointer ${selectedCategories.includes(cat.id) ? "bg-[#3A0F0E]" : "bg-transparent"}`}
-                  onClick={() => handleCategoryChange(cat.id)}
+                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] cursor-pointer ${selectedCategories.includes(cat.id.toString()) ? "bg-[#3A0F0E]" : "bg-transparent"}`}
+                  onClick={() => handleCategoryChange(cat.id.toString())}
                 />
                 <label
                   className="text-sm text-[#3A0F0E]/80 cursor-pointer"
-                  onClick={() => handleCategoryChange(cat.id)}
+                  onClick={() => handleCategoryChange(cat.id.toString())}
                 >
-                  {cat.label}
+                  {cat.name}
                 </label>
               </div>
             ))}
@@ -174,7 +168,7 @@ export function SidebarFilters() {
       {/* Rates */}
       <AccordionItem value="rates">
         <AccordionTrigger className="text-base font-medium text-[#3A0F0E]">
-          {t("filters.rates")}
+          {t("filters.rating")}
         </AccordionTrigger>
         <AccordionContent>
           <div className="flex flex-col gap-2">
@@ -182,10 +176,10 @@ export function SidebarFilters() {
               <div
                 key={rate}
                 className="flex items-center gap-2 cursor-pointer"
-                onClick={() => handleRateChange(rate)}
+                onClick={() => handleRatingChange(rate)}
               >
                 <div
-                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] shrink-0 ${selectedRate === rate ? "bg-[#3A0F0E]" : "bg-transparent"}`}
+                  className={`w-4 h-4 rounded-full border border-[#3A0F0E] shrink-0 ${selectedRating === rate ? "bg-[#3A0F0E]" : "bg-transparent"}`}
                 />
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
@@ -234,7 +228,7 @@ export function SidebarFilters() {
              */}
             <button
               onClick={applyPriceFilter}
-              className="text-xs underline text-[#3A0F0E] text-left hover:text-[#3A0F0E]/70"
+              className="w-full h-12 border border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
             >
               {t("filters.applyPrice")}
             </button>
@@ -244,7 +238,7 @@ export function SidebarFilters() {
       {/* Clear Filters */}
       <Button
         variant="outline"
-        className="w-full mt-4 border-[#3A0F0E] text-[#3A0F0E] hover:bg-[#3A0F0E] hover:text-white"
+        className="mt-4 w-full h-12 border-[#310E0E]/90! text-[#310E0E]/90! bg-transparent rounded-full uppercase text-xs tracking-widest hover:bg-[#310E0E]/5 transition-all font-bold"
         onClick={clearFilters}
       >
         {t("filters.clear")}

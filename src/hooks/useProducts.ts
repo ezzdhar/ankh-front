@@ -40,7 +40,7 @@ export interface Product {
   images?: Array<{ id: number; url: string }>;
   price: string;
   price_after_discount?: string;
-  discount_percentage?: string;
+  discount_percentage?: string | number;
   has_discount?: boolean;
   category?: { id: number; name: string };
   category_name?: string;
@@ -51,6 +51,8 @@ export interface Product {
   is_favorited?: boolean;
   size_chart?: string;
   variants?: ProductVariant[];
+  average_rating?: number;
+  reviews_count?: number;
 }
 
 export function useCategories(page = 1, per_page = 10) {
@@ -78,7 +80,7 @@ export interface ProductParams {
   per_page?: number | string;
   minPrice?: number | string;
   maxPrice?: number | string;
-  rate?: number | string;
+  rating?: number | string;
   [key: string]: string | number | boolean | undefined | null;
 }
 

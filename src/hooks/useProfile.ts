@@ -22,7 +22,7 @@ interface UpdatePasswordData {
 
 export function useProfile() {
   const router = useRouter();
-  const { isAuthenticated, logout: authLogout } = useAuth();
+  const { isAuthenticated, updateUser, logout: authLogout } = useAuth();
 
   const getProfile = useQuery<ApiResponse>({
     queryKey: ["profile"],
@@ -63,9 +63,9 @@ export function useProfile() {
     },
     onSuccess: (data) => {
       toast.success("Profile updated successfully");
-      // Update local storage user if needed
+      // Update global user state
       if (data.data) {
-        localStorage.setItem("user", JSON.stringify(data.data));
+        updateUser(data.data as any);
       }
       // Invalidate query to refetch fresh data
       getProfile.refetch();

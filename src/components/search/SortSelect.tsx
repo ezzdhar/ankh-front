@@ -8,8 +8,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useTranslation } from "@/i18n/hooks";
 
 export function SortSelect() {
+  const { t } = useTranslation("search");
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -20,9 +22,6 @@ export function SortSelect() {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
     current.set("sort_by", value);
 
-    // Check if we need to reset page? Usually sorting doesn't require page reset but good practice to see top results
-    // current.set("page", "1");
-
     const search = current.toString();
     const query = search ? `?${search}` : "";
 
@@ -32,18 +31,18 @@ export function SortSelect() {
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm text-maroon/70 whitespace-nowrap uppercase tracking-wider hidden sm:inline">
-        Sort By:
+        {t("sort.label")}
       </span>
       <Select value={currentSort} onValueChange={handleSortChange}>
         <SelectTrigger className="w-[180px] border-maroon/20 text-maroon focus:ring-maroon/20">
-          <SelectValue placeholder="Sort by" />
+          <SelectValue placeholder={t("sort.label")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="latest">Latest</SelectItem>
-          <SelectItem value="price_low">Price: Low to High</SelectItem>
-          <SelectItem value="price_high">Price: High to Low</SelectItem>
-          <SelectItem value="rating">Top Rated</SelectItem>
-          <SelectItem value="name">Name: A-Z</SelectItem>
+          <SelectItem value="latest">{t("sort.newest")}</SelectItem>
+          <SelectItem value="price_low">{t("sort.priceLow")}</SelectItem>
+          <SelectItem value="price_high">{t("sort.priceHigh")}</SelectItem>
+          <SelectItem value="rating">{t("sort.rating")}</SelectItem>
+          <SelectItem value="name">{t("sort.name")}</SelectItem>
         </SelectContent>
       </Select>
     </div>

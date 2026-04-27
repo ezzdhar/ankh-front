@@ -23,7 +23,7 @@ export function ProductDetails({ id }: { id: string }) {
       id: p.id,
       image: p.main_image || p.image,
       title: p.name,
-      link: `/product/${p.id}`,
+      link: `/product/${p.slug || p.id}`,
     }));
   }, [randomData]);
 

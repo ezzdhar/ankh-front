@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import { useTranslation } from "@/i18n/hooks";
 import { Button } from "@/components/ui/button";
@@ -52,8 +52,10 @@ export function CheckoutSummary({
   }, [couponCode]);
 
   const handleApplyCoupon = () => {
-    if (onApplyCoupon && promoCode) {
-      onApplyCoupon(promoCode);
+    const normalizedCouponCode = promoCode.trim();
+    if (onApplyCoupon && normalizedCouponCode) {
+      onApplyCoupon(normalizedCouponCode);
+      setPromoCode(normalizedCouponCode);
     }
   };
 
@@ -137,25 +139,30 @@ export function CheckoutSummary({
         <label className="text-sm text-[#3A0F0E] opacity-80 block">
           {t("cart:summary.promoCode")}
         </label>
-        <div className="relative flex items-center">
-          <Input
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-            placeholder={t("cart:summary.applyCoupon")}
-            className="pr-24 bg-[#EAE0D5]/50 border-none h-12 rounded-md focus-visible:ring-1 focus-visible:ring-[#3A0F0E]/20"
-            disabled={!!couponCode}
-          />
-          {couponCode ? (
+
+        {couponCode ? (
+          <div className="flex items-center justify-between bg-[#0fa47f]/10 px-4 py-3 rounded-md border border-[#0fa47f]/20">
+            <span className="text-sm font-medium text-[#0fa47f]">
+              {couponCode} {t("cart:summary.apply")}
+            </span>
             <Button
               onClick={onRemoveCoupon}
               variant="ghost"
               size="sm"
-              className="absolute right-1 text-[#A32020] hover:text-[#A32020]/80 h-10 px-3"
+              className="text-[#A32020] hover:text-[#A32020]/80 h-8 px-2"
               disabled={isApplyingCoupon}
             >
               <X size={16} className="mr-1" /> {t("cart:summary.remove")}
             </Button>
-          ) : (
+          </div>
+        ) : (
+          <div className="relative flex items-center">
+            <Input
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              placeholder={t("cart:summary.applyCoupon")}
+              className="pr-24 bg-[#EAE0D5]/50 border-none h-12 rounded-md focus-visible:ring-1 focus-visible:ring-[#3A0F0E]/20"
+            />
             <Button
               onClick={handleApplyCoupon}
               className="absolute right-0 top-0 bottom-0 bg-[#310E0E] hover:bg-[#310E0E]/90 text-white rounded-l-none rounded-r-md px-6 h-12 uppercase text-xs tracking-widest font-bold"
@@ -163,8 +170,8 @@ export function CheckoutSummary({
             >
               {isApplyingCoupon ? "..." : t("cart:summary.apply")}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="h-px bg-[#3A0F0E]/10 my-6" />
@@ -178,14 +185,8 @@ export function CheckoutSummary({
             {discount.toFixed(0)} EGP-
           </span>
         </div>
-        <div className="flex justify-between items-center text-sm md:text-base">
-          <span className="text-[#3A0F0E] opacity-80">
-            {t("cart:summary.vatAmount")}
-          </span>
-          <span className="text-[#3A0F0E] font-medium">
-            {vat.toFixed(0)} EGP
-          </span>
-        </div>
+
+        {/* VAT row hidden from UI as requested */}
 
         {/* Only show Shipping if > 0 */}
         {shipping > 0 && (

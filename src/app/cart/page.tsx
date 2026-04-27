@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/hooks";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { CartItemCard } from "@/components/cart/CartItemCard";
 import { OrderSummary } from "@/components/cart/OrderSummary";
 import { CollectionCarousel } from "@/components/home/CollectionCarousel";
@@ -26,6 +26,12 @@ export default function CartPage() {
   const removeCoupon = useRemoveCoupon();
   const { data: randomData } = useRandomProducts();
   const [updatingItemId, setUpdatingItemId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (cartData) {
+      console.log("🛒 Cart API Data:", cartData);
+    }
+  }, [cartData]);
 
   const items = useMemo(
     () => cartData?.data?.items || [],
@@ -180,7 +186,7 @@ export default function CartPage() {
             </div>
             <Button
               asChild
-              className="bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white rounded-full px-12"
+              className="bg-[#310E0E]! hover:bg-[#310E0E]/90! text-white! rounded-full px-12"
             >
               <Link href="/search">{t("empty.button")}</Link>
             </Button>

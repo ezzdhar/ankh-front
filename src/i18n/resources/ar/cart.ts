@@ -2,8 +2,8 @@ const cartTranslations = {
   title: "عربة التسوق",
   items: {
     total: "المجموع",
-    color: "اللون*",
-    size: "المقاس*",
+    color: "اللون",
+    size: "المقاس",
     quantity: "الكمية",
   },
   summary: {

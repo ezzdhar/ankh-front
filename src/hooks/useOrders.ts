@@ -2,12 +2,37 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types/api";
 
+const GUEST_ID_STORAGE_KEY = "ankh_guest_id";
+
+function getOrderSessionScope() {
+  if (typeof window === "undefined") {
+    return "server";
+  }
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    return `auth:${token.slice(0, 12)}`;
+  }
+
+  const guestId = localStorage.getItem(GUEST_ID_STORAGE_KEY);
+  return guestId ? `guest:${guestId}` : "guest:anonymous";
+}
+
 export interface OrderItem {
   id: number;
   product_id: number;
   quantity: number;
   price: string;
   total: string;
+  product?: {
+    id: number;
+    name: string;
+    main_image: string;
+  };
+  variant?: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface Order {
@@ -34,6 +59,10 @@ export interface Order {
     city_id: number;
     address_details: string;
     postal_code: string;
+    city?: {
+      id: number;
+      name: string;
+    };
   };
   user?: {
     id: number;
@@ -54,10 +83,12 @@ export interface OrdersPaginatedData {
 export function useOrders(
   page = 1,
   per_page = 10,
-  filters?: { search?: string; status?: string; payment_status?: string },
+  filters?: { search?: string; order_status?: string; payment_status?: string },
 ) {
+  const sessionScope = getOrderSessionScope();
+
   return useQuery<ApiResponse<OrdersPaginatedData>>({
-    queryKey: ["orders", page, per_page, filters],
+    queryKey: ["orders", sessionScope, page, per_page, filters],
     queryFn: async () => {
       const response = await api.get<ApiResponse<OrdersPaginatedData>>(
         "/api/v1/orders",
@@ -66,9 +97,9 @@ export function useOrders(
             per_page,
             page,
             search: filters?.search || undefined,
-            order_status:
-              filters?.status === "all" ? undefined : filters?.status,
-            payment_status:
+            filter_order_status:
+              filters?.order_status === "all" ? undefined : filters?.order_status,
+            filter_payment_status:
               filters?.payment_status === "all"
                 ? undefined
                 : filters?.payment_status,

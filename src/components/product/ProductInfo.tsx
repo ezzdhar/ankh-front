@@ -10,6 +10,7 @@ import {
   Plus,
   ChevronLeft,
   ChevronRight,
+  Star,
 } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useIsMounted } from "@/hooks/useIsMounted";
@@ -34,6 +35,7 @@ export function ProductInfo({ product }: { product: Product }) {
   const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [loadingAction, setLoadingAction] = useState<"cart" | "buy_now" | null>(null);
   const addToCart = useAddToCart();
   const toggleFavorite = useToggleFavorite();
 
@@ -122,31 +124,55 @@ export function ProductInfo({ product }: { product: Product }) {
     emblaMainApi.on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  const handleAddToCart = () => {
+  const getCartPayload = () => {
     if (showVariants && !selectedVariant) {
       toast.error(t("details.selectVariant", { lng: isMounted ? undefined : "en" }) || "Please select options");
-      return;
+      return null;
     }
 
-    addToCart.mutate({
+    return {
       product_id: product.id,
       product_variant_id: selectedVariant?.id,
       quantity,
+    };
+  };
+
+  const handleAddToCart = () => {
+    const payload = getCartPayload();
+    if (!payload) {
+      return;
+    }
+
+    addToCart.mutate(payload);
+  };
+
+  const handleCheckout = () => {
+    const payload = getCartPayload();
+    if (!payload) {
+      return;
+    }
+
+    addToCart.mutate(payload, {
+      onSuccess: (data) => {
+        if ((data as { success?: boolean })?.success) {
+          router.push("/checkout");
+        }
+      },
     });
   };
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 bg-[#FFF8EF]">
       {/* Gallery Section */}
-      <div className="flex flex-col gap-4 w-full lg:w-[600px] select-none animate-in fade-in slide-in-from-left-8 duration-700">
+      <div className="flex flex-col gap-4 w-full max-w-[420px] sm:max-w-[520px] lg:w-[560px] lg:max-w-[560px] mx-auto lg:mx-0 select-none animate-in fade-in slide-in-from-left-8 duration-700">
         {/* Main Slider */}
         <div className="relative group">
-          <div className="overflow-hidden" ref={mainViewportRef}>
+          <div className="overflow-hidden rounded-md" ref={mainViewportRef}>
             <div className="flex">
               {images.map((img, idx) => (
                 <div
                   key={idx}
-                  className="relative flex-[0_0_100%] min-w-0 aspect-3/4"
+                  className="relative flex-[0_0_100%] min-w-0 aspect-[4/5] sm:aspect-3/4"
                 >
                   <Image
                     src={img}
@@ -154,7 +180,7 @@ export function ProductInfo({ product }: { product: Product }) {
                     fill
                     className="object-cover"
                     priority={idx === 0}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                    sizes="(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 560px"
                   />
                 </div>
               ))}
@@ -178,13 +204,13 @@ export function ProductInfo({ product }: { product: Product }) {
         {/* Thumbnail Slider */}
         <div className="relative">
           <div className="overflow-hidden" ref={thumbViewportRef}>
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               {images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => onThumbClick(idx)}
                   className={cn(
-                    "relative shrink-0 w-20 h-28 overflow-hidden transition-all duration-300",
+                    "relative shrink-0 w-16 h-24 sm:w-20 sm:h-28 overflow-hidden transition-all duration-300",
                     selectedImage === idx
                       ? "opacity-100 ring-1 ring-[#3A0F0E]"
                       : "opacity-100",
@@ -233,18 +259,58 @@ export function ProductInfo({ product }: { product: Product }) {
           <h1 className="text-2xl font-medium text-[#3A0F0E] font-cormorant leading-tight">
             {product.name}
           </h1>
+
+          {/* Rating Display */}
+          {product.average_rating !== undefined && Number(product.average_rating) > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => {
+                  const rating = Number(product.average_rating);
+                  const isFilled = i < Math.round(rating);
+                  return (
+                    <Star
+                      key={i}
+                      size={16}
+                      fill={isFilled ? "currentColor" : "none"}
+                      className={isFilled ? "text-yellow-400" : "text-gray-300"}
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-sm text-gray-500 font-medium">
+                {Number(product.average_rating).toFixed(1)}
+              </span>
+              <span className="text-xs text-gray-400">
+                ({product.reviews_count || 0} {t("details.reviews")})
+              </span>
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <div className="text-xl font-bold text-[#3A0F0E]">
-              {selectedVariant?.price ||
-                product.price_after_discount ||
-                product.price}{" "}
+              {(() => {
+                const isZeroDiscount =
+                  product.discount_percentage === "0.00" ||
+                  product.discount_percentage === "0" ||
+                  product.discount_percentage === 0;
+                
+                return selectedVariant?.price ||
+                  (!isZeroDiscount && product.price_after_discount) ||
+                  product.price;
+              })()}{" "}
               EGP
             </div>
             {(() => {
+              const isZeroDiscount =
+                product.discount_percentage === "0.00" ||
+                product.discount_percentage === "0" ||
+                product.discount_percentage === 0;
+
               const displayPrice =
-                selectedVariant?.price || product.price_after_discount;
+                selectedVariant?.price || (!isZeroDiscount && product.price_after_discount) || null;
               const originalPrice = product.price;
-              if (displayPrice && displayPrice !== originalPrice) {
+              
+              if (!isZeroDiscount && displayPrice && String(displayPrice) !== String(originalPrice)) {
                 return (
                   <div className="text-lg text-gray-400 line-through">
                     {originalPrice} EGP
@@ -400,25 +466,38 @@ export function ProductInfo({ product }: { product: Product }) {
             </button>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row gap-3">
             <Button
               variant="outline"
               disabled={addToCart.isPending}
-              onClick={handleAddToCart}
-              className="flex-1 h-12 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
+              onClick={() => {
+                setLoadingAction("cart");
+                handleAddToCart();
+              }}
+              className="flex-1 h-12 border-2 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
-              {addToCart.isPending
+              {addToCart.isPending && loadingAction === "cart"
                 ? t("details.adding", { lng: isMounted ? undefined : "en" })
                 : t("details.addToCart", { lng: isMounted ? undefined : "en" })}
             </Button>
+
             <Button
+              disabled={addToCart.isPending}
               onClick={() => {
-                handleAddToCart();
-                setTimeout(() => router.push("/checkout"), 500);
+                setLoadingAction("buy_now");
+                const payload = getCartPayload();
+                if (!payload) return;
+                addToCart.mutate(payload, {
+                  onSuccess: () => {
+                    router.push("/cart");
+                  }
+                });
               }}
-              className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#3A0F0E]/90! text-white text-sm font-medium rounded-full uppercase tracking-wider transition-all"
+              className="flex-1 h-12 bg-[#3A0F0E] text-white hover:bg-[#3A0F0E]/90 text-sm font-medium rounded-full transition-all uppercase tracking-wider"
             >
-              {t("details.checkOut", { lng: isMounted ? undefined : "en" })}
+              {addToCart.isPending && loadingAction === "buy_now"
+                ? t("details.adding", { lng: isMounted ? undefined : "en" })
+                : t("details.buyNow", { lng: isMounted ? undefined : "en" })}
             </Button>
           </div>
         </div>

@@ -2,8 +2,8 @@ const cartTranslations = {
   title: "Cart",
   items: {
     total: "Total",
-    color: "Color*",
-    size: "Size*",
+    color: "Color",
+    size: "Size",
     quantity: "Qty",
   },
   summary: {

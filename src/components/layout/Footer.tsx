@@ -39,7 +39,7 @@ export function Footer() {
   const supportLinks = [
     { label: t("footer.myAccount", { lng: isMounted ? undefined : "en" }), href: "/profile" },
     { label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }), href: "/orders" },
-    { label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }) || "Wishlist", href: "/wishlist" },
+    { label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }), href: "/wishlist" },
   ];
 
   const policyLinks = [

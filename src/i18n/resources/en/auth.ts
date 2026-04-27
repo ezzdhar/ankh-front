@@ -109,6 +109,7 @@ const auth = {
     },
     submit: "Reset Password",
   },
+  logout: "Logout",
   validation: {
     emailRequired: "Email is required",
     emailInvalid: "Invalid email address",

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/providers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import Script from "next/script";
 
 const cairo = Cairo({
   variable: "--font-cairo",
@@ -107,6 +108,19 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://admin.ankh-eg.com" />
       </head>
       <body suppressHydrationWarning>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-CSVZBBDQEN"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-CSVZBBDQEN');
+          `}
+        </Script>
         <Providers>
           <Navbar />
           <main className="main">{children}</main>

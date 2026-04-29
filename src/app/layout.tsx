@@ -116,7 +116,7 @@ export default async function RootLayout({
       <body suppressHydrationWarning>
         <Script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-CSVZBBDQEN"
+          src="https://www.googletagmanager.com/gtag/js?id=G-27J3ZJV7S4"
         />
         <Script id="google-analytics">
           {`
@@ -124,7 +124,7 @@ export default async function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-CSVZBBDQEN');
+            gtag('config', 'G-27J3ZJV7S4');
           `}
         </Script>
         <Providers>

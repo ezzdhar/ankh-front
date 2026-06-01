@@ -50,7 +50,9 @@ export function ProductInfo({ product }: { product: Product }) {
 
   // Extract variants
   const variants = useMemo(() => product.variants || [], [product.variants]);
-  const showVariants = variants.length > 1;
+  const showVariants =
+    variants.length > 1 ||
+    (variants.length === 1 && (variants[0].attribute_values?.length ?? 0) > 0);
 
   // Track which variant card is selected by ID
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
@@ -341,94 +343,151 @@ export function ProductInfo({ product }: { product: Product }) {
 
         {/* Variant Cards */}
         {showVariants && (
-          <div className="space-y-3">
-            <div className="text-sm font-medium text-[#3A0F0E]">
-              {t("details.chooseOption", { lng: isMounted ? undefined : "en" })}
-            </div>
-            <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-3">
-              {variants.map((variant) => {
-                const isSelected = selectedVariantId === variant.id;
-                const isOutOfStock = variant.stock <= 0;
-                const isLowStock =
-                  variant.stock > 0 && variant.stock <= LOW_STOCK_THRESHOLD;
+          <div className="space-y-4">
+            {variants.length > 1 ? (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1 h-4 bg-[#C6943E] rounded-full" />
+                  <span className="text-sm font-semibold text-[#3A0F0E] uppercase tracking-wider">
+                    {t("details.chooseOption", { lng: isMounted ? undefined : "en" })}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {variants.map((variant) => {
+                    const isSelected = selectedVariantId === variant.id;
+                    const isOutOfStock = variant.stock <= 0;
+                    const isLowStock =
+                      variant.stock > 0 && variant.stock <= LOW_STOCK_THRESHOLD;
 
-                return (
-                  <button
-                    key={variant.id}
-                    onClick={() =>
-                      !isOutOfStock && setSelectedVariantId(variant.id)
-                    }
-                    disabled={isOutOfStock}
-                    className={cn(
-                      "relative w-full text-start p-4 rounded-lg border-2 transition-all duration-200",
-                      isSelected
-                        ? "border-[#C6943E] bg-[#FFFDF7] shadow-sm"
-                        : "border-[#3A0F0E]/10 bg-white hover:border-[#3A0F0E]/30",
-                      isOutOfStock &&
-                        "opacity-50 cursor-not-allowed bg-gray-50",
-                    )}
-                  >
-                    {/* Selected Indicator */}
-                    {isSelected && (
-                      <div className="absolute top-3 end-3 w-5 h-5 rounded-full bg-[#C6943E] flex items-center justify-center">
-                        <Check
-                          size={12}
-                          className="text-white"
-                          strokeWidth={3}
-                        />
-                      </div>
-                    )}
-
-                    {/* Attribute Lines */}
-                    <div className="space-y-1 pe-6">
-                      {variant.attribute_values &&
-                      variant.attribute_values.length > 0 ? (
-                        variant.attribute_values.map((attr) => (
-                          <div
-                            key={attr.id}
-                            className="flex items-center gap-2 text-sm text-[#3A0F0E]"
-                          >
-                            <span className="font-medium">
-                              {attr.attribute.name}:
-                            </span>
-                            {attr.color_code && (
-                              <span
-                                className="inline-block w-4 h-4 rounded-full border border-black/10"
-                                style={{ backgroundColor: attr.color_code }}
-                              />
-                            )}
-                            <span className="opacity-80">{attr.name}</span>
+                    return (
+                      <button
+                        key={variant.id}
+                        onClick={() =>
+                          !isOutOfStock && setSelectedVariantId(variant.id)
+                        }
+                        disabled={isOutOfStock}
+                        className={cn(
+                          "relative w-full text-start group p-4 rounded-xl border transition-all duration-300",
+                          isSelected
+                            ? "border-[#C6943E] bg-[#C6943E]/5 ring-1 ring-[#C6943E]/20"
+                            : "border-[#3A0F0E]/10 bg-white hover:border-[#3A0F0E]/30 hover:shadow-md",
+                          isOutOfStock &&
+                            "opacity-40 cursor-not-allowed grayscale",
+                        )}
+                      >
+                        {/* Selected Indicator */}
+                        {isSelected && (
+                          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#C6943E] text-white flex items-center justify-center shadow-lg transform scale-110 transition-transform duration-300">
+                            <Check size={14} strokeWidth={3} />
                           </div>
-                        ))
-                      ) : (
-                        <div className="text-sm text-[#3A0F0E] opacity-70">
-                          {variant.is_default
-                            ? "Default"
-                            : `Variant #${variant.id}`}
+                        )}
+
+                        <div className="space-y-3">
+                          {/* Attribute List */}
+                          <div className="space-y-2">
+                            {variant.attribute_values &&
+                            variant.attribute_values.length > 0 ? (
+                              variant.attribute_values.map((attr) => (
+                                <div
+                                  key={attr.id}
+                                  className="flex items-center justify-between"
+                                >
+                                  <span className="text-[10px] uppercase tracking-widest text-[#3A0F0E]/50 font-bold">
+                                    {attr.attribute.name}
+                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    {attr.color_code && (
+                                      <div
+                                        className="w-3 h-3 rounded-full border border-black/10"
+                                        style={{
+                                          backgroundColor: attr.color_code,
+                                        }}
+                                      />
+                                    )}
+                                    <span className="text-xs font-semibold text-[#3A0F0E]">
+                                      {attr.name}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-xs text-[#3A0F0E] opacity-70">
+                                {variant.is_default
+                                  ? "Default"
+                                  : `Variant #${variant.id}`}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Price & Stock */}
+                          <div className="pt-2 border-t border-[#3A0F0E]/5 flex items-center justify-between">
+                            <div className="text-sm font-bold text-[#3A0F0E]">
+                              {parseFloat(variant.price).toFixed(2)}{" "}
+                              <span className="text-[10px] font-normal opacity-60">
+                                EGP
+                              </span>
+                            </div>
+                            {isOutOfStock ? (
+                              <span className="text-[10px] font-bold text-red-500 uppercase">
+                                {t("details.outOfStock", {
+                                  lng: isMounted ? undefined : "en",
+                                })}
+                              </span>
+                            ) : isLowStock ? (
+                              <span className="text-[10px] font-bold text-[#C6943E] animate-pulse">
+                                {t("details.lowStock", {
+                                  count: variant.stock,
+                                  lng: isMounted ? undefined : "en",
+                                })}
+                              </span>
+                            ) : null}
+                          </div>
                         </div>
-                      )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              /* Single Variant Information Panel */
+              <div className="bg-white border border-[#3A0F0E]/10 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C6943E]" />
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#3A0F0E]/30 uppercase tracking-[0.2em]">
+                      {t("details.specifications") || "Product Specifications"}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-[#3A0F0E]/5 flex items-center justify-center text-[#3A0F0E]/20">
+                      <Plus size={14} />
                     </div>
+                  </div>
 
-                    {/* Stock Badge */}
-                    {isOutOfStock && (
-                      <div className="mt-2 text-xs font-medium text-red-600">
-                        {t("details.outOfStock", { lng: isMounted ? undefined : "en" })}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                    {variants[0].attribute_values.map((attr) => (
+                      <div
+                        key={attr.id}
+                        className="flex items-center justify-between border-b border-[#3A0F0E]/5 pb-2"
+                      >
+                        <span className="text-sm text-[#3A0F0E]/60 font-medium">
+                          {attr.attribute.name}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {attr.color_code && (
+                            <div
+                              className="w-4 h-4 rounded-full border border-black/10 shadow-inner"
+                              style={{ backgroundColor: attr.color_code }}
+                            />
+                          )}
+                          <span className="text-sm font-bold text-[#3A0F0E]">
+                            {attr.name}
+                          </span>
+                        </div>
                       </div>
-                    )}
-                    {isLowStock && (
-                      <div className="mt-2 text-xs font-medium text-[#C6943E]">
-                        {t("details.lowStock", { count: variant.stock, lng: isMounted ? undefined : "en" })}
-                      </div>
-                    )}
-
-                    {/* Price */}
-                    <div className="mt-2 text-base font-bold text-[#3A0F0E]">
-                      {parseFloat(variant.price).toFixed(2)} EGP
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

@@ -58,7 +58,7 @@ export function Hero({
         <div className="absolute inset-0 bg-black/10" />
       </div>
 
-      <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both delay-300">
+      {/* <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-6 text-center p-6 pb-20 text-white z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both delay-300">
         <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl leading-tight tracking-wide uppercase drop-shadow-md">
           {displayTitle}
         </h1>
@@ -80,7 +80,7 @@ export function Hero({
             <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-0 ease-out" />
           </Link>
         </Button>
-      </div>
+      </div> */}
     </section>
   );
 }

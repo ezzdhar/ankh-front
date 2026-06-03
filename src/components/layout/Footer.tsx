@@ -65,7 +65,7 @@ export function Footer() {
                 className="h-10 w-auto"
               />
             </Link>
-            <p className="text-sm text-white/70 leading-relaxed max-w-xs">
+            <p className="text-sm text-white leading-relaxed max-w-xs">
               {settings?.description ||
                 "An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes."}
             </p>
@@ -81,7 +81,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
+                    className="text-sm text-white hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -100,7 +100,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
+                    className="text-sm text-white hover:text-white transition-all duration-300 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -116,7 +116,7 @@ export function Footer() {
             </h3>
             <ul className="flex flex-col gap-3">
               {settings?.phone && (
-                <li className="flex items-center gap-2 text-sm text-white/70">
+                <li className="flex items-center gap-2 text-sm text-white">
                   <Phone size={16} className="shrink-0" />
                   <a
                     href={`tel:${settings.phone.replace(/\s/g, "")}`}
@@ -127,7 +127,7 @@ export function Footer() {
                 </li>
               )}
               {settings?.email && (
-                <li className="flex items-center gap-2 text-sm text-white/70">
+                <li className="flex items-center gap-2 text-sm text-white">
                   <Mail size={16} className="shrink-0" />
                   <a
                     href={`mailto:${settings.email}`}
@@ -138,7 +138,7 @@ export function Footer() {
                 </li>
               )}
               {settings?.phone && (
-                <li className="flex items-center gap-2 text-sm text-white/70">
+                <li className="flex items-center gap-2 text-sm text-white">
                   <svg
                     width="16"
                     height="16"
@@ -157,7 +157,7 @@ export function Footer() {
                 </li>
               )}
               {settings?.address && (
-                <li className="flex items-start gap-2 text-sm text-white/70">
+                <li className="flex items-start gap-2 text-sm text-white">
                   <MapPin size={16} className="mt-0.5 shrink-0" />
                   <span>{settings.address}</span>
                 </li>
@@ -172,7 +172,7 @@ export function Footer() {
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Copyright */}
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-white">
               {t("footer.copyright", { year: new Date().getFullYear(), lng: isMounted ? undefined : "en" })}
             </p>
 
@@ -199,7 +199,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-white/60 hover:text-white transition-colors hover:underline"
+                  className="text-xs text-white hover:text-white transition-colors hover:underline"
                 >
                   {link.label}
                 </Link>

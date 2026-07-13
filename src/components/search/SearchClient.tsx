@@ -26,7 +26,7 @@ export function SearchClient() {
 
   return (
     <div className="bg-cream min-h-screen">
-      <div className="relative w-full h-[200px] sm:h-[300px] lg:h-[400px] mb-8 md:mb-12">
+      <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-[21/8] mb-8 md:mb-12">
         <Image
           src={headerImg}
           alt="Search Header"

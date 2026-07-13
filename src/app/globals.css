@@ -2,6 +2,9 @@
 @import "tw-animate-css";
 
 @theme {
+  /* Custom Breakpoints */
+  --breakpoint-xs: 30rem; /* 480px */
+
   /* Colors - Ankh Design System */
   --color-cream: #fff8ef;
   --color-cream-dark: #f5efe8;

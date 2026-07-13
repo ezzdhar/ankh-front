@@ -34,7 +34,7 @@ export function Hero({
   const showLoader = isParentLoading || isImageLoading;
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#3A0F0E] aspect-9/16 md:aspect-auto md:h-[calc(100vh-60px)]">
+    <section className="relative w-full overflow-hidden bg-[#3A0F0E] aspect-[16/9] sm:aspect-auto sm:h-[calc(100vh-60px)]">
       <div className="absolute inset-0">
         {showLoader && (
           <Skeleton className="absolute inset-0 w-full h-full bg-[#3A0F0E]/50 z-10" />

@@ -19,7 +19,7 @@ const WinterCollection = dynamic(
     ),
   {
     loading: () => (
-      <div className="w-full aspect-9/16 md:aspect-auto md:h-[calc(100vh-60px)] bg-[#310E0E] animate-pulse" />
+      <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[calc(100vh-60px)] bg-[#310E0E] animate-pulse" />
     ),
   },
 );
@@ -29,7 +29,7 @@ const NewCollection = dynamic(
     import("@/components/home/NewCollection").then((mod) => mod.NewCollection),
   {
     loading: () => (
-      <div className="w-full aspect-9/16 md:aspect-auto md:h-[calc(100vh-60px)] bg-[#3A0F0E] animate-pulse" />
+      <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[calc(100vh-60px)] bg-[#3A0F0E] animate-pulse" />
     ),
   },
 );

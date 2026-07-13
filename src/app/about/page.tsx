@@ -29,12 +29,12 @@ export default function AboutPage() {
 
       {/* Hero Image */}
       <div className="w-full">
-        <div className="relative w-full aspect-16/7">
+        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-[16/7]">
           <Image
             src={banner?.image || "/about.webp"}
             alt={banner?.name || "ANKH About"}
             fill
-            className="object-cover"
+            className="object-cover object-center"
             priority
           />
         </div>

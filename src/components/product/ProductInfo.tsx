@@ -29,6 +29,13 @@ import { useAddToCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
 import { useToggleFavorite } from "@/hooks/useFavorite";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ProductInfo({ product }: { product: Product }) {
   const { t } = useTranslation("product");
@@ -73,6 +80,90 @@ export function ProductInfo({ product }: { product: Product }) {
     }
     return variants.find((v) => v.id === selectedVariantId) || null;
   }, [variants, selectedVariantId]);
+
+  // Group attribute values from variants into categories (e.g. Size, Color)
+  const attributesMap = useMemo(() => {
+    const map: Record<
+      string,
+      {
+        id: number;
+        name: string;
+        values: Array<{ id: number; name: string; color_code?: string }>;
+      }
+    > = {};
+
+    variants.forEach((v) => {
+      v.attribute_values?.forEach((attr) => {
+        const attrName = attr.attribute.name;
+        if (!map[attrName]) {
+          map[attrName] = {
+            id: attr.attribute.id,
+            name: attrName,
+            values: [],
+          };
+        }
+        if (!map[attrName].values.some((val) => val.name === attr.name)) {
+          map[attrName].values.push({
+            id: attr.id,
+            name: attr.name,
+            color_code: attr.color_code,
+          });
+        }
+      });
+    });
+    return Object.values(map);
+  }, [variants]);
+
+  const getSelectedValueForAttribute = useCallback(
+    (attrName: string) => {
+      const found = selectedVariant?.attribute_values?.find(
+        (attr) => attr.attribute.name === attrName,
+      );
+      return found ? found.name : "";
+    },
+    [selectedVariant],
+  );
+
+  const handleSelectAttribute = useCallback(
+    (attrName: string, valueName: string) => {
+      const otherAttributes: Record<string, string> = {};
+      selectedVariant?.attribute_values?.forEach((attr) => {
+        if (attr.attribute.name !== attrName) {
+          otherAttributes[attr.attribute.name] = attr.name;
+        }
+      });
+
+      let bestVariant = null;
+      let bestMatchCount = -1;
+
+      for (const variant of variants) {
+        const matchesAttr = variant.attribute_values?.some(
+          (attr) => attr.attribute.name === attrName && attr.name === valueName,
+        );
+        if (!matchesAttr) continue;
+
+        let matchCount = 0;
+        variant.attribute_values?.forEach((attr) => {
+          if (
+            attr.attribute.name !== attrName &&
+            otherAttributes[attr.attribute.name] === attr.name
+          ) {
+            matchCount++;
+          }
+        });
+
+        if (matchCount > bestMatchCount) {
+          bestMatchCount = matchCount;
+          bestVariant = variant;
+        }
+      }
+
+      if (bestVariant) {
+        setSelectedVariantId(bestVariant.id);
+      }
+    },
+    [variants, selectedVariant],
+  );
 
   // Helpers for display
   const LOW_STOCK_THRESHOLD = 10;
@@ -341,112 +432,73 @@ export function ProductInfo({ product }: { product: Product }) {
           )}
         </div>
 
-        {/* Variant Cards */}
+        {/* Variant Selectors */}
         {showVariants && (
           <div className="space-y-4">
             {variants.length > 1 ? (
               <>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-4 bg-[#C6943E] rounded-full" />
-                  <span className="text-sm font-semibold text-[#3A0F0E] uppercase tracking-wider">
-                    {t("details.chooseOption", { lng: isMounted ? undefined : "en" })}
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {variants.map((variant) => {
-                    const isSelected = selectedVariantId === variant.id;
-                    const isOutOfStock = variant.stock <= 0;
-                    const isLowStock =
-                      variant.stock > 0 && variant.stock <= LOW_STOCK_THRESHOLD;
-
+                <div className="flex flex-col sm:flex-row gap-4 mb-2">
+                  {attributesMap.map((attr) => {
+                    const currentValue = getSelectedValueForAttribute(attr.name);
                     return (
-                      <button
-                        key={variant.id}
-                        onClick={() =>
-                          !isOutOfStock && setSelectedVariantId(variant.id)
-                        }
-                        disabled={isOutOfStock}
-                        className={cn(
-                          "relative w-full text-start group p-4 rounded-xl border transition-all duration-300",
-                          isSelected
-                            ? "border-[#C6943E] bg-[#C6943E]/5 ring-1 ring-[#C6943E]/20"
-                            : "border-[#3A0F0E]/10 bg-white hover:border-[#3A0F0E]/30 hover:shadow-md",
-                          isOutOfStock &&
-                            "opacity-40 cursor-not-allowed grayscale",
-                        )}
-                      >
-                        {/* Selected Indicator */}
-                        {isSelected && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#C6943E] text-white flex items-center justify-center shadow-lg transform scale-110 transition-transform duration-300">
-                            <Check size={14} strokeWidth={3} />
-                          </div>
-                        )}
-
-                        <div className="space-y-3">
-                          {/* Attribute List */}
-                          <div className="space-y-2">
-                            {variant.attribute_values &&
-                            variant.attribute_values.length > 0 ? (
-                              variant.attribute_values.map((attr) => (
-                                <div
-                                  key={attr.id}
-                                  className="flex items-center justify-between"
-                                >
-                                  <span className="text-[10px] uppercase tracking-widest text-[#3A0F0E]/50 font-bold">
-                                    {attr.attribute.name}
-                                  </span>
-                                  <div className="flex items-center gap-1.5">
-                                    {attr.color_code && (
-                                      <div
-                                        className="w-3 h-3 rounded-full border border-black/10"
-                                        style={{
-                                          backgroundColor: attr.color_code,
-                                        }}
-                                      />
-                                    )}
-                                    <span className="text-xs font-semibold text-[#3A0F0E]">
-                                      {attr.name}
-                                    </span>
-                                  </div>
+                      <div key={attr.name} className="flex-1 flex flex-col gap-2">
+                        <span className="text-xs font-semibold text-[#3A0F0E] uppercase tracking-wider">
+                          {attr.name}
+                        </span>
+                        <Select
+                          value={currentValue}
+                          onValueChange={(val) => handleSelectAttribute(attr.name, val)}
+                        >
+                          <SelectTrigger className="w-full h-11 bg-white border-[#3A0F0E]/15 text-[#3A0F0E] rounded-xl focus:border-[#C6943E] shadow-sm hover:border-[#3A0F0E]/30 transition-all font-medium">
+                            <SelectValue placeholder={`Select ${attr.name}`} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {attr.values.map((val) => (
+                              <SelectItem key={val.name} value={val.name}>
+                                <div className="flex items-center gap-2">
+                                  {val.color_code && (
+                                    <div
+                                      className="w-4 h-4 rounded-full border border-[#3A0F0E]/15 shrink-0"
+                                      style={{ backgroundColor: val.color_code }}
+                                    />
+                                  )}
+                                  <span>{val.name}</span>
                                 </div>
-                              ))
-                            ) : (
-                              <div className="text-xs text-[#3A0F0E] opacity-70">
-                                {variant.is_default
-                                  ? "Default"
-                                  : `Variant #${variant.id}`}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Price & Stock */}
-                          <div className="pt-2 border-t border-[#3A0F0E]/5 flex items-center justify-between">
-                            <div className="text-sm font-bold text-[#3A0F0E]">
-                              {parseFloat(variant.price).toFixed(2)}{" "}
-                              <span className="text-[10px] font-normal opacity-60">
-                                EGP
-                              </span>
-                            </div>
-                            {isOutOfStock ? (
-                              <span className="text-[10px] font-bold text-red-500 uppercase">
-                                {t("details.outOfStock", {
-                                  lng: isMounted ? undefined : "en",
-                                })}
-                              </span>
-                            ) : isLowStock ? (
-                              <span className="text-[10px] font-bold text-[#C6943E] animate-pulse">
-                                {t("details.lowStock", {
-                                  count: variant.stock,
-                                  lng: isMounted ? undefined : "en",
-                                })}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                      </button>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     );
                   })}
                 </div>
+
+                {/* Stock Indicator */}
+                {selectedVariant && (
+                  <div className="pt-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                    {selectedVariant.stock <= 0 ? (
+                      <span className="text-xs font-bold text-red-500 uppercase flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-red-500" />
+                        {t("details.outOfStock", {
+                          lng: isMounted ? undefined : "en",
+                        })}
+                      </span>
+                    ) : selectedVariant.stock <= LOW_STOCK_THRESHOLD ? (
+                      <span className="text-xs font-bold text-[#C6943E] animate-pulse flex items-center gap-1.5">
+                        <span className="w-2/5 h-2/5 rounded-full bg-[#C6943E] inline-block w-2 h-2" />
+                        {t("details.lowStock", {
+                          count: selectedVariant.stock,
+                          lng: isMounted ? undefined : "en",
+                        })}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold text-green-600 flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-green-500" />
+                        {t("details.inStock") || "Available in stock"}
+                      </span>
+                    )}
+                  </div>
+                )}
               </>
             ) : (
               /* Single Variant Information Panel */

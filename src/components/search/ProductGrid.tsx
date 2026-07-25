@@ -21,7 +21,7 @@ export function ProductGrid() {
     sort_by: searchParams.get("sort_by") || undefined,
     per_page: searchParams.get("per_page") || 12,
     page: searchParams.get("page") || 1,
-    category_id: categoryId ? parseInt(categoryId) : undefined,
+    category_id: categoryId || undefined,
     brand_id: brandId ? parseInt(brandId) : undefined,
     min_price: searchParams.get("min_price")
       ? Number(searchParams.get("min_price"))

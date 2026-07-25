@@ -31,8 +31,9 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
   // Data fetching
   const { data: categoriesData } = useCategories(1, 50); // Fetch first 50 categories
 
-  // Derived state from URL
-  const selectedCategory = searchParams.get("category_id");
+  // Derived state from URL - support multiple categories as a comma-separated list
+  const categoryParam = searchParams.get("category_id") || "";
+  const selectedCategories = categoryParam ? categoryParam.split(",") : [];
   const selectedRating = searchParams.get("rating")
     ? Number(searchParams.get("rating"))
     : null;
@@ -103,31 +104,41 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-3 pt-2 pb-6">
-              {categoriesData?.data?.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex items-center space-x-3 group cursor-pointer"
-                  onClick={() =>
-                    updateFilter("category_id", selectedCategory === category.id.toString() ? null : category.id.toString())
-                  }
-                >
+              {categoriesData?.data?.map((category) => {
+                const categoryIdStr = category.id.toString();
+                const isSelected = selectedCategories.includes(categoryIdStr);
+                return (
                   <div
-                    className={cn(
-                      "w-4 h-4 rounded-full border border-maroon flex items-center justify-center transition-all",
-                      selectedCategory === category.id.toString()
-                        ? "bg-maroon"
-                        : "bg-transparent group-hover:border-maroon/70",
-                    )}
+                    key={category.id}
+                    className="flex items-center space-x-3 group cursor-pointer"
+                    onClick={() => {
+                      const newCategories = isSelected
+                        ? selectedCategories.filter((id) => id !== categoryIdStr)
+                        : [...selectedCategories, categoryIdStr];
+                      updateFilter(
+                        "category_id",
+                        newCategories.length > 0 ? newCategories.join(",") : null
+                      );
+                    }}
                   >
-                    {selectedCategory === category.id.toString() && (
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    )}
+                    <div
+                      className={cn(
+                        "w-4 h-4 rounded border border-maroon flex items-center justify-center transition-all",
+                        isSelected
+                          ? "bg-maroon animate-in fade-in zoom-in-75 duration-200"
+                          : "bg-transparent group-hover:border-maroon/70",
+                      )}
+                    >
+                      {isSelected && (
+                        <div className="w-2 h-2 rounded-[2px] bg-white" />
+                      )}
+                    </div>
+                    <span className="text-sm text-gray-700 group-hover:text-maroon transition-colors">
+                      {category.name}
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-700 group-hover:text-maroon transition-colors">
-                    {category.name}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </AccordionContent>
         </AccordionItem>

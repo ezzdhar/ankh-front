@@ -112,8 +112,8 @@ export function useProfile() {
       const response = await api.post<ApiResponse>("/api/v1/profile/logout");
       return response.data;
     },
-    onSuccess: () => {
-      toast.success("Logged out successfully");
+    onSuccess: (data) => {
+      toast.success(data.message || i18n.t("success.logout"));
       authLogout();
       router.push("/");
     },

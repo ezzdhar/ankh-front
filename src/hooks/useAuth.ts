@@ -50,8 +50,7 @@ export function useLogin() {
         // Use AuthContext login — sets storage, cookies, and updates reactive state
         authLogin(data.data.token, data.data.user);
       }
-
-      toast.success("Logged in successfully");
+      toast.success(data.message || i18n.t("success.login"));
       router.push("/");
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {

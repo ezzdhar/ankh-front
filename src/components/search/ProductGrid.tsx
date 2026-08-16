@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { getProducts } from "@/lib/api/products";
 import { ProductCard } from "@/components/products/ProductCard";
 import { Pagination } from "./Pagination";
-import { Loader2 } from "lucide-react";
 import { ProductSearchParams } from "@/types/product";
 import { useTranslation } from "@/i18n/hooks";
+import { Loader } from "@/components/common/Loader";
 
 export function ProductGrid() {
   const { t } = useTranslation("search");
@@ -42,11 +42,7 @@ export function ProductGrid() {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-96 w-full">
-        <Loader2 className="h-10 w-10 animate-spin text-maroon" />
-      </div>
-    );
+    return <Loader minHeight="min-h-[400px]" size="md" />;
   }
 
   if (isError) {

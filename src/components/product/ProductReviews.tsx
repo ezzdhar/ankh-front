@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 import { useReviews } from "@/hooks/useReview";
 import { useState } from "react";
+import { Loader } from "@/components/common/Loader";
 
 interface ProductReviewsProps {
   productId: number | string;
@@ -31,11 +32,7 @@ export function ProductReviews({
   };
 
   if (isLoading && perPage === 6) {
-    return (
-      <div className="flex justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3A0F0E]"></div>
-      </div>
-    );
+    return <Loader minHeight="min-h-[200px]" size="sm" />;
   }
 
   return (

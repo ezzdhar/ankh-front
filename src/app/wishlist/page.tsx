@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductCard } from "@/components/common/ProductCard";
 import { useFavorites } from "@/hooks/useFavorite";
+import { Loader } from "@/components/common/Loader";
 
 export default function WishlistPage() {
   return (
@@ -33,11 +34,7 @@ function WishlistContent() {
   const totalPages = paginate?.last_page || 1;
 
   if (isLoading) {
-    return (
-      <div className="bg-[#FFF8EF] min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
-      </div>
-    );
+    return <Loader minHeight="min-h-screen" size="lg" />;
   }
 
   return (

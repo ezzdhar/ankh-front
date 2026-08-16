@@ -59,11 +59,13 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
+    toast.dismiss();
     toast.success(t("share.copied", { lng: isMounted ? undefined : "en" }) || "Link copied to clipboard!");
   };
 
   const handleToggleFavorite = () => {
     if (!checkAuth()) {
+      toast.dismiss();
       toast.error(
         t("loginRequiredGeneric", {
           ns: "auth",
@@ -239,6 +241,7 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const getCartPayload = () => {
     if (showVariants && !selectedVariant) {
+      toast.dismiss();
       toast.error(t("details.selectVariant", { lng: isMounted ? undefined : "en" }) || "Please select options");
       return null;
     }
@@ -252,6 +255,7 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const handleAddToCart = () => {
     if (!checkAuth()) {
+      toast.dismiss();
       toast.error(
         t("login.loginRequired", {
           ns: "auth",
@@ -274,6 +278,7 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const handleBuyNow = () => {
     if (!checkAuth()) {
+      toast.dismiss();
       toast.error(
         t("login.loginRequired", {
           ns: "auth",

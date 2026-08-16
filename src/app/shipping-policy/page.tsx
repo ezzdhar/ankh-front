@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Loader } from "@/components/common/Loader";
 
 export default function ShippingPolicyPage() {
   const { t } = useTranslation("common");
@@ -27,9 +28,7 @@ export default function ShippingPolicyPage() {
       <div className="container py-8 mx-auto">
         <div className="max-w-3xl mx-auto">
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
-            </div>
+            <Loader minHeight="min-h-[300px]" size="md" />
           ) : html ? (
             <div
               className="policy-content"

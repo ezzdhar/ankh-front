@@ -64,12 +64,14 @@ export function useToggleFavorite() {
       return response.data;
     },
     onSuccess: (data) => {
+      toast.dismiss();
       toast.success(data.message || i18n.t("wishlist:toastSuccess"));
       queryClient.invalidateQueries({ queryKey: ["favorites"] });
       queryClient.invalidateQueries({ queryKey: ["product"] });
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error) => {
+      toast.dismiss();
       toast.error(
         error.response?.data?.message || i18n.t("errors.somethingWentWrong"),
       );

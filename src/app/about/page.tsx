@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useBanners } from "@/hooks/useBanners";
+import { Loader } from "@/components/common/Loader";
 
 export default function AboutPage() {
   const { t } = useTranslation("about");
@@ -44,9 +45,7 @@ export default function AboutPage() {
       <div className="container pt-6 md:pt-10 pb-12 mx-auto">
         <div className="max-w-3xl mx-auto">
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
-            </div>
+            <Loader minHeight="min-h-[300px]" size="md" />
           ) : aboutHtml ? (
             <div
               className="policy-content"

@@ -7,6 +7,7 @@ import { ReviewModal } from "@/components/product/ReviewModal";
 import { CollectionCarousel } from "@/components/home/CollectionCarousel";
 import { useProduct, useRandomProducts } from "@/hooks/useProducts";
 import { useState, useMemo, useEffect } from "react";
+import { Loader } from "@/components/common/Loader";
 
 export function ProductDetails({ id }: { id: string }) {
   const { t } = useTranslation("product");
@@ -38,11 +39,7 @@ export function ProductDetails({ id }: { id: string }) {
   }, [randomData]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#FFF8EF] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
-      </div>
-    );
+    return <Loader minHeight="min-h-screen" size="lg" />;
   }
 
   if (!product) {

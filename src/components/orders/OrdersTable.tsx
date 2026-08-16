@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { OrderDetailsModal } from "./OrderDetailsModal";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Loader } from "@/components/common/Loader";
 
 export function OrdersTable() {
   const { t, i18n } = useTranslation("orders");
@@ -83,11 +84,7 @@ export function OrdersTable() {
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full py-12 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3A0F0E]"></div>
-      </div>
-    );
+    return <Loader minHeight="min-h-[300px]" size="md" />;
   }
 
   if (orders.length === 0) {

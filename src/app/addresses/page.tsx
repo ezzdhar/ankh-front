@@ -5,6 +5,7 @@ import { AddressCard, AddNewAddressCard } from "@/components/address";
 import { useAddresses, useDeleteAddress } from "@/hooks/useAddress";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Loader } from "@/components/common/Loader";
 
 export default function AddressesPage() {
   return (
@@ -33,13 +34,7 @@ function AddressesContent() {
   const addresses = addressesData?.data || [];
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#FFF8EF] py-12 px-4 flex items-center justify-center">
-        <div className="text-[#3A0F0E] animate-pulse">
-          {t("common:loading")}
-        </div>
-      </div>
-    );
+    return <Loader minHeight="min-h-screen" size="lg" />;
   }
 
   return (

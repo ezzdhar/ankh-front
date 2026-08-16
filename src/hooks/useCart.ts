@@ -88,11 +88,13 @@ export function useAddToCart() {
     },
     onSuccess: (data) => {
       if (data.success) {
+        toast.dismiss();
         toast.success(i18n.t("cart:addedSuccess"));
         queryClient.invalidateQueries({ queryKey: ["cart"] });
       }
     },
     onError: (error: AxiosError<ApiResponse>) => {
+      toast.dismiss();
       toast.error(
         error.response?.data?.message || i18n.t("errors:generic"),
       );
@@ -127,6 +129,7 @@ export function useRemoveCartItem() {
       return response.data;
     },
     onSuccess: () => {
+      toast.dismiss();
       toast.success(i18n.t("cart:removedSuccess"));
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
@@ -169,6 +172,7 @@ export function useApplyCoupon() {
       return response.data;
     },
     onSuccess: (data) => {
+      toast.dismiss();
       if (data.success) {
         toast.success(i18n.t("cart:couponApplied"));
         queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -183,6 +187,7 @@ export function useApplyCoupon() {
         data: error.response?.data,
         message: error.message,
       });
+      toast.dismiss();
       toast.error(
         error.response?.data?.message || i18n.t("cart:couponError"),
       );
@@ -199,6 +204,7 @@ export function useRemoveCoupon() {
       return response.data;
     },
     onSuccess: () => {
+      toast.dismiss();
       toast.success(i18n.t("cart:couponRemoved"));
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },

@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/AuthProvider";
 import { GuestAddressForm } from "@/components/checkout/GuestAddressForm";
+import { Loader } from "@/components/common/Loader";
 
 export default function CheckoutPage() {
   return (
@@ -214,11 +215,7 @@ function CheckoutContent() {
   }, [isCartLoading, items.length, router]);
 
   if (isCartLoading || (isAuthenticated && isAddressesLoading) || isAuthLoading) {
-    return (
-      <div className="bg-[#FFF8EF] min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3A0F0E]"></div>
-      </div>
-    );
+    return <Loader minHeight="min-h-screen" size="lg" />;
   }
 
   if (items.length === 0) {

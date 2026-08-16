@@ -20,7 +20,7 @@ export function Providers({ children }: ProvidersProps) {
           <FaviconUpdater />
           <LanguageManager />
           {children}
-          <Toaster richColors closeButton position="top-center" />
+          <Toaster richColors closeButton position="top-center" visibleToasts={1} duration={2500} />
         </LenisProvider>
       </AuthProvider>
     </QueryProvider>

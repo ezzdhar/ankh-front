@@ -14,6 +14,7 @@ import { useEffect, useMemo } from "react";
 import { MapPin, AlignLeft, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -31,7 +32,9 @@ const addressSchema = (t: (key: string) => string) =>
     address_details: z
       .string()
       .min(1, { message: t("validation.streetRequired") }),
-    postal_code: z.string().optional().or(z.literal("")),
+    postal_code: z
+      .string()
+      .min(1, { message: t("validation.postalCodeRequired") || "Postal code is required" }),
     is_default: z.boolean(),
   });
 
@@ -207,21 +210,24 @@ export function AddressForm() {
           <div className="space-y-1.5">
             <label className="text-sm font-semibold text-[#3A0F0E] flex items-center gap-2">
               <Mail className="w-4 h-4 text-[#3A0F0E]" />
-              {t("postalCode.label")}
+              {t("postalCode.label")} *
             </label>
             <Controller
               name="postal_code"
               control={control}
               render={({ field }) => (
-                <Textarea
+                <Input
                   {...field}
                   value={field.value as string}
                   placeholder={t("postalCode.placeholder")}
-                  className="min-h-[100px] border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent resize-none p-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]"
+                  className="h-11 border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent px-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]"
                   dir={isRTL ? "rtl" : "ltr"}
                 />
               )}
             />
+            {errors.postal_code && (
+              <MessageError message={errors.postal_code.message ?? ""} />
+            )}
           </div>
 
           <div className="flex items-center gap-2">

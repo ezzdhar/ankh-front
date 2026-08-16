@@ -84,6 +84,14 @@ export function useCreateAddress() {
       toast.success(i18n.t("address:success.create"));
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
+    onError: (error) => {
+      const errorMsg =
+        error.response?.data?.message ||
+        (error.response?.data?.errors &&
+          Object.values(error.response.data.errors).flat().join(", ")) ||
+        i18n.t("errors:generic");
+      toast.error(errorMsg);
+    },
   });
 }
 
@@ -106,6 +114,14 @@ export function useUpdateAddress(id: number | string) {
       toast.success(i18n.t("address:success.update"));
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
+    onError: (error) => {
+      const errorMsg =
+        error.response?.data?.message ||
+        (error.response?.data?.errors &&
+          Object.values(error.response.data.errors).flat().join(", ")) ||
+        i18n.t("errors:generic");
+      toast.error(errorMsg);
+    },
   });
 }
 
@@ -124,6 +140,14 @@ export function useDeleteAddress() {
     onSuccess: () => {
       toast.success(i18n.t("address:success.delete"));
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+    onError: (error) => {
+      const errorMsg =
+        error.response?.data?.message ||
+        (error.response?.data?.errors &&
+          Object.values(error.response.data.errors).flat().join(", ")) ||
+        i18n.t("errors:generic");
+      toast.error(errorMsg);
     },
   });
 }

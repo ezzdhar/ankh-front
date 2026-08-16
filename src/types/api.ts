@@ -13,4 +13,5 @@ export interface ApiErrorResponse {
   message: string;
   data: null;
   paginate: null;
+  errors?: Record<string, string[]>;
 }

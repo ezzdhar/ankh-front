@@ -11,7 +11,7 @@ const address = {
   },
   postalCode: {
     label: "الرمز البريدي",
-    placeholder: "أي ملاحظات خاصة للتوصيل أو لطلبك؟",
+    placeholder: "أدخل الرمز البريدي",
   },
   submit: "حفظ العنوان",
   cancel: "إلغاء",
@@ -39,6 +39,7 @@ const address = {
     streetRequired: "اسم الشارع مطلوب",
     buildingRequired: "رقم المبنى مطلوب",
     phoneRequired: "رقم الهاتف مطلوب",
+    postalCodeRequired: "الرمز البريدي مطلوب",
   },
 };
 

@@ -11,7 +11,7 @@ const address = {
   },
   postalCode: {
     label: "Postal Code",
-    placeholder: "Any special notes for delivery or your order ?",
+    placeholder: "Enter postal code",
   },
   submit: "Save Address",
   cancel: "Cancel",
@@ -39,6 +39,7 @@ const address = {
     streetRequired: "Street name is required",
     buildingRequired: "Building number is required",
     phoneRequired: "Phone number is required",
+    postalCodeRequired: "Postal code is required",
   },
 };
 

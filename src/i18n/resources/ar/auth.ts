@@ -109,6 +109,10 @@ const auth = {
     submit: "تغيير كلمة المرور",
   },
   logout: "تسجيل الخروج",
+  logoutConfirmTitle: "تأكيد تسجيل الخروج",
+  logoutConfirmMessage: "هل أنت متأكد من تسجيل الخروج؟",
+  loginRequiredGeneric: "يجب تسجيل الدخول أولاً للمتابعة",
+  myAddresses: "عناوينى",
   validation: {
     emailRequired: "البريد الإلكتروني مطلوب",
     emailInvalid: "بريد إلكتروني غير صالح",

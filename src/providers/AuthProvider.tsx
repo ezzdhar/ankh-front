@@ -67,14 +67,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    // Wrap in setTimeout to avoid synchronous setState warning and cascading renders
-    setTimeout(() => {
-      setAuthState({
-        isAuthenticated: !!token,
-        isLoading: false,
-        user: initialUser,
-      });
-    }, 0);
+    setAuthState({
+      isAuthenticated: !!token,
+      isLoading: false,
+      user: initialUser,
+    });
   }, []);
 
   const login = useCallback(

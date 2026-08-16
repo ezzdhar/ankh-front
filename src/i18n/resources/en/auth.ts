@@ -110,6 +110,10 @@ const auth = {
     submit: "Reset Password",
   },
   logout: "Logout",
+  logoutConfirmTitle: "Logout Confirmation",
+  logoutConfirmMessage: "Are you sure you want to log out?",
+  loginRequiredGeneric: "You must login first to continue",
+  myAddresses: "My Addresses",
   validation: {
     emailRequired: "Email is required",
     emailInvalid: "Invalid email address",

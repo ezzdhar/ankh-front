@@ -10,6 +10,7 @@ const common = {
     about: "About",
     products: "Products",
     contact: "Contact",
+    myAddresses: "My Addresses",
   },
   search: {
     placeholder: "What are you looking for?",

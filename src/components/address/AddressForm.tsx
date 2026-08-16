@@ -92,6 +92,9 @@ export function AddressForm() {
     }
   }, [isEdit, currentAddress, reset, setValue, cities.length]);
 
+  const redirectParam = searchParams.get("redirect");
+  const redirectUrl = redirectParam && redirectParam.startsWith("/") ? redirectParam : "/addresses";
+
   const onSubmit = async (data: AddressSchema) => {
     if (isEdit) {
       updateAddress.mutate(
@@ -102,7 +105,7 @@ export function AddressForm() {
           is_default: data.is_default,
         },
         {
-          onSuccess: () => router.push("/addresses"),
+          onSuccess: () => router.push(redirectUrl),
         },
       );
     } else {
@@ -114,7 +117,7 @@ export function AddressForm() {
           is_default: data.is_default ? 1 : 0,
         },
         {
-          onSuccess: () => router.push("/addresses"),
+          onSuccess: () => router.push(redirectUrl),
         },
       );
     }

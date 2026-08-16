@@ -3,6 +3,7 @@ const checkoutTranslations = {
   delivery: {
     title: "Delivery Address",
     addNew: "Add new address",
+    noAddresses: "No saved addresses found. Please add a new address to continue.",
     selectAddressError: "Please select a delivery address",
   },
   notes: {

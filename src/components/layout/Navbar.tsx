@@ -47,7 +47,7 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const router = useRouter();
-  const { t } = useTranslation(["common", "cart", "auth"]);
+  const { t } = useTranslation(["common", "cart", "auth", "address"]);
   const { isAuthenticated, user: authUser, logout: authLogout } = useAuth();
   const { getProfile, logout: profileLogout } = useProfile();
   const isMounted = useIsMounted();
@@ -102,7 +102,15 @@ export function Navbar() {
     { href: "/cart", label: t("title", { ns: "cart", lng: isMounted ? undefined : "en" }), protected: true },
     { href: "/wishlist", label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }), protected: true },
     { href: "/orders", label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }), protected: true },
-    { href: "/addresses", label: t("myAddresses", { ns: "auth", lng: isMounted ? undefined : "en" }), protected: true },
+    {
+      href: "/addresses",
+      label:
+        t("nav.myAddresses", { lng: isMounted ? undefined : "en" }) ||
+        t("myAddresses", { ns: "auth", lng: isMounted ? undefined : "en" }) ||
+        t("list.title", { ns: "address", lng: isMounted ? undefined : "en" }) ||
+        "My Addresses",
+      protected: true,
+    },
   ];
 
   const handleDrawerLinkClick = (e: React.MouseEvent, link: typeof navLinks[0]) => {

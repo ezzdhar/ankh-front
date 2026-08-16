@@ -6,7 +6,7 @@ import { ProductReviews } from "@/components/product/ProductReviews";
 import { ReviewModal } from "@/components/product/ReviewModal";
 import { CollectionCarousel } from "@/components/home/CollectionCarousel";
 import { useProduct, useRandomProducts } from "@/hooks/useProducts";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export function ProductDetails({ id }: { id: string }) {
   const { t } = useTranslation("product");
@@ -14,6 +14,16 @@ export function ProductDetails({ id }: { id: string }) {
 
   const { data: productData, isLoading } = useProduct(id);
   const { data: randomData } = useRandomProducts();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [id]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [isLoading]);
 
   const product = productData?.data;
 

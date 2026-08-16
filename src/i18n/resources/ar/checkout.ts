@@ -3,6 +3,7 @@ const checkoutTranslations = {
   delivery: {
     title: "عنوان التوصيل",
     addNew: "إضافة عنوان جديد",
+    noAddresses: "لا توجد عناوين محفوظة. يرجى إضافة عنوان جديد للمتابعة.",
     selectAddressError: "يرجى اختيار عنوان التوصيل",
   },
   notes: {

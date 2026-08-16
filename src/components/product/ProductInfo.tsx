@@ -28,6 +28,8 @@ import { Product } from "@/hooks/useProducts";
 import { useAddToCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
 import { useToggleFavorite } from "@/hooks/useFavorite";
+import { useAuth } from "@/providers/AuthProvider";
+import Cookies from "js-cookie";
 import { toast } from "sonner";
 import {
   Select,
@@ -38,13 +40,22 @@ import {
 } from "@/components/ui/select";
 
 export function ProductInfo({ product }: { product: Product }) {
-  const { t } = useTranslation("product");
+  const { t } = useTranslation(["product", "auth"]);
   const isMounted = useIsMounted();
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [selectedImage, setSelectedImage] = useState(0);
   const [loadingAction, setLoadingAction] = useState<"cart" | "buy_now" | null>(null);
   const addToCart = useAddToCart();
   const toggleFavorite = useToggleFavorite();
+
+  const checkAuth = () => {
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("token") || Cookies.get("token")
+        : null;
+    return isAuthenticated || !!token;
+  };
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -52,6 +63,15 @@ export function ProductInfo({ product }: { product: Product }) {
   };
 
   const handleToggleFavorite = () => {
+    if (!checkAuth()) {
+      toast.error(
+        t("loginRequiredGeneric", {
+          ns: "auth",
+          lng: isMounted ? undefined : "en",
+        }) || "You must login first to continue",
+      );
+      return;
+    }
     toggleFavorite.mutate(product.id);
   };
 
@@ -231,25 +251,50 @@ export function ProductInfo({ product }: { product: Product }) {
   };
 
   const handleAddToCart = () => {
+    if (!checkAuth()) {
+      toast.error(
+        t("login.loginRequired", {
+          ns: "auth",
+          lng: isMounted ? undefined : "en",
+        }) || "You must login first to add products to cart",
+      );
+      return;
+    }
+
     const payload = getCartPayload();
     if (!payload) {
       return;
     }
 
-    addToCart.mutate(payload);
+    setLoadingAction("cart");
+    addToCart.mutate(payload, {
+      onSettled: () => setLoadingAction(null),
+    });
   };
 
-  const handleCheckout = () => {
+  const handleBuyNow = () => {
+    if (!checkAuth()) {
+      toast.error(
+        t("login.loginRequired", {
+          ns: "auth",
+          lng: isMounted ? undefined : "en",
+        }) || "You must login first to add products to cart",
+      );
+      return;
+    }
+
     const payload = getCartPayload();
     if (!payload) {
       return;
     }
 
+    setLoadingAction("buy_now");
     addToCart.mutate(payload, {
-      onSuccess: (data) => {
-        if ((data as { success?: boolean })?.success) {
-          router.push("/checkout");
-        }
+      onSuccess: () => {
+        router.push("/cart");
+      },
+      onSettled: () => {
+        setLoadingAction(null);
       },
     });
   };
@@ -580,11 +625,8 @@ export function ProductInfo({ product }: { product: Product }) {
           <div className="pt-4 flex flex-col sm:flex-row gap-3">
             <Button
               variant="outline"
-              disabled={addToCart.isPending}
-              onClick={() => {
-                setLoadingAction("cart");
-                handleAddToCart();
-              }}
+              disabled={addToCart.isPending && loadingAction === "cart"}
+              onClick={handleAddToCart}
               className="flex-1 h-12 border-2 border-[#3A0F0E] text-[#3A0F0E] text-sm font-medium rounded-full hover:bg-[#3A0F0E] hover:text-white transition-all uppercase tracking-wider"
             >
               {addToCart.isPending && loadingAction === "cart"
@@ -593,17 +635,8 @@ export function ProductInfo({ product }: { product: Product }) {
             </Button>
 
             <Button
-              disabled={addToCart.isPending}
-              onClick={() => {
-                setLoadingAction("buy_now");
-                const payload = getCartPayload();
-                if (!payload) return;
-                addToCart.mutate(payload, {
-                  onSuccess: () => {
-                    router.push("/cart");
-                  }
-                });
-              }}
+              disabled={addToCart.isPending && loadingAction === "buy_now"}
+              onClick={handleBuyNow}
               className="flex-1 h-12 bg-[#3A0F0E] text-white hover:bg-[#3A0F0E]/90 text-sm font-medium rounded-full transition-all uppercase tracking-wider"
             >
               {addToCart.isPending && loadingAction === "buy_now"

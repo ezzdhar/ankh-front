@@ -92,6 +92,11 @@ export function useAddToCart() {
         queryClient.invalidateQueries({ queryKey: ["cart"] });
       }
     },
+    onError: (error: AxiosError<ApiResponse>) => {
+      toast.error(
+        error.response?.data?.message || i18n.t("errors:generic"),
+      );
+    },
   });
 }
 

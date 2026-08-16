@@ -10,6 +10,7 @@ const common = {
     about: "من نحن",
     products: "المنتجات",
     contact: "تواصل معنا",
+    myAddresses: "عناوينى",
   },
   search: {
     placeholder: "ما الذي تبحث عنه؟",

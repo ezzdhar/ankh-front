@@ -81,9 +81,9 @@ export function OrderSummary({
               className="flex-1 bg-transparent px-4 py-3 text-sm focus:outline-none placeholder:text-[#3A0F0E]/40 text-[#3A0F0E]"
             />
             <button
-              onClick={() => onApplyCoupon?.(promoCode)}
-              disabled={isApplyingCoupon || !promoCode}
-              className="bg-[#310E0E] text-white px-6 py-3 text-xs font-medium uppercase tracking-widest hover:bg-[#4a1818] disabled:opacity-50 transition-colors"
+              onClick={() => onApplyCoupon?.(promoCode.trim())}
+              disabled={isApplyingCoupon || !promoCode.trim()}
+              className="bg-[#310E0E] text-white px-6 py-3 text-xs font-medium uppercase tracking-widest hover:bg-[#4a1818] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isApplyingCoupon ? "..." : t("summary.apply") || "Apply"}
             </button>

@@ -64,9 +64,10 @@ export function AddressForm() {
     control,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<AddressSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       city_id: "",
       address_details: "",
@@ -252,7 +253,8 @@ export function AddressForm() {
             <Button
               type="submit"
               isLoading={isSubmitting}
-              className="w-full md:w-auto px-12 h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-sm font-medium rounded-full shadow-md transition-all active:scale-95"
+              disabled={!isValid || isSubmitting}
+              className="w-full md:w-auto px-12 h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-sm font-medium rounded-full shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("submit")}
             </Button>

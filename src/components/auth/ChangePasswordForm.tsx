@@ -46,9 +46,10 @@ export function ChangePasswordForm() {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<ChangePasswordSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       currentPassword: "",
       newPassword: "",
@@ -164,7 +165,8 @@ export function ChangePasswordForm() {
             <Button
               type="submit"
               isLoading={isLoading}
-              className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#2A0B0A]! text-white text-base font-medium rounded-full"
+              disabled={!isValid || isLoading}
+              className="flex-1 h-12 bg-[#3A0F0E]! hover:bg-[#2A0B0A]! text-white text-base font-medium rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("changePassword.submit")}
             </Button>

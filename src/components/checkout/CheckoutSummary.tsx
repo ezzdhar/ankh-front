@@ -20,6 +20,7 @@ interface CheckoutSummaryProps {
   finalTotal: number;
   onPayNow: () => void;
   isSubmitting?: boolean;
+  isValid?: boolean;
   couponCode?: string;
   onApplyCoupon?: (code: string) => void;
   onRemoveCoupon?: () => void;
@@ -36,6 +37,7 @@ export function CheckoutSummary({
   finalTotal,
   onPayNow,
   isSubmitting,
+  isValid = true,
   couponCode,
   onApplyCoupon,
   onRemoveCoupon,
@@ -225,9 +227,9 @@ export function CheckoutSummary({
           </Link>
         </Button>
         <Button
-          disabled={isSubmitting}
+          disabled={!isValid || isSubmitting}
           onClick={onPayNow}
-          className="flex-1 h-12 bg-[#310E0E] hover:bg-[#310E0E]/90 text-white rounded-full uppercase text-xs tracking-widest transition-all font-bold"
+          className="flex-1 h-12 bg-[#310E0E] hover:bg-[#310E0E]/90 text-white rounded-full uppercase text-xs tracking-widest transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "..." : t("checkout:payment.payNow")}
         </Button>

@@ -39,9 +39,10 @@ export function ResetPasswordForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<ResetPasswordSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       password: "",
       confirmPassword: "",
@@ -101,7 +102,8 @@ export function ResetPasswordForm() {
           <Button
             type="submit"
             isLoading={isLoading}
-            className="w-full h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full"
+            disabled={!isValid || isLoading}
+            className="w-full h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {t("resetPassword.submit")}
           </Button>

@@ -82,9 +82,10 @@ export function RegisterForm() {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       fullName: "",
       email: "",
@@ -243,7 +244,8 @@ export function RegisterForm() {
           <Button
             type="submit"
             isLoading={isLoading}
-            className="w-full h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full"
+            disabled={!isValid || isLoading}
+            className="w-full h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {t("register.submit")}
           </Button>

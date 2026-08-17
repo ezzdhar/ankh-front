@@ -135,7 +135,8 @@ export function OTPForm({ isResetMode }: OTPFormProps) {
             <Button
               type="submit"
               isLoading={isLoading}
-              className="w-full h-12 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full shadow-md"
+              disabled={otp.length !== 6 || isLoading}
+              className="w-full h-12 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-base font-medium rounded-full shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("otp.submit")}
             </Button>

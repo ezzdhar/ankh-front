@@ -35,10 +35,11 @@ export function GuestAddressForm({ value, onChange }: GuestAddressFormProps) {
         {/* Name */}
         <div className="space-y-1">
           <label className="text-xs font-medium text-[#3A0F0E]/70 uppercase tracking-wide">
-            {t("guest.name")}
+            {t("guest.name")} <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
+            required
             className={inputClass}
             placeholder={t("guest.namePlaceholder")}
             value={value.guest_name}
@@ -49,10 +50,11 @@ export function GuestAddressForm({ value, onChange }: GuestAddressFormProps) {
         {/* Phone */}
         <div className="space-y-1">
           <label className="text-xs font-medium text-[#3A0F0E]/70 uppercase tracking-wide">
-            {t("guest.phone")}
+            {t("guest.phone")} <span className="text-red-500">*</span>
           </label>
           <input
             type="tel"
+            required
             className={inputClass}
             placeholder={t("guest.phonePlaceholder")}
             value={value.guest_phone}
@@ -63,10 +65,11 @@ export function GuestAddressForm({ value, onChange }: GuestAddressFormProps) {
         {/* Address */}
         <div className="space-y-1">
           <label className="text-xs font-medium text-[#3A0F0E]/70 uppercase tracking-wide">
-            {t("guest.address")}
+            {t("guest.address")} <span className="text-red-500">*</span>
           </label>
           <textarea
             rows={3}
+            required
             className={`${inputClass} resize-none`}
             placeholder={t("guest.addressPlaceholder")}
             value={value.guest_address}

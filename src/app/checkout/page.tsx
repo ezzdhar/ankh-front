@@ -123,6 +123,18 @@ function CheckoutContent() {
     }
   }, [addresses, selectedAddressId]);
 
+  const isCheckoutValid = useMemo(() => {
+    if (items.length === 0) return false;
+    if (isAuthenticated) {
+      return !!selectedAddressId;
+    }
+    return (
+      guestData.guest_name.trim().length > 0 &&
+      guestData.guest_phone.trim().length > 0 &&
+      guestData.guest_address.trim().length > 0
+    );
+  }, [items.length, isAuthenticated, selectedAddressId, guestData]);
+
   const handlePayNow = () => {
     if (isAuthenticated) {
       if (!selectedAddressId) {
@@ -269,6 +281,7 @@ function CheckoutContent() {
                 finalTotal={finalTotal}
                 onPayNow={handlePayNow}
                 isSubmitting={checkoutMutation.isPending}
+                isValid={isCheckoutValid}
                 couponCode={cart?.coupon_code || appliedCouponCode}
                 onApplyCoupon={(code) =>
                   applyCouponMutation.mutate(code, {

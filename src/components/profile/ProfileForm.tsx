@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import MessageError from "@/components/ui/MessageError";
 import InputField from "@/components/ui/InputField";
 import { useProfile } from "@/hooks/useProfile";
+import { Loader } from "@/components/common/Loader";
 
 const profileSchema = (t: (key: string) => string) =>
   z.object({
@@ -44,9 +45,10 @@ export function ProfileForm() {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<ProfileSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     values: {
       name: user?.name || "",
       email: user?.email || "",
@@ -68,16 +70,7 @@ export function ProfileForm() {
 
   // Loading State
   if (getProfile.isLoading) {
-    return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-4 border-[#3A0F0E] border-t-transparent rounded-full animate-spin" />
-          <p className="text-[#3A0F0E] font-medium animate-pulse">
-            {t("loading") || "Loading..."}
-          </p>
-        </div>
-      </div>
-    );
+    return <Loader minHeight="min-h-[400px]" size="md" />;
   }
 
   // Error State
@@ -230,7 +223,8 @@ export function ProfileForm() {
             <Button
               type="submit"
               isLoading={isLoading}
-              className="flex-1 h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-sm font-medium rounded-full shadow-sm"
+              disabled={!isValid || isLoading}
+              className="flex-1 h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-sm font-medium rounded-full shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("submit")}
             </Button>

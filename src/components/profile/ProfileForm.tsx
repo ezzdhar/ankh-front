@@ -114,10 +114,10 @@ export function ProfileForm() {
   const isRTL = i18n.language === "ar";
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-[#FFF8EF] rounded-[20px] p-8 shadow-sm border border-[#EBE5E0]">
+    <div className="w-full max-w-md mx-auto min-w-0">
+      <div className="bg-[#FFF8EF] rounded-[20px] p-8 shadow-sm border border-[#EBE5E0] min-w-0 overflow-hidden">
         {/* Header with Avatar */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 min-w-0">
           <div
             className="relative w-24 h-24 mx-auto mb-4 group cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
@@ -146,7 +146,7 @@ export function ProfileForm() {
               onChange={handleImageChange}
             />
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#3A0F0E] mb-1 font-cormorant">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#3A0F0E] mb-1 font-cormorant break-words [overflow-wrap:anywhere] max-w-full px-2">
             {getProfile.data?.data?.name || "User"}
           </h1>
           <p className="text-[#8C8C8C] text-sm md:text-base">{t("title")}</p>

@@ -99,8 +99,8 @@ export function OrdersTable() {
 
   return (
     <>
-      <div className="bg-transparent rounded-lg overflow-hidden">
-        <Table>
+      <div className="w-full overflow-x-auto rounded-lg">
+        <Table className="min-w-[640px]">
           <TableHeader>
             <TableRow className="border-b-[#EBE5E0] hover:bg-transparent">
               <TableHead

@@ -55,7 +55,7 @@ export function ProductReviews({
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="bg-[#EBE5E0] p-6 flex flex-col items-center text-center space-y-4 rounded-sm"
+            className="bg-[#EBE5E0] p-6 flex flex-col items-center text-center space-y-4 rounded-sm min-w-0 overflow-hidden"
           >
             {/* Avatar */}
             <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white bg-gray-200 flex items-center justify-center shrink-0">
@@ -88,13 +88,13 @@ export function ProductReviews({
             </div>
 
             {/* Text */}
-            <p className="text-xs md:text-sm text-[#3A0F0E] leading-relaxed line-clamp-4">
+            <p className="text-xs md:text-sm text-[#3A0F0E] leading-relaxed line-clamp-4 break-words [overflow-wrap:anywhere] min-w-0 max-w-full">
               {review.comment}
             </p>
 
             {/* Name */}
-            <div className="mt-auto pt-2">
-              <span className="text-[10px] md:text-xs font-medium text-[#3A0F0E] opacity-70">
+            <div className="mt-auto pt-2 max-w-full min-w-0">
+              <span className="text-[10px] md:text-xs font-medium text-[#3A0F0E] opacity-70 break-words [overflow-wrap:anywhere] max-w-full truncate block">
                 {review.user?.name}
               </span>
             </div>

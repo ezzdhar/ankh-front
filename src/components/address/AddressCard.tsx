@@ -15,65 +15,66 @@ interface AddressCardProps {
 }
 
 export function AddressCard({ address, onEdit, onDelete }: AddressCardProps) {
-  const { t, i18n } = useTranslation("address");
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation("address");
 
   return (
-    <div className="bg-[#FFF8EF] rounded-[15px] border border-[#EBE5E0] p-6 shadow-sm flex flex-col h-full transition-all hover:shadow-md">
+    <div className="bg-[#FFF8EF] rounded-[15px] border border-[#EBE5E0] p-6 shadow-sm flex flex-col h-full transition-all hover:shadow-md min-w-0 w-full overflow-hidden">
       {/* Header: Governorate + Default Badge */}
-      <div className="flex flex-col items-center mb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <MapPin className="w-5 h-5 text-[#3A0F0E]" />
-          <h3 className="text-xl font-bold text-[#3A0F0E] font-cormorant">
+      <div className="flex flex-col items-center mb-6 text-center min-w-0 w-full">
+        <div className="flex items-center justify-center gap-2 mb-2 max-w-full min-w-0 px-2">
+          <MapPin className="w-5 h-5 text-[#3A0F0E] shrink-0" />
+          <h3
+            className="text-xl font-bold text-[#3A0F0E] font-cormorant truncate max-w-full"
+            title={address.city_name}
+          >
             {address.city_name}
           </h3>
         </div>
         {address.is_default && (
           <Badge
             variant="secondary"
-            className="bg-[#3A0F0E] text-white hover:bg-[#3A0F0E]/90"
+            className="bg-[#3A0F0E] text-white hover:bg-[#3A0F0E]/90 shrink-0"
           >
             {t("list.default")}
           </Badge>
         )}
       </div>
 
-      <div className="flex-1 space-y-4">
+      <div className="flex-1 space-y-4 min-w-0 w-full">
         {/* Address Details */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 min-w-0">
           <MapPin className="w-4 h-4 text-[#3A0F0E] mt-1 shrink-0" />
-          <p className="text-sm text-[#3A0F0E]/80">{address.address_details}</p>
+          <p className="text-sm text-[#3A0F0E]/80 break-words [overflow-wrap:anywhere] min-w-0 flex-1">
+            {address.address_details}
+          </p>
         </div>
 
         {/* Postal Code */}
-        <div className="flex items-center gap-3">
-          <Mail className="w-4 h-4 text-[#3A0F0E] shrink-0" />
-          <p className="text-sm text-[#3A0F0E]/80">
-            {t("postalCode.label")}: {address.postal_code}
-          </p>
-        </div>
+        {address.postal_code && (
+          <div className="flex items-center gap-3 min-w-0">
+            <Mail className="w-4 h-4 text-[#3A0F0E] shrink-0" />
+            <p className="text-sm text-[#3A0F0E]/80 break-all min-w-0 flex-1">
+              {t("postalCode.label")}: {address.postal_code}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Divider */}
       <div className="h-px w-full bg-[#EBE5E0] my-4" />
 
       {/* Actions */}
-      <div
-        className={cn(
-          "flex items-center gap-6",
-          isRTL ? "flex-row-reverse" : "",
-        )}
-      >
+      <div className="flex items-center gap-6 min-w-0">
         <button
           onClick={() => onEdit?.(address.id)}
-          className="flex items-center gap-2 text-[#3A0F0E] hover:text-[#5C2C28] text-sm font-medium transition-colors"
+          className="flex items-center gap-2 text-[#3A0F0E] hover:text-[#5C2C28] text-sm font-medium transition-colors shrink-0"
         >
           <Edit2 className="w-4 h-4" />
           {t("list.edit")}
         </button>
         <button
           onClick={() => onDelete?.(address.id)}
-          className="flex items-center gap-2 text-[#C85D5D] hover:text-[#A64444] text-sm font-medium transition-colors"
+          className="flex items-center gap-2 text-[#C85D5D] hover:text-[#A64444] text-sm font-medium transition-colors shrink-0"
         >
           <Trash2 className="w-4 h-4" />
           {t("list.delete")}

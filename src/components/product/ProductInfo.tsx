@@ -376,7 +376,7 @@ export function ProductInfo({ product }: { product: Product }) {
       </div>
 
       {/* Details Section */}
-      <div className="flex-1 space-y-6 animate-in fade-in slide-in-from-right-8 duration-700">
+      <div className="flex-1 space-y-6 animate-in fade-in slide-in-from-right-8 duration-700 min-w-0">
         <div className="flex justify-start gap-3">
           <button
             onClick={handleToggleFavorite}
@@ -398,8 +398,8 @@ export function ProductInfo({ product }: { product: Product }) {
           </button>
         </div>
 
-        <div className="space-y-4">
-          <h1 className="text-2xl font-medium text-[#3A0F0E] font-cormorant leading-tight">
+        <div className="space-y-4 min-w-0">
+          <h1 className="text-2xl font-medium text-[#3A0F0E] font-cormorant leading-tight break-words [overflow-wrap:anywhere] min-w-0">
             {product.name}
           </h1>
 
@@ -469,13 +469,13 @@ export function ProductInfo({ product }: { product: Product }) {
           {product.sku && (
             <div className="flex gap-2 text-base">
               <span className="font-medium">{t("details.sku", { lng: isMounted ? undefined : "en" })} :</span>
-              <span className="opacity-70">{product.sku}</span>
+              <span className="opacity-70 break-all">{product.sku}</span>
             </div>
           )}
           {product.category_name && (
             <div className="flex gap-2 text-base">
               <span className="font-medium">{t("details.category", { lng: isMounted ? undefined : "en" })} :</span>
-              <span className="opacity-70 uppercase tracking-widest">
+              <span className="opacity-70 uppercase tracking-widest break-words">
                 {product.category_name}
               </span>
             </div>

@@ -110,7 +110,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                 return (
                   <div
                     key={category.id}
-                    className="flex items-center space-x-3 group cursor-pointer"
+                    className="flex items-center gap-3 group cursor-pointer min-w-0"
                     onClick={() => {
                       const newCategories = isSelected
                         ? selectedCategories.filter((id) => id !== categoryIdStr)
@@ -123,7 +123,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                   >
                     <div
                       className={cn(
-                        "w-4 h-4 rounded border border-maroon flex items-center justify-center transition-all",
+                        "w-4 h-4 rounded border border-maroon flex items-center justify-center transition-all shrink-0",
                         isSelected
                           ? "bg-maroon animate-in fade-in zoom-in-75 duration-200"
                           : "bg-transparent group-hover:border-maroon/70",
@@ -133,7 +133,7 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
                         <div className="w-2 h-2 rounded-[2px] bg-white" />
                       )}
                     </div>
-                    <span className="text-sm text-gray-700 group-hover:text-maroon transition-colors">
+                    <span className="text-sm text-gray-700 group-hover:text-maroon transition-colors break-words [overflow-wrap:anywhere] min-w-0 flex-1">
                       {category.name}
                     </span>
                   </div>
@@ -153,12 +153,12 @@ export function Filters({ className, closeMobileMenu }: FiltersProps) {
               {RATES.map((rate) => (
                 <div
                   key={rate}
-                  className="flex items-center space-x-3 group cursor-pointer"
+                  className="flex items-center gap-3 group cursor-pointer min-w-0"
                   onClick={() => updateFilter("rating", selectedRating?.toString() === rate.toString() ? null : rate.toString())}
                 >
                   <div
                     className={cn(
-                      "w-4 h-4 rounded-full border border-maroon flex items-center justify-center transition-all",
+                      "w-4 h-4 rounded-full border border-maroon flex items-center justify-center transition-all shrink-0",
                       selectedRating === rate
                         ? "bg-maroon"
                         : "bg-transparent group-hover:border-maroon/70",

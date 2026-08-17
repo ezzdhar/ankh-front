@@ -19,8 +19,9 @@ import { useTranslation } from "@/i18n/hooks";
 import { useIsMounted } from "@/hooks/useIsMounted";
 
 export function SearchClient() {
-  const { t } = useTranslation("search");
+  const { t, i18n } = useTranslation("search");
   const isMounted = useIsMounted();
+  const isArabic = isMounted && i18n.language === "ar";
 
   if (!isMounted) return <div className="bg-cream min-h-screen pt-[60px] pb-16" />;
 
@@ -54,9 +55,9 @@ export function SearchClient() {
                     <Filter size={16} /> {t("filters.title")}
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="bg-cream w-[300px]">
+                <SheetContent side={isArabic ? "right" : "left"} className="bg-cream w-[300px]">
                   <SheetHeader>
-                    <SheetTitle className="text-maroon uppercase tracking-widest text-left">
+                    <SheetTitle className="text-maroon uppercase tracking-widest text-left rtl:text-right">
                       {t("filters.title")}
                     </SheetTitle>
                   </SheetHeader>
@@ -84,7 +85,7 @@ export function SearchClient() {
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             <Suspense
               fallback={
                 <div className="h-96 w-full animate-pulse bg-gray-100 rounded-lg"></div>

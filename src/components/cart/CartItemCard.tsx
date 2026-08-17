@@ -27,7 +27,7 @@ export function CartItemCard({
       : item.product.main_image || item.product.image || "";
 
   return (
-    <div className="bg-[#FFF8EF] border border-[#3A0F0E]/10 rounded-lg p-3 sm:p-6 flex gap-4 sm:gap-6 relative shadow-sm hover:shadow-md transition-shadow group">
+    <div className="bg-[#FFF8EF] border border-[#3A0F0E]/10 rounded-lg p-3 sm:p-6 flex gap-4 sm:gap-6 relative shadow-sm hover:shadow-md transition-shadow group min-w-0 overflow-hidden">
       {/* Image */}
       <div className="relative w-24 sm:w-32 aspect-3/4 shrink-0 overflow-hidden rounded-md bg-gray-100">
         {imageSrc ? (
@@ -45,10 +45,10 @@ export function CartItemCard({
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-between py-1">
-        <div className="space-y-1">
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="text-sm sm:text-base font-medium text-[#3A0F0E] uppercase tracking-wide font-cormorant leading-tight line-clamp-2">
+      <div className="flex-1 flex flex-col justify-between py-1 min-w-0">
+        <div className="space-y-1 min-w-0">
+          <div className="flex justify-between items-start gap-2 min-w-0">
+            <h3 className="text-sm sm:text-base font-medium text-[#3A0F0E] uppercase tracking-wide font-cormorant leading-tight line-clamp-2 break-words [overflow-wrap:anywhere] min-w-0 flex-1">
               {item.product.name}
             </h3>
             <button

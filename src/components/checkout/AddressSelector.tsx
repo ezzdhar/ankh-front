@@ -36,7 +36,7 @@ export function AddressSelector({
             <label
               key={address.id}
               className={cn(
-                "flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all bg-white/50",
+                "flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all bg-white/50 min-w-0",
                 selectedId === address.id
                   ? "border-[#3A0F0E] shadow-sm"
                   : "border-[#3A0F0E]/10 hover:border-[#3A0F0E]/30",
@@ -59,9 +59,16 @@ export function AddressSelector({
                   )}
                 />
               </div>
-              <span className="text-[#3A0F0E] font-medium text-base">
-                {address.city}
-              </span>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[#3A0F0E] font-medium text-base break-words [overflow-wrap:anywhere] min-w-0">
+                  {address.city}
+                </span>
+                {address.address_details && (
+                  <span className="text-xs text-[#3A0F0E]/70 break-words [overflow-wrap:anywhere] min-w-0 mt-0.5">
+                    {address.address_details}
+                  </span>
+                )}
+              </div>
             </label>
           ))}
         </div>

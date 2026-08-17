@@ -61,12 +61,12 @@ export function OrderSummary({
         </label>
         {couponCode ? (
           <div className="flex items-center justify-between bg-[#0fa47f]/10 px-4 py-3 rounded-md border border-[#0fa47f]/20">
-            <span className="text-sm font-medium text-[#0fa47f]">
+            <span className="text-sm font-medium text-[#0fa47f] break-all">
               {couponCode} Applied
             </span>
             <button
               onClick={onRemoveCoupon}
-              className="text-[#A32020] hover:bg-[#A32020]/10 p-1 rounded-full transition-colors"
+              className="text-[#A32020] hover:bg-[#A32020]/10 p-1 rounded-full transition-colors shrink-0"
             >
               <Trash2 size={16} />
             </button>

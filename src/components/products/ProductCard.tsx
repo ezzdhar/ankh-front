@@ -27,7 +27,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
     (oldPrice && Number(oldPrice) > Number(product.price)));
 
   return (
-    <Link href={href} className={cn("block group/item h-full", className)}>
+    <Link href={href} className={cn("block group/item h-full min-w-0", className)}>
       <div className="relative aspect-3/4 overflow-hidden mb-4 bg-gray-100">
         {img ? (
           <Image
@@ -50,8 +50,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-1 items-center">
-        <h3 className="text-center text-sm md:text-base font-medium tracking-widest uppercase text-maroon line-clamp-1">
+      <div className="flex flex-col gap-1 items-center min-w-0 max-w-full px-1">
+        <h3
+          className="text-center text-sm md:text-base font-medium tracking-widest uppercase text-maroon line-clamp-1 break-words [overflow-wrap:anywhere] min-w-0 max-w-full"
+          title={name}
+        >
           {name}
         </h3>
 
@@ -69,13 +72,12 @@ export function ProductCard({ product, className }: ProductCardProps) {
           })}
         </div>
 
-
-        <div className="flex items-center gap-2 justify-center mt-1">
-          <div className="text-sm md:text-base font-bold text-[#3A0F0E]">
+        <div className="flex items-center gap-2 justify-center mt-1 flex-wrap">
+          <div className="text-sm md:text-base font-bold text-[#3A0F0E] whitespace-nowrap">
             {product.price} {product.currency || "EGP"}
           </div>
           {hasDiscount && oldPrice && (
-            <div className="text-xs md:text-sm text-gray-400 line-through">
+            <div className="text-xs md:text-sm text-gray-400 line-through whitespace-nowrap">
               {oldPrice} {product.currency || "EGP"}
             </div>
           )}

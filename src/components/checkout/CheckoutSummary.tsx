@@ -70,7 +70,7 @@ export function CheckoutSummary({
       {/* Items List */}
       <div className="space-y-6">
         {items.map((item) => (
-          <div key={item.id} className="flex gap-4">
+          <div key={item.id} className="flex gap-4 min-w-0">
             <div className="relative w-20 aspect-3/4 shrink-0 overflow-hidden rounded-md bg-gray-100">
               {item.product.main_image ||
               item.product.image ||
@@ -98,8 +98,8 @@ export function CheckoutSummary({
                 </div>
               )}
             </div>
-            <div className="flex-1 space-y-2">
-              <h3 className="text-xs md:text-sm font-medium text-[#3A0F0E] uppercase tracking-wide">
+            <div className="flex-1 space-y-2 min-w-0">
+              <h3 className="text-xs md:text-sm font-medium text-[#3A0F0E] uppercase tracking-wide break-words [overflow-wrap:anywhere] min-w-0">
                 {item.product.name}
               </h3>
               <div className="text-base font-bold text-[#A32020] font-cormorant">
@@ -144,7 +144,7 @@ export function CheckoutSummary({
 
         {couponCode ? (
           <div className="flex items-center justify-between bg-[#0fa47f]/10 px-4 py-3 rounded-md border border-[#0fa47f]/20">
-            <span className="text-sm font-medium text-[#0fa47f]">
+            <span className="text-sm font-medium text-[#0fa47f] break-all">
               {couponCode} {t("cart:summary.apply")}
             </span>
             <Button
@@ -163,11 +163,11 @@ export function CheckoutSummary({
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
               placeholder={t("cart:summary.applyCoupon")}
-              className="pr-24 bg-[#EAE0D5]/50 border-none h-12 rounded-md focus-visible:ring-1 focus-visible:ring-[#3A0F0E]/20"
+              className="pe-24 ps-4 bg-[#EAE0D5]/50 border-none h-12 rounded-md focus-visible:ring-1 focus-visible:ring-[#3A0F0E]/20"
             />
             <Button
               onClick={handleApplyCoupon}
-              className="absolute right-0 top-0 bottom-0 bg-[#310E0E] hover:bg-[#310E0E]/90 text-white rounded-l-none rounded-r-md px-6 h-12 uppercase text-xs tracking-widest font-bold"
+              className="absolute end-0 top-0 bottom-0 bg-[#310E0E] hover:bg-[#310E0E]/90 text-white ltr:rounded-l-none ltr:rounded-r-md rtl:rounded-r-none rtl:rounded-l-md px-6 h-12 uppercase text-xs tracking-widest font-bold"
               disabled={isApplyingCoupon || !promoCode}
             >
               {isApplyingCoupon ? "..." : t("cart:summary.apply")}

@@ -48,11 +48,11 @@ export function ReviewModal({ productId, isOpen, onClose }: ReviewModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-[#FFF8EF] w-full max-w-2xl rounded-sm shadow-2xl border border-[#3A0F0E]/5 overflow-hidden animate-in fade-in zoom-in duration-200">
-        <div className="p-8 md:p-12 space-y-10">
+      <div className="relative bg-[#FFF8EF] w-full max-w-2xl rounded-sm shadow-2xl border border-[#3A0F0E]/5 overflow-hidden animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
+        <div className="p-6 md:p-12 space-y-8 md:space-y-10">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-medium text-[#3A0F0E] font-cormorant">
+            <h2 className="text-2xl md:text-4xl font-medium text-[#3A0F0E] font-cormorant">
               {t("reviews.writeReview")}
             </h2>
             <div className="flex justify-center gap-2">
@@ -65,9 +65,9 @@ export function ReviewModal({ productId, isOpen, onClose }: ReviewModalProps) {
                   className="transition-transform hover:scale-110"
                 >
                   <Star
-                    size={48}
+                    size={36}
                     className={cn(
-                      "transition-colors",
+                      "transition-colors sm:size-12",
                       (hoveredRating || rating) >= star
                         ? "fill-[#FFB800] text-[#FFB800]"
                         : "fill-[#D1D5DB] text-[#D1D5DB]",
@@ -91,7 +91,7 @@ export function ReviewModal({ productId, isOpen, onClose }: ReviewModalProps) {
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full h-40 p-6 bg-[#FCF7F1] border border-[#3A0F0E]/20 rounded-2xl focus:ring-1 focus:ring-[#3A0F0E] focus:outline-none transition-all text-sm text-[#3A0F0E] placeholder:text-[#3A0F0E]/40 font-cairo resize-none"
+                className="w-full h-40 p-4 sm:p-6 bg-[#FCF7F1] border border-[#3A0F0E]/20 rounded-2xl focus:ring-1 focus:ring-[#3A0F0E] focus:outline-none transition-all text-sm text-[#3A0F0E] placeholder:text-[#3A0F0E]/40 font-cairo resize-none"
                 placeholder={
                   t("reviews.placeholder") ||
                   "What do you think about this product?"
@@ -129,7 +129,7 @@ export function ReviewModal({ productId, isOpen, onClose }: ReviewModalProps) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-[#3A0F0E]/5 rounded-full transition-colors hidden sm:block"
+          className="absolute top-4 end-4 p-2 hover:bg-[#3A0F0E]/5 rounded-full transition-colors block cursor-pointer"
         >
           <X size={20} className="text-[#3A0F0E] opacity-40" />
         </button>

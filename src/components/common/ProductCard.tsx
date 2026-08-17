@@ -19,7 +19,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/product/${product.id}`}
-      className="flex flex-col items-center group cursor-pointer"
+      className="flex flex-col items-center group cursor-pointer min-w-0 w-full"
     >
       {/* Image Container */}
       <div className="relative w-full aspect-3/4 mb-4 overflow-hidden bg-gray-100">
@@ -38,10 +38,13 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Info */}
-      <h3 className="text-xs md:text-sm text-[#3A0F0E] text-center tracking-wide uppercase font-medium mb-1">
+      <h3
+        className="text-xs md:text-sm text-[#3A0F0E] text-center tracking-wide uppercase font-medium mb-1 line-clamp-1 break-words [overflow-wrap:anywhere] min-w-0 max-w-full"
+        title={product.title}
+      >
         {product.title}
       </h3>
-      <p className="text-sm md:text-base text-[#3A0F0E] font-cormorant font-semibold">
+      <p className="text-sm md:text-base text-[#3A0F0E] font-cormorant font-semibold whitespace-nowrap">
         {product.price}
       </p>
     </Link>

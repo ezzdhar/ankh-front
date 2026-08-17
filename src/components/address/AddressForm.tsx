@@ -10,7 +10,7 @@ import {
   type City,
 } from "@/hooks/useAddress";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapPin, AlignLeft, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import MessageError from "@/components/ui/MessageError";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const addressSchema = (t: (key: string) => string) =>
   z.object({
@@ -46,6 +54,9 @@ export function AddressForm() {
   const router = useRouter();
   const addressId = searchParams.get("id");
   const isEdit = !!addressId;
+
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [pendingData, setPendingData] = useState<AddressSchema | null>(null);
 
   const { data: citiesData, isLoading: isLoadingCities } = useCities();
   const { data: addressesData, isLoading: isLoadingAddresses } = useAddresses();
@@ -101,17 +112,8 @@ export function AddressForm() {
 
   const onSubmit = async (data: AddressSchema) => {
     if (isEdit) {
-      updateAddress.mutate(
-        {
-          city_id: Number(data.city_id),
-          address_details: data.address_details,
-          postal_code: data.postal_code || "",
-          is_default: data.is_default,
-        },
-        {
-          onSuccess: () => router.push(redirectUrl),
-        },
-      );
+      setPendingData(data);
+      setIsConfirmDialogOpen(true);
     } else {
       createAddress.mutate(
         {
@@ -127,6 +129,22 @@ export function AddressForm() {
     }
   };
 
+  const handleConfirmUpdate = () => {
+    if (!pendingData) return;
+    setIsConfirmDialogOpen(false);
+    updateAddress.mutate(
+      {
+        city_id: Number(pendingData.city_id),
+        address_details: pendingData.address_details,
+        postal_code: pendingData.postal_code || "",
+        is_default: pendingData.is_default,
+      },
+      {
+        onSuccess: () => router.push(redirectUrl),
+      },
+    );
+  };
+
   if (isInitialLoading) {
     return (
       <div className="w-full max-w-2xl mx-auto p-12 flex justify-center items-center">
@@ -139,7 +157,7 @@ export function AddressForm() {
     <div className="w-full max-w-2xl mx-auto">
       {/* Title */}
       <h1 className="text-2xl md:text-3xl font-bold text-[#3A0F0E] text-center mb-8 font-cormorant">
-        {t("title")}
+        {isEdit ? t("editTitle") || t("title") : t("title")}
       </h1>
 
       {/* Card Container */}
@@ -252,7 +270,7 @@ export function AddressForm() {
           <div className="flex justify-center pt-2">
             <Button
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={isSubmitting && !isConfirmDialogOpen}
               disabled={!isValid || isSubmitting}
               className="w-full md:w-auto px-12 h-11 bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white text-sm font-medium rounded-full shadow-md transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -261,6 +279,39 @@ export function AddressForm() {
           </div>
         </form>
       </div>
+
+      {/* Update Confirmation Dialog */}
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-[#FFF8EF] border-[#3A0F0E]/10 p-6 rounded-2xl text-[#3A0F0E]">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-xl font-cormorant font-bold text-[#3A0F0E] text-center">
+              {t("confirmUpdateTitle") || "Confirm Address Update"}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-[#3A0F0E]/80 text-center">
+              {t("confirmUpdateMessage") ||
+                "Are you sure you want to save changes to this address?"}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row items-center justify-center gap-3 mt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsConfirmDialogOpen(false)}
+              className="border-[#3A0F0E]/30 text-[#3A0F0E] hover:bg-[#3A0F0E]/10 rounded-full px-6 cursor-pointer"
+            >
+              {t("cancel") || "Cancel"}
+            </Button>
+            <Button
+              type="button"
+              onClick={handleConfirmUpdate}
+              isLoading={updateAddress.isPending}
+              className="bg-[#3A0F0E]! hover:bg-[#5C2C28]! text-white rounded-full px-6 cursor-pointer"
+            >
+              {t("confirm") || "Confirm"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

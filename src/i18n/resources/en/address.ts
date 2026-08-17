@@ -1,5 +1,6 @@
 const address = {
   title: "Add A Delivery Address",
+  editTitle: "Edit Delivery Address",
   subtitle: "",
   city: {
     label: "City",
@@ -15,6 +16,9 @@ const address = {
   },
   submit: "Save Address",
   cancel: "Cancel",
+  confirm: "Confirm",
+  confirmUpdateTitle: "Confirm Address Update",
+  confirmUpdateMessage: "Are you sure you want to save changes to this address?",
   list: {
     title: "My Addresses",
     subtitle: "Manage your delivery addresses",

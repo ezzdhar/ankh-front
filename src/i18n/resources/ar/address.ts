@@ -1,5 +1,6 @@
 const address = {
   title: "إضافة عنوان توصيل",
+  editTitle: "تعديل عنوان التوصيل",
   subtitle: "",
   city: {
     label: "المدينة",
@@ -15,6 +16,9 @@ const address = {
   },
   submit: "حفظ العنوان",
   cancel: "إلغاء",
+  confirm: "تأكيد",
+  confirmUpdateTitle: "تأكيد تعديل العنوان",
+  confirmUpdateMessage: "هل أنت متأكد من حفظ التعديلات على هذا العنوان؟",
   list: {
     title: "عناوينى",
     subtitle: "إدارة عناوين التوصيل الخاصة بك",

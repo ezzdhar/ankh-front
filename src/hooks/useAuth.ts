@@ -82,14 +82,14 @@ export function useRegister() {
       const response = await api.post("/api/v1/register", formData);
       return response.data;
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: any, variables: RegisterData) => {
       const successMsg =
         data?.message ||
         (i18n.language === "ar"
-          ? "تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول."
-          : "Account created successfully! Please log in.");
+          ? "تم إنشاء الحساب بنجاح! يرجى تأكيد البريد الإلكتروني."
+          : "Account created successfully. Please verify your email.");
       toast.success(successMsg);
-      router.push("/login");
+      router.push(`/otp?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {
       const errorMsg =

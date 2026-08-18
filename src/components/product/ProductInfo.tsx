@@ -40,7 +40,8 @@ import {
 } from "@/components/ui/select";
 
 export function ProductInfo({ product }: { product: Product }) {
-  const { t } = useTranslation(["product", "auth"]);
+  const { t, i18n } = useTranslation(["product", "auth"]);
+  const isRTL = i18n.language === "ar";
   const isMounted = useIsMounted();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
@@ -274,33 +275,61 @@ export function ProductInfo({ product }: { product: Product }) {
     return [...new Set(rawImages)];
   }, [product, selectedVariant]);
 
-  const [mainViewportRef, emblaMainApi] = useEmblaCarousel({ loop: images.length > 1 }, [
-    Autoplay({ delay: 4000, stopOnInteraction: true }),
-  ]);
+  const [mainViewportRef, emblaMainApi] = useEmblaCarousel(
+    {
+      loop: images.length > 1,
+      direction: isRTL ? "rtl" : "ltr",
+    },
+    [Autoplay({ delay: 4000, stopOnInteraction: true })],
+  );
   const [thumbViewportRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
+    direction: isRTL ? "rtl" : "ltr",
   });
 
   const onThumbClick = useCallback(
     (index: number) => {
-      if (!emblaMainApi || !emblaThumbsApi) return;
+      if (!emblaMainApi) return;
       emblaMainApi.scrollTo(index);
     },
-    [emblaMainApi, emblaThumbsApi],
+    [emblaMainApi],
   );
 
   const onSelect = useCallback(() => {
-    if (!emblaMainApi || !emblaThumbsApi) return;
-    setSelectedImage(emblaMainApi.selectedScrollSnap());
-    emblaThumbsApi.scrollTo(emblaMainApi.selectedScrollSnap());
-  }, [emblaMainApi, emblaThumbsApi, setSelectedImage]);
+    if (!emblaMainApi) return;
+    const index = emblaMainApi.selectedScrollSnap();
+    setSelectedImage(index);
+    if (emblaThumbsApi) {
+      emblaThumbsApi.scrollTo(index);
+    }
+  }, [emblaMainApi, emblaThumbsApi]);
 
   useEffect(() => {
     if (!emblaMainApi) return;
     emblaMainApi.on("select", onSelect);
     emblaMainApi.on("reInit", onSelect);
+    return () => {
+      emblaMainApi.off("select", onSelect);
+      emblaMainApi.off("reInit", onSelect);
+    };
   }, [emblaMainApi, onSelect]);
+
+  useEffect(() => {
+    if (emblaMainApi) {
+      emblaMainApi.reInit({
+        loop: images.length > 1,
+        direction: isRTL ? "rtl" : "ltr",
+      });
+    }
+    if (emblaThumbsApi) {
+      emblaThumbsApi.reInit({
+        containScroll: "keepSnaps",
+        dragFree: true,
+        direction: isRTL ? "rtl" : "ltr",
+      });
+    }
+  }, [emblaMainApi, emblaThumbsApi, images.length, isRTL]);
 
   useEffect(() => {
     if (emblaMainApi) {
@@ -411,18 +440,18 @@ export function ProductInfo({ product }: { product: Product }) {
                 <button
                   type="button"
                   onClick={() => emblaMainApi?.scrollPrev()}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white cursor-pointer"
                   aria-label="Previous image"
                 >
-                  <ChevronLeft size={20} />
+                  <ChevronLeft size={20} className="rtl:rotate-180" />
                 </button>
                 <button
                   type="button"
                   onClick={() => emblaMainApi?.scrollNext()}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white cursor-pointer"
                   aria-label="Next image"
                 >
-                  <ChevronRight size={20} />
+                  <ChevronRight size={20} className="rtl:rotate-180" />
                 </button>
               </>
             )}

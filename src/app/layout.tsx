@@ -22,20 +22,22 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL("https://ankh-eg.com"),
   title: {
-    default: "ANKH | Fashion Store",
+    default: "ANKH | متجر أزياء",
     template: "%s | ANKH",
   },
   description:
-    "An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes. Discover our latest collections of coats, knitwear, denim, and dresses.",
+    "متجر أزياء إلكتروني يقدم قطعاً أنيقة وعالية الجودة بأسعار تنافسية تناسب جميع الأذواق. اكتشف أحدث تشكيلاتنا من المعاطف، الملابس المحبوكة، الجينز، والفساتين.",
   keywords: [
+    "أزياء",
+    "ملابس",
+    "ANKH",
+    "متجر إلكتروني",
+    "أزياء مصر",
+    "فساتين",
+    "جينز",
+    "تريكو",
     "Fashion",
     "Clothing",
-    "ANKH",
-    "Online Store",
-    "Egypt Fashion",
-    "Dresses",
-    "Denim",
-    "Knitwear",
   ],
   authors: [{ name: "ANKH" }],
   creator: "ANKH",
@@ -54,9 +56,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "ANKH | Fashion Store",
+    title: "ANKH | متجر أزياء",
     description:
-      "An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes.",
+      "متجر أزياء إلكتروني يقدم قطعاً أنيقة وعالية الجودة بأسعار تنافسية تناسب جميع الأذواق.",
     url: "https://ankh-eg.com",
     siteName: "ANKH",
     images: [
@@ -68,14 +70,14 @@ export const metadata: Metadata = {
         type: "image/svg+xml",
       },
     ],
-    locale: "en_US",
+    locale: "ar_EG",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ANKH | Fashion Store",
+    title: "ANKH | متجر أزياء",
     description:
-      "Modern fashion store offering high-quality clothing and accessories.",
+      "متجر أزياء عصري يقدم ملابس وإكسسوارات عالية الجودة بأسعار تنافسية.",
     images: ["https://ankh-eg.com/logo_white.svg"],
   },
   robots: {

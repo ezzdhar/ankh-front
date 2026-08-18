@@ -191,14 +191,14 @@ export function Navbar() {
         {/* Center - Logo */}
         <Link
           href="/"
-          className="absolute left-1/2 -translate-x-1/2 font-logo text-2xl md:text-[1.75rem] font-light tracking-[0.15em] text-[#3A0F0E] hover:opacity-70 transition-opacity z-0"
+          className="absolute left-1/2 -translate-x-1/2 font-logo text-2xl md:text-[1.75rem] font-light tracking-[0.15em] text-[#3A0F0E] hover:opacity-70 transition-opacity z-0 flex items-center justify-center"
         >
           <Image
-            src="/logo.svg"
+            src="/ANKH (2).png"
             alt="Ankh"
-            width={100}
+            width={120}
             height={40}
-            className="h-9 sm:h-10 w-auto"
+            className="h-8 sm:h-9 w-auto object-contain"
             loading="eager"
             priority
           />

@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Phone, MapPin, Mail } from "lucide-react";
 import { useTranslation } from "@/i18n/hooks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useIsMounted } from "@/hooks/useIsMounted";
+import { useAuth } from "@/providers/AuthProvider";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 const API_BASE_URL = "https://admin.ankh-eg.com";
 
@@ -19,12 +23,36 @@ const paymentIcons = [
 ];
 
 export function Footer() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["common", "auth"]);
   const isMounted = useIsMounted();
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const { data: settingsData } = useSiteSettings();
   const settings = settingsData?.data;
 
   const logoUrl = "/ANKH (2).png";
+
+  const handleProtectedLinkClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("token") || Cookies.get("token")
+        : null;
+    const isUserAuth = isAuthenticated || !!token;
+
+    if (!isUserAuth) {
+      toast.dismiss();
+      toast.error(
+        t("loginRequiredGeneric", {
+          ns: "auth",
+          lng: isMounted ? undefined : "en",
+        }) || "You must login first to continue",
+      );
+      return;
+    }
+
+    router.push(href);
+  };
 
   const quickLinks = [
     { label: t("footer.home", { lng: isMounted ? undefined : "en" }), href: "/" },
@@ -33,9 +61,21 @@ export function Footer() {
   ];
 
   const supportLinks = [
-    { label: t("footer.myAccount", { lng: isMounted ? undefined : "en" }), href: "/profile" },
-    { label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }), href: "/orders" },
-    { label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }), href: "/wishlist" },
+    {
+      label: t("footer.myAccount", { lng: isMounted ? undefined : "en" }),
+      href: "/profile",
+      protected: true,
+    },
+    {
+      label: t("footer.myOrders", { lng: isMounted ? undefined : "en" }),
+      href: "/orders",
+      protected: true,
+    },
+    {
+      label: t("footer.wishlist", { lng: isMounted ? undefined : "en" }),
+      href: "/wishlist",
+      protected: true,
+    },
   ];
 
   const policyLinks = [
@@ -100,12 +140,13 @@ export function Footer() {
             <ul className="flex flex-col gap-2.5">
               {supportLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/80 hover:text-white transition-all duration-200 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block"
+                  <button
+                    type="button"
+                    onClick={(e) => handleProtectedLinkClick(e, link.href)}
+                    className="text-sm text-white/80 hover:text-white transition-all duration-200 hover:translate-x-1 rtl:hover:-translate-x-1 inline-block text-start cursor-pointer"
                   >
                     {link.label}
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>

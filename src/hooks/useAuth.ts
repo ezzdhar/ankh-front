@@ -82,9 +82,14 @@ export function useRegister() {
       const response = await api.post("/api/v1/register", formData);
       return response.data;
     },
-    onSuccess: (data: any, variables: RegisterData) => {
-      toast.success("Account created successfully. Please verify your email.");
-      router.push(`/otp?email=${encodeURIComponent(variables.email)}`);
+    onSuccess: (data: any) => {
+      const successMsg =
+        data?.message ||
+        (i18n.language === "ar"
+          ? "تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول."
+          : "Account created successfully! Please log in.");
+      toast.success(successMsg);
+      router.push("/login");
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {
       const errorMsg =
@@ -101,8 +106,6 @@ interface VerifyCodeData {
 }
 
 export function useVerifyCode() {
-  const { login: authLogin } = useAuth();
-
   return useMutation({
     mutationFn: async (data: VerifyCodeData) => {
       const formData = new FormData();
@@ -118,14 +121,13 @@ export function useVerifyCode() {
         if (data.data?.token) {
           localStorage.setItem("resetToken", data.data.token);
         }
-      } else {
-        // Normal verify flow: use AuthContext login
-        if (data.data?.token) {
-          authLogin(data.data.token, data.data.user);
-        }
       }
 
-      toast.success("Account verified successfully!");
+      toast.success(
+        i18n.language === "ar"
+          ? "تم التحقق من الحساب بنجاح! يرجى تسجيل الدخول."
+          : "Account verified successfully! Please log in.",
+      );
     },
     onError: (error: AxiosError<ApiErrorResponse>) => {
       const errorMsg =

@@ -82,7 +82,7 @@ export function OTPForm({ isResetMode }: OTPFormProps) {
           if (cleanMode === "reset") {
             router.push(`/reset-password?email=${encodeURIComponent(email)}`);
           } else {
-            router.push("/");
+            router.push("/login");
           }
         },
       },

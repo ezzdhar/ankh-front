@@ -136,6 +136,47 @@ export function ProductInfo({ product }: { product: Product }) {
     return Object.values(map);
   }, [variants]);
 
+  // Price and discount calculations
+  const { currentPrice, originalPrice, hasDiscount } = useMemo(() => {
+    const isZeroDiscount =
+      !product.discount_percentage ||
+      product.discount_percentage === "0.00" ||
+      product.discount_percentage === "0" ||
+      product.discount_percentage === 0;
+
+    const discountPercent = isZeroDiscount ? 0 : Number(product.discount_percentage || 0);
+
+    const baseOrig = Number(
+      selectedVariant?.price ||
+      (product.price_after_discount && Number(product.price) > Number(product.price_after_discount) ? product.price : null) ||
+      product.price ||
+      0
+    );
+
+    let discounted: number | null = null;
+
+    if (discountPercent > 0) {
+      if (
+        product.price_after_discount &&
+        (!selectedVariant?.price || Math.abs(Number(selectedVariant.price) - Number(product.price || 0)) < 0.01)
+      ) {
+        discounted = Number(product.price_after_discount);
+      } else {
+        discounted = Number((baseOrig * (1 - discountPercent / 100)).toFixed(2));
+      }
+    } else if (product.price_after_discount && Number(product.price_after_discount) < baseOrig) {
+      discounted = Number(product.price_after_discount);
+    }
+
+    const hasValidDiscount = discounted !== null && discounted < baseOrig;
+
+    return {
+      currentPrice: (hasValidDiscount && discounted !== null ? discounted : baseOrig) as number,
+      originalPrice: (hasValidDiscount ? baseOrig : null) as number | null,
+      hasDiscount: hasValidDiscount,
+    };
+  }, [product, selectedVariant]);
+
   const getSelectedValueForAttribute = useCallback(
     (attrName: string) => {
       const found = selectedVariant?.attribute_values?.find(
@@ -431,37 +472,13 @@ export function ProductInfo({ product }: { product: Product }) {
 
           <div className="flex items-center gap-3">
             <div className="text-xl font-bold text-[#3A0F0E]">
-              {(() => {
-                const isZeroDiscount =
-                  product.discount_percentage === "0.00" ||
-                  product.discount_percentage === "0" ||
-                  product.discount_percentage === 0;
-                
-                return selectedVariant?.price ||
-                  (!isZeroDiscount && product.price_after_discount) ||
-                  product.price;
-              })()}{" "}
-              EGP
+              {currentPrice.toFixed(2)} EGP
             </div>
-            {(() => {
-              const isZeroDiscount =
-                product.discount_percentage === "0.00" ||
-                product.discount_percentage === "0" ||
-                product.discount_percentage === 0;
-
-              const displayPrice =
-                selectedVariant?.price || (!isZeroDiscount && product.price_after_discount) || null;
-              const originalPrice = product.price;
-              
-              if (!isZeroDiscount && displayPrice && String(displayPrice) !== String(originalPrice)) {
-                return (
-                  <div className="text-lg text-gray-400 line-through">
-                    {originalPrice} EGP
-                  </div>
-                );
-              }
-              return null;
-            })()}
+            {hasDiscount && originalPrice !== null && (
+              <div className="text-lg text-gray-400 line-through">
+                {originalPrice.toFixed(2)} EGP
+              </div>
+            )}
           </div>
         </div>
 
@@ -600,14 +617,7 @@ export function ProductInfo({ product }: { product: Product }) {
               {t("details.total")} :
             </span>
             <span className="text-lg font-bold text-[#3A0F0E]">
-              {(
-                parseFloat(
-                  selectedVariant?.price ||
-                    product.price_after_discount ||
-                    product.price,
-                ) * quantity
-              ).toFixed(2)}{" "}
-              EGP
+              {(currentPrice * quantity).toFixed(2)} EGP
             </span>
           </div>
 

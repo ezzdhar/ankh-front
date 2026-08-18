@@ -17,14 +17,32 @@ export function ProductCard({ product, className }: ProductCardProps) {
   const averageRating = product.average_rating;
   const reviewsCount = product.reviews_count;
   const isZeroDiscount = 
+    !product.discount_percentage ||
     product.discount_percentage === "0.00" || 
     product.discount_percentage === "0" || 
     product.discount_percentage === 0;
 
+  const rawPrice = Number(product.price || 0);
+  const rawOldPrice = product.original_price || product.old_price;
+  const rawPriceAfterDiscount = product.price_after_discount ? Number(product.price_after_discount) : null;
+
+  let displayPrice: string | number = product.price;
+  let displayOldPrice: string | number | undefined = rawOldPrice ? String(rawOldPrice) : undefined;
+
+  if (!isZeroDiscount && rawPriceAfterDiscount && rawPriceAfterDiscount < rawPrice) {
+    displayPrice = rawPriceAfterDiscount;
+    displayOldPrice = rawPrice;
+  } else if (rawOldPrice && Number(rawOldPrice) > rawPrice) {
+    displayPrice = product.price;
+    displayOldPrice = rawOldPrice;
+  }
+
   const hasDiscount =
-    !isZeroDiscount && (
-    product.has_discount ||
-    (oldPrice && Number(oldPrice) > Number(product.price)));
+    !isZeroDiscount &&
+    Boolean(
+      product.has_discount ||
+      (displayOldPrice && Number(displayOldPrice) > Number(displayPrice))
+    );
 
   return (
     <Link href={href} className={cn("block group/item h-full min-w-0", className)}>
@@ -74,11 +92,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
 
         <div className="flex items-center gap-2 justify-center mt-1 flex-wrap">
           <div className="text-sm md:text-base font-bold text-[#3A0F0E] whitespace-nowrap">
-            {product.price} {product.currency || "EGP"}
+            {displayPrice} {product.currency || "EGP"}
           </div>
-          {hasDiscount && oldPrice && (
+          {hasDiscount && displayOldPrice && (
             <div className="text-xs md:text-sm text-gray-400 line-through whitespace-nowrap">
-              {oldPrice} {product.currency || "EGP"}
+              {displayOldPrice} {product.currency || "EGP"}
             </div>
           )}
         </div>

@@ -296,6 +296,24 @@ export function ProductInfo({ product }: { product: Product }) {
     [emblaMainApi],
   );
 
+  const onLeftArrowClick = useCallback(() => {
+    if (!emblaMainApi) return;
+    if (isRTL) {
+      emblaMainApi.scrollNext();
+    } else {
+      emblaMainApi.scrollPrev();
+    }
+  }, [emblaMainApi, isRTL]);
+
+  const onRightArrowClick = useCallback(() => {
+    if (!emblaMainApi) return;
+    if (isRTL) {
+      emblaMainApi.scrollPrev();
+    } else {
+      emblaMainApi.scrollNext();
+    }
+  }, [emblaMainApi, isRTL]);
+
   const onSelect = useCallback(() => {
     if (!emblaMainApi) return;
     const index = emblaMainApi.selectedScrollSnap();
@@ -439,19 +457,19 @@ export function ProductInfo({ product }: { product: Product }) {
               <>
                 <button
                   type="button"
-                  onClick={() => emblaMainApi?.scrollPrev()}
+                  onClick={onLeftArrowClick}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white cursor-pointer"
-                  aria-label="Previous image"
+                  aria-label="Scroll left"
                 >
-                  <ChevronLeft size={20} className="rtl:rotate-180" />
+                  <ChevronLeft size={20} />
                 </button>
                 <button
                   type="button"
-                  onClick={() => emblaMainApi?.scrollNext()}
+                  onClick={onRightArrowClick}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white cursor-pointer"
-                  aria-label="Next image"
+                  aria-label="Scroll right"
                 >
-                  <ChevronRight size={20} className="rtl:rotate-180" />
+                  <ChevronRight size={20} />
                 </button>
               </>
             )}

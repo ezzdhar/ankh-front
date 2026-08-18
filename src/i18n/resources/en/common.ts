@@ -39,6 +39,7 @@ const common = {
     shippingPolicy: "Shipping Policy",
     refundPolicy: "Refund Policy",
     copyright: "© {{year}}, All Rights Reserved ANKH",
+    description: "An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes.",
   },
 };
 

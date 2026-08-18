@@ -113,12 +113,35 @@ export function Navbar() {
     },
   ];
 
+  const handleProtectedClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("token") || Cookies.get("token")
+        : null;
+    const isUserAuth = isAuthenticated || !!token;
+
+    if (!isUserAuth) {
+      toast.dismiss();
+      toast.error(
+        t("loginRequiredGeneric", {
+          ns: "auth",
+          lng: isMounted ? undefined : "en",
+        }) || "You must login first to continue",
+      );
+      return;
+    }
+
+    router.push(href);
+  };
+
   const handleDrawerLinkClick = (e: React.MouseEvent, link: typeof navLinks[0]) => {
     e.preventDefault();
     const token = typeof window !== "undefined" ? (localStorage.getItem("token") || Cookies.get("token")) : null;
     const isUserAuth = isAuthenticated || !!token;
 
     if (link.protected && !isUserAuth) {
+      toast.dismiss();
       toast.error(
         t("loginRequiredGeneric", { ns: "auth", lng: isMounted ? undefined : "en" }) ||
           "You must login first to continue"
@@ -155,20 +178,22 @@ export function Navbar() {
               <UserRound size={24} strokeWidth={1} />
             )}
           </button>
-          <Link
-            href="/wishlist"
-            className="p-2 hover:opacity-60 transition-opacity hidden sm:flex"
+          <button
+            type="button"
+            onClick={(e) => handleProtectedClick(e, "/wishlist")}
+            className="p-2 hover:opacity-60 transition-opacity hidden sm:flex items-center justify-center cursor-pointer"
             aria-label={t("footer.wishlist", { lng: isMounted ? undefined : "en" })}
           >
             <Heart size={24} strokeWidth={1} />
-          </Link>
-          <Link
-            href="/cart"
-            className="p-2 hover:opacity-60 transition-opacity"
+          </button>
+          <button
+            type="button"
+            onClick={(e) => handleProtectedClick(e, "/cart")}
+            className="p-2 hover:opacity-60 transition-opacity flex items-center justify-center cursor-pointer"
             aria-label="Cart"
           >
             <ShoppingCart size={24} strokeWidth={1} />
-          </Link>
+          </button>
           <button
             className="p-2 hover:opacity-60 transition-opacity hidden sm:flex cursor-pointer"
             aria-label="Language"

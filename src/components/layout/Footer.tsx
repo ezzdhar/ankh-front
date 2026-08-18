@@ -64,8 +64,8 @@ export function Footer() {
                 />
               </Link>
             </div>
-            <p className="text-sm text-white/80 leading-relaxed max-w-xs text-left" dir="ltr">
-              An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes.
+            <p className="text-sm text-white/80 leading-relaxed max-w-xs text-start">
+              {t("footer.description", { lng: isMounted ? undefined : "en" })}
             </p>
           </div>
 

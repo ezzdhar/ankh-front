@@ -11,7 +11,17 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "admin.ankh-eg.com",
-        pathname: "/storage/**",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "admin.ankh-eg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ankh-eg.com",
+        pathname: "/**",
       },
       {
         protocol: "https",

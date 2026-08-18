@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ar, enUS } from "date-fns/locale";
 
 interface OrderDetailsModalProps {
   order: Order | null;
@@ -42,7 +43,9 @@ export function OrderDetailsModal({
             <div>
               <p className="text-xs text-slate-500">{t("table.date")}</p>
               <p className="font-medium">
-                {format(new Date(order.created_at), "PPP")}
+                {format(new Date(order.created_at), "PPP", {
+                  locale: isRTL ? ar : enUS,
+                })}
               </p>
             </div>
             <div>

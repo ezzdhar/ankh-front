@@ -233,26 +233,48 @@ export function ProductInfo({ product }: { product: Product }) {
 
   const [quantity, setQuantity] = useState(1);
 
-  // Filter out any invalid image URLs
-  const images = useMemo(() => {
-    let allImages = [];
-    if (product.main_image) allImages.push(product.main_image);
-    if (product.images?.length) {
-      allImages = [...allImages, ...product.images.map((img) => img.url)];
+  // Helper to format image URLs
+  const formatImageUrl = (url: unknown): string | null => {
+    if (!url || typeof url !== "string") return null;
+    const trimmed = url.trim();
+    if (!trimmed) return null;
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("/")) {
+      return trimmed;
     }
-    // Add selected variant image if it exists and is not already in the list
-    if (selectedVariant?.image) {
-      const variantImageUrl = selectedVariant.image.startsWith("http")
-        ? selectedVariant.image
-        : `https://admin.ankh-eg.com/storage/${selectedVariant.image}`;
-      if (!allImages.includes(variantImageUrl)) {
-        allImages.unshift(variantImageUrl);
-      }
-    }
-    return [...new Set(allImages)].filter(Boolean);
-  }, [product.main_image, product.images, selectedVariant]);
+    return `https://admin.ankh-eg.com/storage/${trimmed.replace(/^\/+/, "")}`;
+  };
 
-  const [mainViewportRef, emblaMainApi] = useEmblaCarousel({ loop: true }, [
+  // Extract all valid image URLs
+  const images = useMemo(() => {
+    const rawImages: string[] = [];
+
+    if (selectedVariant?.image) {
+      const vImg = formatImageUrl(selectedVariant.image);
+      if (vImg) rawImages.push(vImg);
+    }
+
+    if (product.main_image) {
+      const mImg = formatImageUrl(product.main_image);
+      if (mImg) rawImages.push(mImg);
+    }
+
+    if (product.image) {
+      const pImg = formatImageUrl(product.image);
+      if (pImg) rawImages.push(pImg);
+    }
+
+    if (Array.isArray(product.images)) {
+      product.images.forEach((img: any) => {
+        const u = typeof img === "string" ? img : img?.url || img?.image || img?.path;
+        const formatted = formatImageUrl(u);
+        if (formatted) rawImages.push(formatted);
+      });
+    }
+
+    return [...new Set(rawImages)];
+  }, [product, selectedVariant]);
+
+  const [mainViewportRef, emblaMainApi] = useEmblaCarousel({ loop: images.length > 1 }, [
     Autoplay({ delay: 4000, stopOnInteraction: true }),
   ]);
   const [thumbViewportRef, emblaThumbsApi] = useEmblaCarousel({
@@ -279,6 +301,13 @@ export function ProductInfo({ product }: { product: Product }) {
     emblaMainApi.on("select", onSelect);
     emblaMainApi.on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
+
+  useEffect(() => {
+    if (emblaMainApi) {
+      emblaMainApi.scrollTo(0);
+      setSelectedImage(0);
+    }
+  }, [selectedVariantId, emblaMainApi]);
 
   const getCartPayload = () => {
     if (showVariants && !selectedVariant) {
@@ -350,70 +379,86 @@ export function ProductInfo({ product }: { product: Product }) {
       {/* Gallery Section */}
       <div className="flex flex-col gap-4 w-full max-w-[420px] sm:max-w-[520px] lg:w-[560px] lg:max-w-[560px] mx-auto lg:mx-0 select-none animate-in fade-in slide-in-from-left-8 duration-700">
         {/* Main Slider */}
-        <div className="relative group">
-          <div className="overflow-hidden rounded-md" ref={mainViewportRef}>
-            <div className="flex">
-              {images.map((img, idx) => (
-                <div
-                  key={idx}
-                  className="relative flex-[0_0_100%] min-w-0 aspect-[4/5] sm:aspect-3/4"
-                >
-                  <Image
-                    src={img}
-                    alt={`${product.name} ${idx}`}
-                    fill
-                    className="object-cover"
-                    priority={idx === 0}
-                    sizes="(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 560px"
-                  />
-                </div>
-              ))}
-            </div>
+        {images.length === 0 ? (
+          <div className="relative aspect-[4/5] sm:aspect-[3/4] rounded-md bg-gray-100 flex items-center justify-center text-gray-400">
+            <span>{t("details.noImage", { lng: isMounted ? undefined : "en" }) || "No Image Available"}</span>
           </div>
+        ) : (
+          <div className="relative group">
+            <div className="overflow-hidden rounded-md" ref={mainViewportRef}>
+              <div className="flex">
+                {images.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="relative flex-[0_0_100%] min-w-0 aspect-[4/5] sm:aspect-[3/4] bg-gray-50"
+                  >
+                    <Image
+                      src={img}
+                      alt={`${product.name || "Product"} ${idx}`}
+                      fill
+                      className="object-cover"
+                      priority={idx === 0}
+                      unoptimized={img.startsWith("http")}
+                      sizes="(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 560px"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          <button
-            onClick={() => emblaMainApi?.scrollPrev()}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            onClick={() => emblaMainApi?.scrollNext()}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
+            {images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => emblaMainApi?.scrollPrev()}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => emblaMainApi?.scrollNext()}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#3A0F0E] opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-white"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Thumbnail Slider */}
-        <div className="relative">
-          <div className="overflow-hidden" ref={thumbViewportRef}>
-            <div className="flex gap-3 sm:gap-4">
-              {images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => onThumbClick(idx)}
-                  className={cn(
-                    "relative shrink-0 w-16 h-24 sm:w-20 sm:h-28 overflow-hidden transition-all duration-300",
-                    selectedImage === idx
-                      ? "opacity-100 ring-1 ring-[#3A0F0E]"
-                      : "opacity-100",
-                  )}
-                >
-                  <Image
-                    src={img}
-                    alt={`Thumb ${idx}`}
-                    fill
-                    className="object-cover"
-                  />
-                  {selectedImage !== idx && (
-                    <div className="absolute inset-0 bg-black/30 transition-opacity" />
-                  )}
-                </button>
-              ))}
+        {images.length > 1 && (
+          <div className="relative">
+            <div className="overflow-hidden" ref={thumbViewportRef}>
+              <div className="flex gap-3 sm:gap-4">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => onThumbClick(idx)}
+                    className={cn(
+                      "relative shrink-0 w-16 h-24 sm:w-20 sm:h-28 overflow-hidden rounded-sm transition-all duration-300 bg-gray-50",
+                      selectedImage === idx
+                        ? "opacity-100 ring-2 ring-[#3A0F0E]"
+                        : "opacity-70 hover:opacity-100",
+                    )}
+                  >
+                    <Image
+                      src={img}
+                      alt={`Thumb ${idx}`}
+                      fill
+                      unoptimized={img.startsWith("http")}
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Details Section */}

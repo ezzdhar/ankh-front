@@ -24,11 +24,7 @@ export function Footer() {
   const { data: settingsData } = useSiteSettings();
   const settings = settingsData?.data;
 
-  const logoUrl = settings?.logo_white
-    ? settings.logo_white.startsWith("http")
-      ? settings.logo_white
-      : `${API_BASE_URL}/storage/${settings.logo_white}`
-    : "/logo_white.svg";
+  const logoUrl = "/ANKH (2).png";
 
   const quickLinks = [
     { label: t("footer.home", { lng: isMounted ? undefined : "en" }), href: "/" },
@@ -53,29 +49,33 @@ export function Footer() {
     <footer className="w-full bg-maroon text-white mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 items-start">
           {/* Logo & Description */}
           <div className="flex flex-col items-start gap-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src={logoUrl}
-                alt="ANKH"
-                width={120}
-                height={40}
-                className="h-10 w-auto object-contain"
-              />
-            </Link>
-            <p className="text-sm text-white/80 leading-relaxed max-w-xs">
-              {settings?.description ||
-                "An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes."}
+            <div className="h-7 flex items-center">
+              <Link href="/" className="inline-flex items-center">
+                <Image
+                  src={logoUrl}
+                  alt="ANKH"
+                  width={120}
+                  height={32}
+                  className="h-7 w-auto object-contain"
+                  priority
+                />
+              </Link>
+            </div>
+            <p className="text-sm text-white/80 leading-relaxed max-w-xs text-left" dir="ltr">
+              An online fashion store offering stylish, high-quality pieces at competitive prices to suit all tastes.
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-base font-semibold tracking-wide text-white">
-              {t("footer.quickLinks", { lng: isMounted ? undefined : "en" })}
-            </h3>
+            <div className="h-7 flex items-center">
+              <h3 className="text-base font-semibold tracking-wide text-white">
+                {t("footer.quickLinks", { lng: isMounted ? undefined : "en" })}
+              </h3>
+            </div>
             <ul className="flex flex-col gap-2.5">
               {quickLinks.map((link) => (
                 <li key={link.href}>
@@ -92,9 +92,11 @@ export function Footer() {
 
           {/* Customer Support */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-base font-semibold tracking-wide text-white">
-              {t("footer.customerSupport", { lng: isMounted ? undefined : "en" })}
-            </h3>
+            <div className="h-7 flex items-center">
+              <h3 className="text-base font-semibold tracking-wide text-white">
+                {t("footer.customerSupport", { lng: isMounted ? undefined : "en" })}
+              </h3>
+            </div>
             <ul className="flex flex-col gap-2.5">
               {supportLinks.map((link) => (
                 <li key={link.href}>
@@ -111,9 +113,11 @@ export function Footer() {
 
           {/* Contact Information */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-base font-semibold tracking-wide text-white">
-              {t("footer.contactInfo", { lng: isMounted ? undefined : "en" })}
-            </h3>
+            <div className="h-7 flex items-center">
+              <h3 className="text-base font-semibold tracking-wide text-white">
+                {t("footer.contactInfo", { lng: isMounted ? undefined : "en" })}
+              </h3>
+            </div>
             <ul className="flex flex-col gap-3">
               {settings?.phone && (
                 <li className="flex items-center gap-2.5 text-sm text-white/80 hover:text-white transition-colors">

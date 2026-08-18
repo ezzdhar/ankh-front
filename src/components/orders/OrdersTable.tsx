@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 import { useOrders, Order } from "@/hooks/useOrders";
 import { format } from "date-fns";
+import { ar, enUS } from "date-fns/locale";
 import { OrderDetailsModal } from "./OrderDetailsModal";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -55,7 +56,13 @@ export function OrdersTable() {
     doc.setFontSize(20);
     doc.text(`Order #${order.id}`, 20, 20);
     doc.setFontSize(10);
-    doc.text(`Date: ${format(new Date(order.created_at), "PPP")}`, 20, 30);
+    doc.text(
+      `Date: ${format(new Date(order.created_at), "PPP", {
+        locale: isAR ? ar : enUS,
+      })}`,
+      20,
+      30,
+    );
     doc.text(`Status: ${order.order_status}`, 20, 35);
     doc.text(`Payment: ${order.payment_status}`, 20, 40);
 

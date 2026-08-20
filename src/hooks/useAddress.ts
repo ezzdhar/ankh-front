@@ -59,8 +59,9 @@ export function useCities() {
   });
 }
 
-export function useCreateAddress() {
+export function useCreateAddress(options?: { showErrorToast?: boolean }) {
   const queryClient = useQueryClient();
+  const showErrorToast = options?.showErrorToast ?? true;
 
   return useMutation<
     ApiResponse,
@@ -85,6 +86,7 @@ export function useCreateAddress() {
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
     onError: (error) => {
+      if (!showErrorToast) return;
       const errorMsg =
         error.response?.data?.message ||
         (error.response?.data?.errors &&
@@ -95,8 +97,12 @@ export function useCreateAddress() {
   });
 }
 
-export function useUpdateAddress(id: number | string) {
+export function useUpdateAddress(
+  id: number | string,
+  options?: { showErrorToast?: boolean },
+) {
   const queryClient = useQueryClient();
+  const showErrorToast = options?.showErrorToast ?? true;
 
   return useMutation<
     ApiResponse,
@@ -115,6 +121,7 @@ export function useUpdateAddress(id: number | string) {
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
     onError: (error) => {
+      if (!showErrorToast) return;
       const errorMsg =
         error.response?.data?.message ||
         (error.response?.data?.errors &&

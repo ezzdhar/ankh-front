@@ -34,6 +34,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import { handleFormServerErrors } from "@/lib/form-errors";
+
 const addressSchema = (t: (key: string) => string) =>
   z.object({
     city_id: z.string().min(1, { message: t("validation.cityRequired") }),
@@ -60,8 +62,8 @@ export function AddressForm() {
 
   const { data: citiesData, isLoading: isLoadingCities } = useCities();
   const { data: addressesData, isLoading: isLoadingAddresses } = useAddresses();
-  const createAddress = useCreateAddress();
-  const updateAddress = useUpdateAddress(addressId!);
+  const createAddress = useCreateAddress({ showErrorToast: false });
+  const updateAddress = useUpdateAddress(addressId!, { showErrorToast: false });
 
   // Find current address from the list
   const currentAddress = useMemo(() => {
@@ -75,6 +77,7 @@ export function AddressForm() {
     control,
     reset,
     setValue,
+    setError,
     formState: { errors, isValid },
   } = useForm<AddressSchema>({
     resolver: zodResolver(formSchema),
@@ -124,6 +127,7 @@ export function AddressForm() {
         },
         {
           onSuccess: () => router.push(redirectUrl),
+          onError: (error) => handleFormServerErrors(error, setError),
         },
       );
     }
@@ -141,6 +145,7 @@ export function AddressForm() {
       },
       {
         onSuccess: () => router.push(redirectUrl),
+        onError: (error) => handleFormServerErrors(error, setError),
       },
     );
   };
@@ -182,6 +187,7 @@ export function AddressForm() {
                     className={cn(
                       "w-full h-11 border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent focus:ring-[#3A0F0E]",
                       isRTL ? "flex-row-reverse" : "",
+                      errors.city_id && "border-red-500 focus:ring-red-500",
                     )}
                   >
                     <SelectValue placeholder={t("city.placeholder")} />
@@ -215,7 +221,11 @@ export function AddressForm() {
                   {...field}
                   value={field.value as string}
                   placeholder={t("details.placeholder")}
-                  className="min-h-[100px] border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent resize-none p-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]"
+                  className={cn(
+                    "min-h-[100px] border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent resize-none p-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]",
+                    errors.address_details &&
+                      "border-red-500 focus-visible:ring-red-500 focus-visible:border-red-500",
+                  )}
                   dir={isRTL ? "rtl" : "ltr"}
                 />
               )}
@@ -239,7 +249,11 @@ export function AddressForm() {
                   {...field}
                   value={field.value as string}
                   placeholder={t("postalCode.placeholder")}
-                  className="h-11 border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent px-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]"
+                  className={cn(
+                    "h-11 border-[#8C8C8C]/50 rounded-[10px] text-sm bg-transparent px-3 focus-visible:ring-[#3A0F0E] focus-visible:border-[#3A0F0E]",
+                    errors.postal_code &&
+                      "border-red-500 focus-visible:ring-red-500 focus-visible:border-red-500",
+                  )}
                   dir={isRTL ? "rtl" : "ltr"}
                 />
               )}

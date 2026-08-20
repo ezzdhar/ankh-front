@@ -143,8 +143,8 @@ export function CollectionCarousel({
               <button
                 onClick={scrollPrev}
                 aria-label="Previous slide"
-                className={`max-sm:hidden absolute left-[5px] lg:left-[10px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white! shadow-lg hidden md:flex items-center justify-center text-maroon z-50 transition-all hover:bg-maroon hover:text-white border border-maroon/10 ${
-                  !prevBtnEnabled && "opacity-0 invisible"
+                className={`max-sm:hidden absolute left-[5px] lg:left-[10px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hidden md:flex items-center justify-center text-maroon z-50 transition-all hover:bg-maroon hover:text-white border border-maroon/10 cursor-pointer ${
+                  !prevBtnEnabled && "opacity-0 invisible pointer-events-none"
                 }`}
               >
                 <ChevronLeft size={20} strokeWidth={1.5} />
@@ -152,8 +152,8 @@ export function CollectionCarousel({
               <button
                 onClick={scrollNext}
                 aria-label="Next slide"
-                className={`max-sm:hidden absolute right-[5px] lg:right-[10px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white! shadow-lg hidden md:flex items-center justify-center text-maroon z-20 transition-all hover:bg-maroon hover:text-white border border-maroon/10 ${
-                  !nextBtnEnabled && "opacity-0 invisible"
+                className={`max-sm:hidden absolute right-[5px] lg:right-[10px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hidden md:flex items-center justify-center text-maroon z-20 transition-all hover:bg-maroon hover:text-white border border-maroon/10 cursor-pointer ${
+                  !nextBtnEnabled && "opacity-0 invisible pointer-events-none"
                 }`}
               >
                 <ChevronRight size={20} strokeWidth={1.5} />
